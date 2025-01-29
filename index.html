@@ -4,28 +4,48 @@
 <head>
     <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
     <script src="auth.js"></script>
-     <script>
-//Add this right after loading auth.js in index.html
-const auth = new AuthHandler();
+    <script>
+    const auth = new AuthService();
 
-// Only redirect if not logged in
-if (!auth.isLoggedIn()) {
-    window.location.href = 'login.html';
-}
+    // Check authentication on page load
+    async function checkAuthentication() {
+        const isAuthenticated = await auth.checkAuth();
+        if (!isAuthenticated) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        // Add logout button to sidebar
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) {
+            const user = auth.getUser();
+            
+            // Add user info
+            const userInfo = document.createElement('div');
+            userInfo.style.color = 'white';
+            userInfo.style.padding = '10px';
+            userInfo.style.marginTop = 'auto';
+            userInfo.textContent = `Signed in as: ${user.username}`;
+            sidebar.appendChild(userInfo);
+            
+            // Add logout button
+            const logoutButton = document.createElement('a');
+            logoutButton.textContent = 'Sign Out';
+            logoutButton.style.backgroundColor = '#dc3545';
+            logoutButton.style.color = 'white';
+            logoutButton.style.cursor = 'pointer';
+            logoutButton.style.padding = '10px';
+            logoutButton.style.marginTop = '10px';
+            logoutButton.style.borderRadius = '4px';
+            logoutButton.style.textAlign = 'center';
+            logoutButton.onclick = () => auth.logout();
+            sidebar.appendChild(logoutButton);
+        }
+    }
 
-// Add logout button to sidebar
-document.addEventListener('DOMContentLoaded', () => {
-    const sidebar = document.querySelector('.sidebar');
-    const logoutButton = document.createElement('a');
-    logoutButton.textContent = 'Logout';
-    logoutButton.style.marginTop = 'auto';
-    logoutButton.style.backgroundColor = '#dc3545';
-    logoutButton.style.textAlign = 'center';
-    logoutButton.style.cursor = 'pointer';
-    logoutButton.onclick = () => auth.logout();
-    sidebar.appendChild(logoutButton);
-});
- </script>
+    // Run authentication check when page loads
+    document.addEventListener('DOMContentLoaded', checkAuthentication);
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microsoft Security Calculator</title>
