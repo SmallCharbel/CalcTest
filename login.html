@@ -4,124 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Microsoft Security Calculator</title>
-    <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
     <script src="auth.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f7;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .login-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .logo {
-            width: 120px;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: #30475e;
-            margin-bottom: 30px;
-            font-size: 24px;
-        }
-
-        .login-button {
-            background-color: #0078d4;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .login-button:hover {
-            background-color: #006cbd;
-        }
-
-        .error-message {
-            color: #d83b01;
-            margin-top: 20px;
-            display: none;
-        }
-        
-        .test-login {
-            margin-top: 20px;
-            background-color: #28a745;
-        }
+        /* Keep your existing styles */
     </style>
 </head>
 <body>
     <div class="login-container">
         <img src="logo.png" alt="Company Logo" class="logo">
         <h1>Microsoft Security Calculator</h1>
-        <button id="signIn" class="login-button">Sign in with Microsoft</button>
-        <button id="testLogin" class="login-button test-login">Test Environment Login</button>
+        <button id="testLogin" class="login-button">Test Environment Login</button>
         <div id="error" class="error-message"></div>
     </div>
 
     <script>
-        let authHandler;
-
-        async function initializeAuth() {
-            authHandler = new AuthHandler();
-            try {
-                const isAuthenticated = await authHandler.initialize();
-                if (isAuthenticated) {
-                    redirectToIndex();
-                }
-            } catch (error) {
-                console.error('Authentication initialization error:', error);
-                showError('Authentication failed. Please try again.');
-            }
+        const auth = new AuthHandler();
+        
+        // If already logged in, redirect to index
+        if (auth.isLoggedIn()) {
+            window.location.href = 'index.html';
         }
 
-        function showError(message) {
-            const errorElement = document.getElementById('error');
-            errorElement.style.display = 'block';
-            errorElement.innerText = message;
-        }
-
-        function redirectToIndex() {
-            // Get the current path and replace login.html with index.html
-            const currentPath = window.location.pathname;
-            const indexPath = currentPath.replace('login.html', 'index.html');
-            window.location.href = indexPath;
-        }
-
-        document.getElementById('signIn').addEventListener('click', async () => {
-            try {
-                await authHandler.login();
-            } catch (error) {
-                console.error('Login error:', error);
-                showError('Sign in failed. Please try again.');
-            }
-        });
-
-        // Add test environment direct access
         document.getElementById('testLogin').addEventListener('click', () => {
-            redirectToIndex();
+            auth.login();
         });
-
-        // Initialize authentication when page loads
-        document.addEventListener('DOMContentLoaded', initializeAuth);
     </script>
 </body>
 </html>
