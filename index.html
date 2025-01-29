@@ -4,14 +4,11 @@
 <head>
     <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
   <script>
-    // Get absolute URL for redirect
-    const redirectUri = new URL('index.html', window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))).href;
-
     const msalConfig = {
         auth: {
             clientId: "63576da9-88bf-46f2-adea-326796514979",
             authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a",
-            redirectUri: redirectUri,
+            redirectUri: "https://smallcharbel.github.io/CalcTest/index.html",
             navigateToLoginRequestUrl: true
         },
         cache: {
@@ -65,7 +62,7 @@
             
             logoutButton.onclick = () => {
                 msalInstance.logoutRedirect({
-                    postLogoutRedirectUri: 'login.html'
+                    postLogoutRedirectUri: 'https://smallcharbel.github.io/CalcTest/login.html'
                 });
             };
             
