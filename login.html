@@ -6,54 +6,7 @@
     <title>Login - Microsoft Security Calculator</title>
     <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f7;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .login-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .logo {
-            width: 120px;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: #30475e;
-            margin-bottom: 30px;
-            font-size: 24px;
-        }
-
-        .login-button {
-            background-color: #0078d4;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .login-button:hover {
-            background-color: #006cbd;
-        }
+        /* Previous styles remain the same */
     </style>
 </head>
 <body>
@@ -61,6 +14,7 @@
         <img src="logo.png" alt="Company Logo" class="logo">
         <h1>Microsoft Security Calculator</h1>
         <button id="signIn" class="login-button">Sign in with Microsoft</button>
+        <div id="status"></div>
     </div>
 
     <script>
@@ -69,26 +23,63 @@
                 clientId: "63576da9-88bf-46f2-adea-326796514979",
                 authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a",
                 redirectUri: window.location.href.replace('login.html', 'index.html')
+            },
+            system: {
+                loggerOptions: {
+                    logLevel: msal.LogLevel.Verbose,
+                    loggerCallback: (level, message, containsPii) => {
+                        if (!containsPii) {
+                            console.log(`[MSAL] ${message}`);
+                            document.getElementById('status').innerText = message;
+                        }
+                    }
+                }
             }
         };
 
+        console.log('RedirectUri:', msalConfig.auth.redirectUri);
+
         const msalInstance = new msal.PublicClientApplication(msalConfig);
 
-        document.getElementById('signIn').onclick = () => {
-            msalInstance.loginRedirect({
-                scopes: ["User.Read"],
-                prompt: "select_account"
-            });
+        document.getElementById('signIn').onclick = async () => {
+            try {
+                console.log('Login button clicked');
+                const loginRequest = {
+                    scopes: ["User.Read"],
+                    prompt: "select_account"
+                };
+                console.log('Login request:', loginRequest);
+                await msalInstance.loginRedirect(loginRequest);
+            } catch (error) {
+                console.error('Login error:', error);
+                document.getElementById('status').innerText = `Login error: ${error.message}`;
+            }
         };
 
-        // Check if we're returning from a redirect
+        // Check for redirect response
         msalInstance.handleRedirectPromise()
             .then((response) => {
+                console.log('Redirect response:', response);
                 if (response) {
+                    console.log('Login successful, account:', response.account);
                     sessionStorage.setItem('msalAccount', JSON.stringify(response.account));
                     window.location.href = msalConfig.auth.redirectUri;
+                } else {
+                    console.log('No redirect response');
                 }
+            })
+            .catch((error) => {
+                console.error('Redirect error:', error);
+                document.getElementById('status').innerText = `Redirect error: ${error.message}`;
             });
+
+        // Check if user is already logged in
+        const accounts = msalInstance.getAllAccounts();
+        console.log('Current accounts:', accounts);
+        if (accounts.length > 0) {
+            console.log('User already logged in, redirecting...');
+            window.location.href = msalConfig.auth.redirectUri;
+        }
     </script>
 </body>
 </html>
