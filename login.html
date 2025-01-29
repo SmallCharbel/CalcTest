@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Microsoft Security Calculator</title>
     <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
+    <script src="auth.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -60,6 +61,11 @@
             margin-top: 20px;
             display: none;
         }
+        
+        .test-login {
+            margin-top: 20px;
+            background-color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -67,58 +73,55 @@
         <img src="logo.png" alt="Company Logo" class="logo">
         <h1>Microsoft Security Calculator</h1>
         <button id="signIn" class="login-button">Sign in with Microsoft</button>
+        <button id="testLogin" class="login-button test-login">Test Environment Login</button>
         <div id="error" class="error-message"></div>
     </div>
 
     <script>
-        const msalConfig = {
-            auth: {
-                clientId: "63576da9-88bf-46f2-adea-326796514979", // Replace with your Azure AD Application ID
-                authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a", // Replace with your Azure AD Tenant ID
-                redirectUri: "https://presalecalculator.ampiosolutions.com/", // Update this to your main page URL
-            },
-            cache: {
-                cacheLocation: "sessionStorage",
-                storeAuthStateInCookie: false,
-            }
-        };
+        let authHandler;
 
-        const msalInstance = new msal.PublicClientApplication(msalConfig);
-
-        // Authentication request configuration
-        const loginRequest = {
-            scopes: ["User.Read"]
-        };
-
-        // Handle the response from Azure AD
-        msalInstance.handleRedirectPromise()
-            .then(response => {
-                if (response) {
-                    // Successfully logged in, redirect to main page
-                    window.location.href = "index.html";
+        async function initializeAuth() {
+            authHandler = new AuthHandler();
+            try {
+                const isAuthenticated = await authHandler.initialize();
+                if (isAuthenticated) {
+                    redirectToIndex();
                 }
-            })
-            .catch(error => {
-                console.error(error);
-                document.getElementById('error').style.display = 'block';
-                document.getElementById('error').innerText = 'An error occurred during sign in. Please try again.';
-            });
+            } catch (error) {
+                console.error('Authentication initialization error:', error);
+                showError('Authentication failed. Please try again.');
+            }
+        }
 
-        // Sign in button click handler
-        document.getElementById('signIn').addEventListener('click', () => {
-            msalInstance.loginRedirect(loginRequest)
-                .catch(error => {
-                    console.error(error);
-                    document.getElementById('error').style.display = 'block';
-                    document.getElementById('error').innerText = 'An error occurred during sign in. Please try again.';
-                });
+        function showError(message) {
+            const errorElement = document.getElementById('error');
+            errorElement.style.display = 'block';
+            errorElement.innerText = message;
+        }
+
+        function redirectToIndex() {
+            // Get the current path and replace login.html with index.html
+            const currentPath = window.location.pathname;
+            const indexPath = currentPath.replace('login.html', 'index.html');
+            window.location.href = indexPath;
+        }
+
+        document.getElementById('signIn').addEventListener('click', async () => {
+            try {
+                await authHandler.login();
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Sign in failed. Please try again.');
+            }
         });
 
-        // Check if user is already signed in
-        const accounts = msalInstance.getAllAccounts();
-        if (accounts.length > 0) {
-            window.location.href = "index.html";
-        }
+        // Add test environment direct access
+        document.getElementById('testLogin').addEventListener('click', () => {
+            redirectToIndex();
+        });
+
+        // Initialize authentication when page loads
+        document.addEventListener('DOMContentLoaded', initializeAuth);
     </script>
 </body>
 </html>
