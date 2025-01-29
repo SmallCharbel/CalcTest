@@ -3,6 +3,64 @@
 
 <head>
     <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
+    <script src="auth.js"></script>
+     <script>
+// Add this script to the beginning of your index.html, after loading auth.js
+let authHandler;
+
+async function initializeAuth() {
+    authHandler = new AuthHandler();
+    
+    try {
+        const isAuthenticated = await authHandler.initialize();
+        
+        // In test environment, we don't redirect
+        if (!authHandler.isTestMode()) {
+            if (!isAuthenticated) {
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        // Setup UI elements for authenticated state
+        setupAuthenticatedUI();
+    } catch (error) {
+        console.error('Authentication initialization error:', error);
+        if (!authHandler.isTestMode()) {
+            window.location.href = 'login.html';
+        }
+    }
+}
+
+function setupAuthenticatedUI() {
+    // Get the active account
+    const account = authHandler.getActiveAccount();
+    
+    // Add logout button to sidebar if it doesn't exist
+    const sidebar = document.querySelector('.sidebar');
+    if (!document.getElementById('logout-button')) {
+        const logoutButton = document.createElement('a');
+        logoutButton.id = 'logout-button';
+        logoutButton.textContent = 'Logout';
+        logoutButton.style.marginTop = 'auto';
+        logoutButton.style.backgroundColor = '#dc3545';
+        logoutButton.style.textAlign = 'center';
+        logoutButton.style.cursor = 'pointer';
+        logoutButton.onclick = () => authHandler.logout();
+        
+        // Add user info to sidebar
+        const userInfo = document.createElement('div');
+        userInfo.style.marginTop = '20px';
+        userInfo.style.padding = '10px';
+        userInfo.style.borderTop = '1px solid rgba(255,255,255,0.1)';
+        userInfo.style.fontSize = '14px';
+        userInfo.textContent = `Signed in as: ${account?.username || 'Test User'}`;
+        
+        sidebar.appendChild(userInfo);
+        sidebar.appendChild(logoutButton);
+    }
+}
+ </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microsoft Security Calculator</title>
