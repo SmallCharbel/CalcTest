@@ -54,12 +54,6 @@
         .login-button:hover {
             background-color: #006cbd;
         }
-
-        .error-message {
-            color: #d83b01;
-            margin-top: 20px;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -67,61 +61,34 @@
         <img src="logo.png" alt="Company Logo" class="logo">
         <h1>Microsoft Security Calculator</h1>
         <button id="signIn" class="login-button">Sign in with Microsoft</button>
-        <div id="error" class="error-message"></div>
     </div>
 
     <script>
-        // MSAL configuration
         const msalConfig = {
             auth: {
                 clientId: "63576da9-88bf-46f2-adea-326796514979",
                 authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a",
-                redirectUri: window.location.origin + window.location.pathname.replace('login.html', 'index.html'),
-            },
-            cache: {
-                cacheLocation: "sessionStorage",
-                storeAuthStateInCookie: false
+                redirectUri: window.location.href.replace('login.html', 'index.html')
             }
         };
 
         const msalInstance = new msal.PublicClientApplication(msalConfig);
 
-        // Function to check if user is already logged in
-        async function checkAccount() {
-            const currentAccounts = msalInstance.getAllAccounts();
-            if (currentAccounts.length > 0) {
-                // User is signed in, redirect to index
-                window.location.href = 'index.html';
-                return;
-            }
+        document.getElementById('signIn').onclick = () => {
+            msalInstance.loginRedirect({
+                scopes: ["User.Read"],
+                prompt: "select_account"
+            });
+        };
 
-            // Handle the redirect promise to capture successful login
-            try {
-                const response = await msalInstance.handleRedirectPromise();
+        // Check if we're returning from a redirect
+        msalInstance.handleRedirectPromise()
+            .then((response) => {
                 if (response) {
-                    // Successful login
-                    window.location.href = 'index.html';
+                    sessionStorage.setItem('msalAccount', JSON.stringify(response.account));
+                    window.location.href = msalConfig.auth.redirectUri;
                 }
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        // Handle login button click
-        document.getElementById('signIn').addEventListener('click', async () => {
-            try {
-                await msalInstance.loginRedirect({
-                    scopes: ["User.Read"]
-                });
-            } catch (error) {
-                console.error(error);
-                document.getElementById('error').style.display = 'block';
-                document.getElementById('error').textContent = 'Failed to sign in. Please try again.';
-            }
-        });
-
-        // Check authentication status when page loads
-        checkAccount();
+            });
     </script>
 </body>
 </html>
