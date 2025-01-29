@@ -71,6 +71,7 @@
     </div>
 
     <script>
+        // MSAL configuration
         const msalConfig = {
             auth: {
                 clientId: "63576da9-88bf-46f2-adea-326796514979",
@@ -85,21 +86,42 @@
 
         const msalInstance = new msal.PublicClientApplication(msalConfig);
 
-        // Handle the sign-in button click
-        document.getElementById('signIn').addEventListener('click', () => {
-            msalInstance.loginRedirect({
-                scopes: ["User.Read"]
-            });
+        // Function to check if user is already logged in
+        async function checkAccount() {
+            const currentAccounts = msalInstance.getAllAccounts();
+            if (currentAccounts.length > 0) {
+                // User is signed in, redirect to index
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Handle the redirect promise to capture successful login
+            try {
+                const response = await msalInstance.handleRedirectPromise();
+                if (response) {
+                    // Successful login
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Handle login button click
+        document.getElementById('signIn').addEventListener('click', async () => {
+            try {
+                await msalInstance.loginRedirect({
+                    scopes: ["User.Read"]
+                });
+            } catch (error) {
+                console.error(error);
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'Failed to sign in. Please try again.';
+            }
         });
 
-        // Check if user is already signed in
-        msalInstance.handleRedirectPromise().then((response) => {
-            if (response) {
-                window.location.href = 'index.html';
-            }
-        }).catch(error => {
-            console.error(error);
-        });
+        // Check authentication status when page loads
+        checkAccount();
     </script>
 </body>
 </html>
