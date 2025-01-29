@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Microsoft Security Calculator</title>
     <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
-    <script src="auth.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -67,28 +66,39 @@
     <div class="login-container">
         <img src="logo.png" alt="Company Logo" class="logo">
         <h1>Microsoft Security Calculator</h1>
-        <button id="loginButton" class="login-button">Sign in with Microsoft</button>
+        <button id="signIn" class="login-button">Sign in with Microsoft</button>
         <div id="error" class="error-message"></div>
     </div>
 
     <script>
-        const auth = new AuthService();
-
-        // Check if we have a user session
-        auth.checkAuth().then(isAuthenticated => {
-            if (isAuthenticated) {
-                window.location.href = 'index.html';
+        const msalConfig = {
+            auth: {
+                clientId: "63576da9-88bf-46f2-adea-326796514979",
+                authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a",
+                redirectUri: window.location.origin + window.location.pathname.replace('login.html', 'index.html'),
+            },
+            cache: {
+                cacheLocation: "sessionStorage",
+                storeAuthStateInCookie: false
             }
+        };
+
+        const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+        // Handle the sign-in button click
+        document.getElementById('signIn').addEventListener('click', () => {
+            msalInstance.loginRedirect({
+                scopes: ["User.Read"]
+            });
         });
 
-        document.getElementById('loginButton').addEventListener('click', async () => {
-            try {
-                await auth.login();
-            } catch (error) {
-                const errorElement = document.getElementById('error');
-                errorElement.style.display = 'block';
-                errorElement.textContent = 'Failed to sign in. Please try again.';
+        // Check if user is already signed in
+        msalInstance.handleRedirectPromise().then((response) => {
+            if (response) {
+                window.location.href = 'index.html';
             }
+        }).catch(error => {
+            console.error(error);
         });
     </script>
 </body>
