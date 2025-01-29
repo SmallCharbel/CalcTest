@@ -3,88 +3,41 @@
 
 <head>
     <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
-    <script>
-    // MSAL configuration
+   <script>
     const msalConfig = {
         auth: {
             clientId: "63576da9-88bf-46f2-adea-326796514979",
             authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a",
-            redirectUri: window.location.origin + window.location.pathname,
-        },
-        cache: {
-            cacheLocation: "sessionStorage",
-            storeAuthStateInCookie: false
+            redirectUri: window.location.href
         }
     };
 
     const msalInstance = new msal.PublicClientApplication(msalConfig);
-
-    // Check if the user is authenticated
-    async function checkAuth() {
-        try {
-            // Handle redirect promise
-            const response = await msalInstance.handleRedirectPromise();
-            
-            // Get all accounts
-            const currentAccounts = msalInstance.getAllAccounts();
-            
-            if (currentAccounts.length === 0) {
-                // No user signed in, redirect to login
-                window.location.href = 'login.html';
-                return;
+    
+    // Check if user is logged in
+    const accounts = msalInstance.getAllAccounts();
+    if (accounts.length === 0) {
+        window.location.href = 'login.html';
+    } else {
+        // Add logout button
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                const logoutButton = document.createElement('a');
+                logoutButton.textContent = 'Sign Out';
+                logoutButton.style.backgroundColor = '#dc3545';
+                logoutButton.style.color = 'white';
+                logoutButton.style.padding = '10px';
+                logoutButton.style.cursor = 'pointer';
+                logoutButton.style.marginTop = 'auto';
+                logoutButton.style.textAlign = 'center';
+                logoutButton.onclick = () => {
+                    msalInstance.logoutRedirect();
+                };
+                sidebar.appendChild(logoutButton);
             }
-
-            // User is authenticated, setup logout
-            setupLogout();
-        } catch (error) {
-            console.error(error);
-            window.location.href = 'login.html';
-        }
+        });
     }
-
-    // Setup logout button
-    function setupLogout() {
-        const sidebar = document.querySelector('.sidebar');
-        if (sidebar) {
-            const currentUser = msalInstance.getAllAccounts()[0];
-            
-            // Add user info
-            if (currentUser) {
-                const userInfo = document.createElement('div');
-                userInfo.style.color = 'white';
-                userInfo.style.padding = '10px';
-                userInfo.style.marginTop = 'auto';
-                userInfo.textContent = `Signed in as: ${currentUser.username}`;
-                sidebar.appendChild(userInfo);
-            }
-            
-            // Add logout button
-            const logoutButton = document.createElement('a');
-            logoutButton.textContent = 'Sign Out';
-            logoutButton.style.backgroundColor = '#dc3545';
-            logoutButton.style.color = 'white';
-            logoutButton.style.cursor = 'pointer';
-            logoutButton.style.padding = '10px';
-            logoutButton.style.marginTop = '10px';
-            logoutButton.style.borderRadius = '4px';
-            logoutButton.style.textAlign = 'center';
-            
-            logoutButton.onclick = async () => {
-                try {
-                    await msalInstance.logoutRedirect({
-                        postLogoutRedirectUri: window.location.origin + '/login.html'
-                    });
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-            
-            sidebar.appendChild(logoutButton);
-        }
-    }
-
-    // Check authentication when page loads
-    document.addEventListener('DOMContentLoaded', checkAuth);
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
