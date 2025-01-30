@@ -1,78 +1,73 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
     <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
-   <script>
-    const msalConfig = {
-        auth: {
-            clientId: "63576da9-88bf-46f2-adea-326796514979",
-            authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a",
-            redirectUri: "https://smallcharbel.github.io/CalcTest/index.html",
-            navigateToLoginRequestUrl: true
-        },
-        cache: {
-            cacheLocation: "sessionStorage",
-            storeAuthStateInCookie: false
-        }
-    };
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Security Calculator</title>
+    <script>
+        // MSAL configuration
+        const msalConfig = {
+            auth: {
+                clientId: "63576da9-88bf-46f2-adea-326796514979",
+                authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a",
+                redirectUri: "https://smallcharbel.github.io/CalcTest/index.html",
+            },
+            cache: {
+                cacheLocation: "sessionStorage",
+                storeAuthStateInCookie: false
+            }
+        };
 
-    const msalInstance = new msal.PublicClientApplication(msalConfig);
+        const msalInstance = new msal.PublicClientApplication(msalConfig);
 
-    function checkAndHandleAuth() {
-        msalInstance.handleRedirectPromise()
-            .then((response) => {
-                // Check if we have any accounts
+        // Check authentication on page load
+        async function checkAuth() {
+            try {
+                const response = await msalInstance.handleRedirectPromise();
                 const accounts = msalInstance.getAllAccounts();
+                
                 if (accounts.length === 0) {
-                    // No accounts, redirect to login
                     window.location.href = 'login.html';
-                } else {
-                    // We have an account, add logout button
-                    addLogoutButton(accounts[0]);
+                    return;
                 }
-            })
-            .catch((error) => {
+
+                // Add logout button and user info after page loads
+                document.addEventListener('DOMContentLoaded', () => {
+                    const sidebar = document.querySelector('.sidebar');
+                    if (sidebar) {
+                        const userInfo = document.createElement('div');
+                        userInfo.style.color = 'white';
+                        userInfo.style.padding = '10px';
+                        userInfo.style.marginTop = 'auto';
+                        userInfo.textContent = `Signed in as: ${accounts[0].username}`;
+                        sidebar.appendChild(userInfo);
+
+                        const logoutButton = document.createElement('a');
+                        logoutButton.textContent = 'Sign Out';
+                        logoutButton.style.backgroundColor = '#dc3545';
+                        logoutButton.style.color = 'white';
+                        logoutButton.style.cursor = 'pointer';
+                        logoutButton.style.padding = '10px';
+                        logoutButton.style.marginTop = '10px';
+                        logoutButton.style.borderRadius = '4px';
+                        logoutButton.style.textAlign = 'center';
+                        logoutButton.onclick = () => {
+                            msalInstance.logoutRedirect({
+                                postLogoutRedirectUri: 'login.html'
+                            });
+                        };
+                        sidebar.appendChild(logoutButton);
+                    }
+                });
+            } catch (error) {
                 console.error(error);
                 window.location.href = 'login.html';
-            });
-    }
-
-    function addLogoutButton(account) {
-        const sidebar = document.querySelector('.sidebar');
-        if (sidebar) {
-            // Add user info
-            const userInfo = document.createElement('div');
-            userInfo.style.color = 'white';
-            userInfo.style.padding = '10px';
-            userInfo.style.marginTop = 'auto';
-            userInfo.textContent = `Signed in as: ${account.username}`;
-            sidebar.appendChild(userInfo);
-
-            // Add logout button
-            const logoutButton = document.createElement('a');
-            logoutButton.textContent = 'Sign Out';
-            logoutButton.style.backgroundColor = '#dc3545';
-            logoutButton.style.color = 'white';
-            logoutButton.style.cursor = 'pointer';
-            logoutButton.style.padding = '10px';
-            logoutButton.style.marginTop = '10px';
-            logoutButton.style.borderRadius = '4px';
-            logoutButton.style.textAlign = 'center';
-            
-            logoutButton.onclick = () => {
-                msalInstance.logoutRedirect({
-                    postLogoutRedirectUri: 'https://smallcharbel.github.io/CalcTest/login.html'
-                });
-            };
-            
-            sidebar.appendChild(logoutButton);
+            }
         }
-    }
 
-    // Check auth when page loads
-    document.addEventListener('DOMContentLoaded', checkAndHandleAuth);
+        // Run auth check
+        checkAuth();
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
