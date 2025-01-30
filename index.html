@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microsoft Security Calculator</title>
     <script>
-        // MSAL configuration
+        // Single MSAL configuration
         const msalConfig = {
             auth: {
                 clientId: "63576da9-88bf-46f2-adea-326796514979",
@@ -348,45 +348,6 @@ input[type="number"] {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
-        const msalConfig = {
-    auth: {
-        clientId: "63576da9-88bf-46f2-adea-326796514979", // Replace with your Azure AD Application ID
-        authority: "https://login.microsoftonline.com/a05d37d6-5a0d-4083-887d-6b340796809a", // Replace with your Azure AD Tenant ID
-        redirectUri: "https://presalecalculator.ampiosolutions.com/",
-    },
-    cache: {
-        cacheLocation: "sessionStorage",
-        storeAuthStateInCookie: false,
-    }
-};
-
-const msalInstance = new msal.PublicClientApplication(msalConfig);
-
-// Check authentication status
-function checkAuth() {
-    const accounts = msalInstance.getAllAccounts();
-    if (accounts.length === 0) {
-        // No user signed in, redirect to login page
-        window.location.href = "login.html";
-        return;
-    }
-    
-    // User is authenticated, you can also get user info here
-    const user = accounts[0];
-    // Optional: Display user info somewhere in your UI
-    console.log("Logged in user:", user.username);
-}
-
-// Add logout functionality
-function logout() {
-    msalInstance.logoutRedirect()
-        .catch(error => {
-            console.error(error);
-        });
-}
-
-// Call checkAuth when the page loads
-document.addEventListener('DOMContentLoaded', checkAuth);
         let totalCost = 0;
 
         function showService(service) {
