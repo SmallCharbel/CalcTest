@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- MSAL Script for Authentication -->
   <script src="https://alcdn.msauth.net/browser/2.30.0/js/msal-browser.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Microsoft Security Calculator</title>
   <style>
+    /* Global Page Styles */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f0f4f7;
@@ -54,7 +56,7 @@
       position: fixed;
       top: 0;
       left: 220px;
-      right: 380px; /* Adjust to leave space for the bill summary */
+      right: 380px; /* Leave space for the bill summary */
       z-index: 1000;
       padding: 20px 0;
       text-align: center;
@@ -67,13 +69,13 @@
       font-size: 32px;
     }
     .content {
-      margin-top: 100px; /* Adds spacing to account for fixed title */
+      margin-top: 100px; /* Account for fixed title */
       margin-left: 240px;
-      margin-right: 400px; /* To prevent overlap with the bill summary */
+      margin-right: 400px; /* Prevent overlap with bill summary */
       padding: 20px;
       background-color: white;
       overflow-y: auto;
-      height: calc(100vh - 120px); /* Adjust to leave space for title bar */
+      height: calc(100vh - 120px);
       box-sizing: border-box;
       border-radius: 20px;
       box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
@@ -218,33 +220,56 @@
       visibility: visible;
       opacity: 1;
     }
-    /* Custom table styling for Exchange Online Protection */
-    .custom-table {
+    /* Dynamic Table Styles (for the SKU table in the EOP tab) */
+    .dynamic-table-container {
+      margin-top: 20px;
+    }
+    .dynamic-table-container label {
+      font-weight: bold;
+    }
+    .dynamic-table-container select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .dynamic-table-container h2 {
+      margin-top: 30px;
+      color: #30475e;
+    }
+    .dynamic-table-container table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-bottom: 40px;
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .custom-table th, 
-    .custom-table td {
+    .dynamic-table-container th,
+    .dynamic-table-container td {
       padding: 12px 15px;
       text-align: left;
+      border: 1px solid #ccc;
     }
-    .custom-table th {
+    .dynamic-table-container th {
       background-color: #30475e;
       color: #fff;
       font-weight: bold;
     }
-    .custom-table tr:nth-child(even) {
+    .dynamic-table-container tr:nth-child(even) {
       background-color: #f3f3f3;
     }
-    .custom-table tr:hover {
+    .dynamic-table-container tr:hover {
       background-color: #e9e9e9;
       transition: background-color 0.3s ease;
     }
-    /* Availability indicators */
+    .section-header {
+      background-color: #e0e0e0;
+      font-weight: bold;
+      text-align: center;
+    }
     .yes {
       background-color: #c8e6c9;
       color: #256029;
@@ -257,9 +282,19 @@
       font-weight: bold;
       text-align: center;
     }
+    @media (max-width: 600px) {
+      .dynamic-table-container th, 
+      .dynamic-table-container td {
+        padding: 8px;
+        font-size: 14px;
+      }
+      .dynamic-table-container select {
+        font-size: 14px;
+      }
+    }
   </style>
   <script>
-    // Single MSAL configuration
+    // MSAL Configuration
     const msalConfig = {
       auth: {
         clientId: "63576da9-88bf-46f2-adea-326796514979",
@@ -271,7 +306,6 @@
         storeAuthStateInCookie: false
       }
     };
-
     const msalInstance = new msal.PublicClientApplication(msalConfig);
 
     // Check authentication on page load
@@ -279,13 +313,11 @@
       try {
         const response = await msalInstance.handleRedirectPromise();
         const accounts = msalInstance.getAllAccounts();
-        
         if (accounts.length === 0) {
           window.location.href = 'login.html';
           return;
         }
-
-        // Add logout button and user info after page loads
+        // Append user info and logout button to sidebar after DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
           const sidebar = document.querySelector('.sidebar');
           if (sidebar) {
@@ -295,7 +327,6 @@
             userInfo.style.marginTop = 'auto';
             userInfo.textContent = `Signed in as: ${accounts[0].username}`;
             sidebar.appendChild(userInfo);
-
             const logoutButton = document.createElement('a');
             logoutButton.textContent = 'Sign Out';
             logoutButton.style.backgroundColor = '#dc3545';
@@ -318,136 +349,477 @@
         window.location.href = 'login.html';
       }
     }
-
-    // Run auth check
     checkAuth();
-  </script>
-</head>
-<body>
-  <div class="sidebar">
-    <img src="logo.png" alt="Company Logo" class="logo" onclick="window.location.href='https://www.ampiosolutions.com/'">
-    <h2>Services</h2>
-    <a onclick="showService('exchange')">Exchange Online Protection</a>
-    <a onclick="showService('defender')">Microsoft Defender for Cloud</a>
-    <a onclick="showService('cloudApps')">Microsoft Defender for Cloud Apps</a>
-    <a onclick="showService('endpoint')">Microsoft Defender for Endpoint</a>
-    <a onclick="showService('identity')">Microsoft Defender for Identity</a>
-    <a onclick="showService('entra')">Microsoft Entra ID Protection</a>
-    <a onclick="showService('sentinel')">Microsoft Sentinel</a>
-  </div>
-  <div class="title-bar">
-    <h1>Microsoft Security Calculator</h1>
-  </div>
-  <div class="content">
-    <h2 id="service-title">Select a Service</h2>
-    <div id="service-details" class="service-options"></div>
-  </div>
 
-  <div id="bill-summary" class="bill-summary">
-    <h3>Bill Summary</h3>
-    <div id="bill-items"></div>
-    <div class="total-cost">Total: $<span id="total-cost">0</span></div>
-    <button class="add-to-bill" onclick="exportToExcel()">Export to Excel</button>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script>
+    /***********************
+     * Cost Calculation Functions (unchanged)
+     ***********************/
+    function calculateSentinelCost() {
+      const instances = document.getElementById('sentinel-instances').value;
+      const extraRules = document.getElementById('sentinel-extra-rules').value;
+      const baseHours = 120;
+      const extraRuleCost = extraRules * 5;
+      const totalHours = instances * (baseHours + extraRuleCost);
+      return totalHours * 190; // Assuming $190 per hour
+    }
+    function calculateEntraCost() {
+      const tenants = document.getElementById('entra-tenants').value;
+      const usersPerTenant = document.getElementById('entra-users-per-tenant').value;
+      let hoursPerTenant;
+      if (usersPerTenant <= 300) { hoursPerTenant = 20; }
+      else if (usersPerTenant <= 750) { hoursPerTenant = 30; }
+      else if (usersPerTenant <= 1000) { hoursPerTenant = 40; }
+      else { alert("Please contact sales for tenants with more than 1000 users."); return 0; }
+      const advancedHuntingCost = document.getElementById('entra-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
+      const serviceCost = tenants * hoursPerTenant * 190;
+      return serviceCost + advancedHuntingCost;
+    }
+    function calculateCost(quantityId, rate) {
+      const quantity = document.getElementById(quantityId).value;
+      return quantity * rate;
+    }
+    function calculateExchangeCost() {
+      const tenants = document.getElementById('tenants').value;
+      const usersPerTenant = document.getElementById('users-per-tenant').value;
+      let hoursPerTenant;
+      if (usersPerTenant <= 300) { hoursPerTenant = 80; }
+      else if (usersPerTenant <= 750) { hoursPerTenant = 120; }
+      else if (usersPerTenant <= 1000) { hoursPerTenant = 160; }
+      else { alert("Please contact Account Executive for tenants with more than 1000 users."); return 0; }
+      const advancedHuntingCost = document.getElementById('advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
+      const serviceCost = tenants * hoursPerTenant * 190;
+      return serviceCost + advancedHuntingCost;
+    }
+    function calculateCloudAppsCost() {
+      const tenants = document.getElementById('cloudapps-tenants').value;
+      const usersPerTenant = document.getElementById('cloudapps-users-per-tenant').value;
+      let hoursPerTenant;
+      if (usersPerTenant <= 300) { hoursPerTenant = 80; }
+      else if (usersPerTenant <= 750) { hoursPerTenant = 120; }
+      else if (usersPerTenant <= 1000) { hoursPerTenant = 160; }
+      else { alert("Please contact Account Executive for tenants with more than 1000 users."); return 0; }
+      const advancedHuntingCost = document.getElementById('cloudapps-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
+      const serviceCost = tenants * hoursPerTenant * 190;
+      return serviceCost + advancedHuntingCost;
+    }
+    function calculateEndpointCost() {
+      const devices = document.getElementById('devices').value;
+      const vulnMgmtDevices = document.getElementById('vuln-mgmt-checkbox').checked ? document.getElementById('vuln-mgmt-devices').value : 0;
+      const deviceCost = devices * 150;
+      const vulnMgmtCost = vulnMgmtDevices * 50;
+      return deviceCost + vulnMgmtCost;
+    }
+    function calculateIdentityCost() {
+      const tenants = document.getElementById('identity-tenants').value;
+      const usersPerTenant = document.getElementById('identity-users-per-tenant').value;
+      let hoursPerTenant;
+      if (usersPerTenant <= 300) { hoursPerTenant = 40; }
+      else if (usersPerTenant <= 750) { hoursPerTenant = 60; }
+      else if (usersPerTenant <= 1000) { hoursPerTenant = 80; }
+      else { alert("Please contact sales for tenants with more than 1000 users."); return 0; }
+      const advancedHuntingCost = document.getElementById('identity-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
+      const serviceCost = tenants * hoursPerTenant * 190;
+      return serviceCost + advancedHuntingCost;
+    }
+    /***********************
+     * Billing Functions (unchanged)
+     ***********************/
     let totalCost = 0;
-
+    function addToBill(serviceName, cost, details) {
+      const billItems = document.getElementById('bill-items');
+      const existingItem = Array.from(billItems.children).find(item => item.querySelector('.item-header span:first-child').textContent === serviceName);
+      let detailsText = '';
+      if (details.tenants) { detailsText = `Tenants: ${details.tenants}, Users per Tenant: ${details.users}`; }
+      if (details.advancedHunting) { detailsText += ", Advanced Hunting Included"; }
+      if (details.instances) { detailsText = `Instances: ${details.instances}`; }
+      if (details.extraRules) { detailsText += `, Extra Rules: ${details.extraRules}`; }
+      if (details.devices) { detailsText = `Devices: ${details.devices}`; }
+      if (details.vulnMgmtDevices) { detailsText += `, Vulnerability Management: ${details.vulnMgmtDevices} Devices`; }
+      if (existingItem) {
+        const itemDetails = existingItem.querySelector('.item-details');
+        const itemPrice = existingItem.querySelector('.item-price');
+        itemDetails.textContent = detailsText;
+        const previousCost = parseFloat(itemPrice.dataset.previousCost || 0);
+        itemPrice.textContent = `$${cost.toFixed(2)}`;
+        totalCost = totalCost - previousCost + cost;
+        itemPrice.dataset.previousCost = cost.toFixed(2);
+      } else {
+        totalCost += cost;
+        const billItem = document.createElement('div');
+        billItem.classList.add('bill-item');
+        billItem.innerHTML = `
+          <div class="item-header">
+            <span>${serviceName}</span>
+            <span class="item-price" data-previous-cost="${cost.toFixed(2)}">$${cost.toFixed(2)}</span>
+            <span class="remove-item" onclick="removeItem(this, ${cost})">X</span>
+          </div>
+          <div class="item-details">${detailsText}</div>
+        `;
+        billItems.appendChild(billItem);
+      }
+      document.getElementById('total-cost').textContent = totalCost.toFixed(2);
+    }
+    function removeItem(element, cost) {
+      const billItem = element.parentElement.parentElement;
+      const previousCost = parseFloat(billItem.querySelector('.item-price').dataset.previousCost);
+      billItem.remove();
+      totalCost -= previousCost;
+      document.getElementById('total-cost').textContent = totalCost.toFixed(2);
+      if (totalCost < 0) { totalCost = 0; }
+    }
+    function exportToExcel() {
+      const companyName = prompt("Enter the Company Name:");
+      if (!companyName) {
+        alert("Company name is required to export the file.");
+        return;
+      }
+      const data = [];
+      const billItems = document.querySelectorAll('.bill-item');
+      data.push([`${companyName}`]);
+      data.push(['Service Name', 'Price', 'Details']);
+      billItems.forEach(item => {
+        const serviceName = item.querySelector('.item-header span:first-child').textContent;
+        const price = item.querySelector('.item-price').textContent;
+        const details = item.querySelector('.item-details').textContent.trim();
+        data.push([serviceName, price, details]);
+      });
+      data.push([]);
+      data.push(['Total Cost', document.getElementById('total-cost').textContent]);
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Bill Summary");
+      XLSX.writeFile(wb, `${companyName}_BillSummary.xlsx`);
+    }
+    function toggleVulnerabilityManagement() {
+      const vulnMgmtCheckbox = document.getElementById('vuln-mgmt-checkbox');
+      const vulnMgmtOptions = document.getElementById('vuln-mgmt-options');
+      vulnMgmtOptions.style.display = vulnMgmtCheckbox.checked ? 'block' : 'none';
+    }
+    /***********************
+     * Dynamic SKU Table Code for Exchange Online Protection Tab
+     ***********************/
+    // SKU mapping and feature arrays (from our previous version)
+    const skuMapping = {
+      "Microsoft 365 Business Basic":         { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 Business Standard":      { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 Business Premium":       { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 E3":                     { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 E5":                     { endpoint: "P2", office: "P2",  extra: true  },
+      "Microsoft 365 A1/A3/A5":               { endpoint: "P2", office: "P2",  extra: true  },
+      "Microsoft 365 F1/F3":                  { endpoint: "P1", office: "None", extra: false },
+      "Exchange Online Plan 1":               { endpoint: "P1", office: "None", extra: false },
+      "Exchange Online Plan 2":               { endpoint: "P1", office: "None", extra: false },
+      "Standalone EOP":                       { endpoint: "P1", office: "None", extra: false },
+      "Microsoft Defender for Office 365 P1": { endpoint: "None", office: "P1", extra: false },
+      "Microsoft Defender for Office 365 P2": { endpoint: "None", office: "P2", extra: false }
+    };
+    const endpointP1Features = [
+      {
+        name: "Next-Generation Protection",
+        description: "Robust antimalware and antivirus protection, including behavior‑based, heuristic, and real‑time protection."
+      },
+      {
+        name: "Attack Surface Reduction (ASR)",
+        description: "Capabilities to harden devices and prevent zero‑day attacks."
+      },
+      {
+        name: "Manual Response Actions",
+        description: "Actions such as quarantining files and isolating devices."
+      },
+      {
+        name: "Centralized Configuration and Management",
+        description: "Integration with Microsoft Intune and management via the Microsoft Defender portal."
+      },
+      {
+        name: "Cross‑Platform Protection",
+        description: "Support for Windows, macOS, iOS, and Android devices."
+      }
+    ];
+    const endpointP2Features = [
+      {
+        name: "Endpoint Detection and Response (EDR)",
+        description: "Advanced threat detection and response capabilities."
+      },
+      {
+        name: "Threat and Vulnerability Management (TVM)",
+        description: "Identifies, assesses, and remediates endpoint vulnerabilities."
+      },
+      {
+        name: "Automated Investigation and Remediation (AIR)",
+        description: "Automates the investigation and remediation of threats."
+      },
+      {
+        name: "Threat Intelligence",
+        description: "Provides detailed threat intelligence and analysis."
+      },
+      {
+        name: "Microsoft Threat Experts",
+        description: "Access to Microsoft’s team of security experts for additional support."
+      }
+    ];
+    const officeP1Features = [
+      {
+        name: "Safe Attachments",
+        description: "Protects against unknown malware and viruses by scanning email attachments."
+      },
+      {
+        name: "Safe Links",
+        description: "Provides time‑of‑click verification of URLs to protect against malicious links."
+      },
+      {
+        name: "Anti‑Phishing Policies",
+        description: "Detects and blocks phishing attempts."
+      },
+      {
+        name: "Real‑Time Detection",
+        description: "Monitors and alerts on suspicious activities in real‑time."
+      },
+      {
+        name: "Quarantine",
+        description: "Isolates potentially harmful emails for review."
+      },
+      {
+        name: "Reporting and Insights",
+        description: "Provides detailed reports and insights on threats and security incidents."
+      }
+    ];
+    const officeP2Features = [
+      {
+        name: "Threat Explorer",
+        description: "Advanced threat hunting and investigation tool."
+      },
+      {
+        name: "Automated Investigation and Response (AIR)",
+        description: "Automates the investigation and remediation of threats."
+      },
+      {
+        name: "Attack Simulation Training",
+        description: "Simulates phishing attacks to train users on recognizing and responding to threats."
+      },
+      {
+        name: "Advanced Threat Protection (ATP) for SharePoint, OneDrive, and Teams",
+        description: "Extends protection to files stored in SharePoint, OneDrive, and Teams."
+      },
+      {
+        name: "Threat Intelligence",
+        description: "Provides detailed threat intelligence and analysis."
+      }
+    ];
+    const additionalM365Features = [
+      {
+        name: "Conditional Access",
+        description: "Advanced access controls across Microsoft 365 applications."
+      },
+      {
+        name: "Identity Protection",
+        description: "Comprehensive identity security to protect against unauthorized access."
+      }
+    ];
+    // Function to populate the SKU dropdown
+    function populateSKU() {
+      const skuSelect = document.getElementById("skuSelect");
+      skuSelect.innerHTML = "";
+      Object.keys(skuMapping).forEach(sku => {
+        const option = document.createElement("option");
+        option.value = sku;
+        option.textContent = sku;
+        skuSelect.appendChild(option);
+      });
+      skuSelect.addEventListener("change", updateTables);
+    }
+    // Function to update the dynamic tables based on selected SKU
+    function updateTables() {
+      const skuSelect = document.getElementById("skuSelect");
+      const selectedSKU = skuSelect.value;
+      const skuData = skuMapping[selectedSKU];
+      // Update Defender for Endpoint Table
+      const endpointTbody = document.querySelector("#endpointTable tbody");
+      endpointTbody.innerHTML = "";
+      let row, cell;
+      // Section Header: Plan 1 Features
+      row = document.createElement("tr");
+      cell = document.createElement("td");
+      cell.textContent = "Plan 1 Features";
+      cell.colSpan = 3;
+      cell.className = "section-header";
+      row.appendChild(cell);
+      endpointTbody.appendChild(row);
+      endpointP1Features.forEach(feature => {
+        row = document.createElement("tr");
+        cell = document.createElement("td");
+        cell.textContent = feature.name;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        cell.textContent = feature.description;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        const availableP1 = (skuData.endpoint === "P1" || skuData.endpoint === "P2");
+        cell.textContent = availableP1 ? "Yes" : "No";
+        cell.className = availableP1 ? "yes" : "no";
+        row.appendChild(cell);
+        endpointTbody.appendChild(row);
+      });
+      // Section Header: Plan 2 Features
+      row = document.createElement("tr");
+      cell = document.createElement("td");
+      cell.textContent = "Plan 2 Features";
+      cell.colSpan = 3;
+      cell.className = "section-header";
+      row.appendChild(cell);
+      endpointTbody.appendChild(row);
+      endpointP2Features.forEach(feature => {
+        row = document.createElement("tr");
+        cell = document.createElement("td");
+        cell.textContent = feature.name;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        cell.textContent = feature.description;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        const availableP2 = (skuData.endpoint === "P2");
+        cell.textContent = availableP2 ? "Yes" : "No";
+        cell.className = availableP2 ? "yes" : "no";
+        row.appendChild(cell);
+        endpointTbody.appendChild(row);
+      });
+      // Update Defender for Office 365 Table
+      const officeTbody = document.querySelector("#officeTable tbody");
+      officeTbody.innerHTML = "";
+      row = document.createElement("tr");
+      cell = document.createElement("td");
+      cell.textContent = "Plan 1 Features";
+      cell.colSpan = 3;
+      cell.className = "section-header";
+      row.appendChild(cell);
+      officeTbody.appendChild(row);
+      officeP1Features.forEach(feature => {
+        row = document.createElement("tr");
+        cell = document.createElement("td");
+        cell.textContent = feature.name;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        cell.textContent = feature.description;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        const availableOfficeP1 = (skuData.office === "P1" || skuData.office === "P2");
+        cell.textContent = availableOfficeP1 ? "Yes" : "No";
+        cell.className = availableOfficeP1 ? "yes" : "no";
+        row.appendChild(cell);
+        officeTbody.appendChild(row);
+      });
+      row = document.createElement("tr");
+      cell = document.createElement("td");
+      cell.textContent = "Plan 2 Features";
+      cell.colSpan = 3;
+      cell.className = "section-header";
+      row.appendChild(cell);
+      officeTbody.appendChild(row);
+      officeP2Features.forEach(feature => {
+        row = document.createElement("tr");
+        cell = document.createElement("td");
+        cell.textContent = feature.name;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        cell.textContent = feature.description;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        const availableOfficeP2 = (skuData.office === "P2");
+        cell.textContent = availableOfficeP2 ? "Yes" : "No";
+        cell.className = availableOfficeP2 ? "yes" : "no";
+        row.appendChild(cell);
+        officeTbody.appendChild(row);
+      });
+      // Update Additional Microsoft 365 Security Features Table
+      const m365Tbody = document.querySelector("#m365Table tbody");
+      m365Tbody.innerHTML = "";
+      additionalM365Features.forEach(feature => {
+        row = document.createElement("tr");
+        cell = document.createElement("td");
+        cell.textContent = feature.name;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        cell.textContent = feature.description;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        const availableExtra = skuData.extra;
+        cell.textContent = availableExtra ? "Yes" : "No";
+        cell.className = availableExtra ? "yes" : "no";
+        row.appendChild(cell);
+        m365Tbody.appendChild(row);
+      });
+    }
+    // Function to initialize the dynamic table for Exchange Online Protection
+    function initEOPTable() {
+      const container = document.createElement('div');
+      container.className = 'dynamic-table-container';
+      container.innerHTML = `
+        <label for="skuSelect"><strong>Select a License SKU:</strong></label>
+        <select id="skuSelect"></select>
+        <h2>Microsoft Defender for Endpoint Features</h2>
+        <table id="endpointTable">
+          <thead>
+            <tr>
+              <th>Feature Name</th>
+              <th>Feature Description</th>
+              <th>Availability</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <h2>Microsoft Defender for Office 365 Features</h2>
+        <table id="officeTable">
+          <thead>
+            <tr>
+              <th>Feature Name</th>
+              <th>Feature Description</th>
+              <th>Availability</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <h2>Additional Microsoft 365 Security Features</h2>
+        <table id="m365Table">
+          <thead>
+            <tr>
+              <th>Feature Name</th>
+              <th>Feature Description</th>
+              <th>Availability</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      `;
+      const serviceDetails = document.getElementById('service-details');
+      serviceDetails.innerHTML = "";
+      serviceDetails.appendChild(container);
+      populateSKU();
+      updateTables();
+    }
+    /***********************
+     * Service Selection Logic
+     ***********************/
     function showService(service) {
       const serviceDetails = document.getElementById('service-details');
       const serviceTitle = document.getElementById('service-title');
-
       serviceDetails.innerHTML = ''; // Clear previous content
-
       if (service === 'exchange') {
         serviceTitle.textContent = 'Exchange Online Protection';
-        serviceDetails.innerHTML = `
-          <div class="service-options">
-            <label for="tenants">Number of Tenants</label>
-            <input type="number" id="tenants" value="1" min="1">
-            <label for="users-per-tenant">Number of Users per Tenant</label>
-            <input type="number" id="users-per-tenant" value="1" min="1">
-          </div>
-          <div class="service-options">
-            <input type="checkbox" id="advanced-hunting-checkbox">
-            <label for="advanced-hunting-checkbox">Include Advanced Hunting</label>
-            <span class="tooltip">?
-              <span class="tooltiptext">Advanced Hunting enables you to proactively inspect data in your organization’s network for signs of potential threats and anomalies using queries in Microsoft Defender.</span>
-            </span>
-          </div>
-          <button class="add-to-bill" onclick="addToBill('Exchange Online Protection', calculateExchangeCost(), {tenants: document.getElementById('tenants').value, users: document.getElementById('users-per-tenant').value, advancedHunting: document.getElementById('advanced-hunting-checkbox').checked})">Add to Bill</button>
-          <div class="service-details">
-            <h3>Exchange Online Protection Summary</h3>
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>Feature</th>
-                  <th>Description</th>
-                  <th>Availability</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="section-header">
-                  <td colspan="3">EOP Capabilities</td>
-                </tr>
-                <tr>
-                  <td>Anti-malware protection</td>
-                  <td>Real-time scanning for malware threats.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>Anti-spam protection</td>
-                  <td>Includes bulk email protection.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>Anti-phishing protection</td>
-                  <td>Detects and blocks spoofing and phishing attempts, including spoof intelligence insight.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>Outbound spam filtering</td>
-                  <td>Monitors outgoing emails for spam content.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>Connection filtering</td>
-                  <td>Restricts connections from suspicious IP addresses.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>Quarantine and quarantine policies</td>
-                  <td>Isolates suspicious emails and enforces quarantine policies.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>False positives/negatives reporting</td>
-                  <td>Uses admin submissions and user reports to improve detection accuracy.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>Tenant Allow/Block List</td>
-                  <td>Manages allow and block entries for incoming emails.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr>
-                  <td>Email Authentication</td>
-                  <td>DKIM and DMARC ensure email legitimacy.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-                <tr class="section-header">
-                  <td colspan="3">Automated Investigation & Response (AIR)</td>
-                </tr>
-                <tr>
-                  <td>Automated Investigation & Response (AIR)</td>
-                  <td>Examines alerts and takes immediate action to resolve breaches, reducing alert volume.</td>
-                  <td class="yes">Yes</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        `;
+        // Instead of a static summary, load our dynamic SKU table:
+        initEOPTable();
+        // (The "Add to Bill" button for EOP is now below the table.)
+        // We also add our "Add to Bill" button below the table container.
+        const addBtn = document.createElement("button");
+        addBtn.className = "add-to-bill";
+        addBtn.textContent = "Add to Bill";
+        addBtn.onclick = function() {
+          // When adding to bill, we use the Exchange cost function
+          // and pass the details (tenants and users from your table inputs)
+          const tenants = document.getElementById('tenants') ? document.getElementById('tenants').value : "N/A";
+          const users = document.getElementById('users-per-tenant') ? document.getElementById('users-per-tenant').value : "N/A";
+          addToBill('Exchange Online Protection', calculateExchangeCost(), { tenants: tenants, users: users });
+        };
+        // Append the button after the dynamic table container
+        serviceDetails.appendChild(addBtn);
       } else if (service === 'defender') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud';
         serviceDetails.innerHTML = `
@@ -473,7 +845,7 @@
                 <li>Includes a Cloud Workload Protection Platform (CWPP) with specialized security measures.</li>
                 <li>Protects servers, containers, storage, databases, and other cloud workloads from threats.</li>
                 <li><strong>Secure Cloud Applications:</strong></li>
-                <li>A DevSecOps solution that integrates security management directly at the code level, unifying security practices across multicloud and multiple-pipeline environments.</li>
+                <li>A DevSecOps solution that integrates security management directly at the code level.</li>
               </ul>
             </ul>
           </div>
@@ -491,7 +863,7 @@
             <input type="checkbox" id="cloudapps-advanced-hunting-checkbox">
             <label for="cloudapps-advanced-hunting-checkbox">Include Advanced Hunting</label>
             <span class="tooltip">?
-              <span class="tooltiptext">Advanced Hunting enables you to proactively inspect data in your organization’s network for signs of potential threats and anomalies using queries in Microsoft Defender.</span>
+              <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats.</span>
             </span>
           </div>
           <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud Apps', calculateCloudAppsCost(), {tenants: document.getElementById('cloudapps-tenants').value, users: document.getElementById('cloudapps-users-per-tenant').value, advancedHunting: document.getElementById('cloudapps-advanced-hunting-checkbox').checked})">Add to Bill</button>
@@ -500,12 +872,12 @@
             <ul>
               <li><strong>Cloud Discovery and App Governance:</strong></li>
               <ul>
-                <li><strong>Cloud Discovery:</strong> Analyzes traffic logs collected by Defender for Endpoint and assesses identified apps against the cloud app catalog, providing insights into compliance and security.</li>
-                <li><strong>App Governance:</strong> Offers insights to help you make decisions about blocking or restricting apps that pose significant risks, ensuring better control over cloud applications.</li>
+                <li><strong>Cloud Discovery:</strong> Analyzes traffic logs for insights into compliance and security.</li>
+                <li><strong>App Governance:</strong> Helps decide on blocking/restricting high-risk apps.</li>
               </ul>
               <li><strong>Manage Cloud Apps with Policies:</strong></li>
               <ul>
-                <li><strong>Cloud Apps with Policies:</strong> Enables you to set policies that define user behavior in the cloud, detecting risky actions, violations, or suspicious activities, helping maintain compliance and security.</li>
+                <li>Defines policies to detect risky actions and suspicious activities.</li>
               </ul>
             </ul>
           </div>
@@ -531,13 +903,13 @@
             <ul>
               <li><strong>Threat Indicators and Endpoint Protection:</strong></li>
               <ul>
-                <li><strong>Custom File and Network Indicators:</strong> Enables banning of suspicious files and blocking or allowing IPs, URLs, or domains based on threat intelligence.</li>
-                <li><strong>Endpoint Detection and Response (EDR) Block:</strong> Detects and blocks malicious artifacts, even when Microsoft Defender Antivirus isn't the primary antivirus, providing enhanced security.</li>
+                <li><strong>Custom File and Network Indicators:</strong> Bans suspicious files and blocks/allows IPs, URLs, or domains.</li>
+                <li><strong>Endpoint Detection and Response (EDR) Block:</strong> Detects and blocks malicious artifacts.</li>
               </ul>
               <li><strong>Response Capabilities and Vulnerability Management:</strong></li>
               <ul>
-                <li><strong>Device and Live Response Capabilities:</strong> Allows rapid response to detected threats by isolating devices and accessing them remotely for real-time investigation and mitigation.</li>
-                <li><strong>Vulnerability Management:</strong> Delivers visibility, assessments, and remediation tools for various platforms, ensuring proactive protection against vulnerabilities.</li>
+                <li><strong>Device and Live Response Capabilities:</strong> Isolates devices and allows real-time investigation.</li>
+                <li><strong>Vulnerability Management:</strong> Provides visibility, assessments, and remediation tools.</li>
               </ul>
             </ul>
           </div>
@@ -555,7 +927,7 @@
             <input type="checkbox" id="identity-advanced-hunting-checkbox">
             <label for="identity-advanced-hunting-checkbox">Include Advanced Hunting</label>
             <span class="tooltip">?
-              <span class="tooltiptext">Advanced Hunting enables you to proactively inspect data in your organization’s network for signs of potential threats and anomalies using queries in Microsoft Defender.</span>
+              <span class="tooltiptext">Advanced Hunting enables proactive threat inspection.</span>
             </span>
           </div>
           <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Identity', calculateIdentityCost(), {tenants: document.getElementById('identity-tenants').value, users: document.getElementById('identity-users-per-tenant').value, advancedHunting: document.getElementById('identity-advanced-hunting-checkbox').checked})">Add to Bill</button>
@@ -564,13 +936,13 @@
             <ul>
               <li><strong>Modern Identity Threat Detection (ITDR):</strong></li>
               <ul>
-                <li>Uses signals from on-premises Active Directory and cloud identities to detect and investigate advanced threats targeting your organization.</li>
-                <li>Provides comprehensive protection against identity-based attacks, enhancing overall security posture.</li>
+                <li>Uses signals from on-premises AD and cloud identities to detect advanced threats.</li>
+                <li>Provides comprehensive protection against identity-based attacks.</li>
               </ul>
               <li><strong>Entity Tags:</strong></li>
               <ul>
-                <li>Tags sensitive accounts for enhanced detection of security events, such as group modifications and lateral movements.</li>
-                <li>Honeytoken accounts are set up as traps; any unauthorized access triggers alerts to help identify breaches.</li>
+                <li>Tags sensitive accounts for enhanced event detection.</li>
+                <li>Honeytoken accounts trigger alerts on unauthorized access.</li>
               </ul>
             </ul>
           </div>
@@ -588,7 +960,7 @@
             <input type="checkbox" id="entra-advanced-hunting-checkbox">
             <label for="entra-advanced-hunting-checkbox">Include Advanced Hunting</label>
             <span class="tooltip">?
-              <span class="tooltiptext">Advanced Hunting enables you to proactively inspect data in your organization’s network for signs of potential threats and anomalies using queries in Microsoft Defender.</span>
+              <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats.</span>
             </span>
           </div>
           <button class="add-to-bill" onclick="addToBill('Microsoft Entra ID Protection', calculateEntraCost(), {tenants: document.getElementById('entra-tenants').value, users: document.getElementById('entra-users-per-tenant').value, advancedHunting: document.getElementById('entra-advanced-hunting-checkbox').checked})">Add to Bill</button>
@@ -597,12 +969,12 @@
             <ul>
               <li><strong>Risk-Based Access Policies:</strong></li>
               <ul>
-                <li>Enhances security with Conditional Access policies that respond to sign-in and user risks.</li>
-                <li>Evaluates each authentication attempt and applies controls based on detected risk levels.</li>
+                <li>Enhances security with Conditional Access that responds to sign-in risks.</li>
+                <li>Evaluates authentication attempts and applies controls based on risk levels.</li>
               </ul>
               <li><strong>Advanced Risk Detection and Response:</strong></li>
               <ul>
-                <li>Continuously monitors identity signals to detect potential threats and unauthorized access.</li>
+                <li>Continuously monitors identity signals for threats and unauthorized access.</li>
                 <li>Automatically adjusts access policies in response to detected risks.</li>
               </ul>
             </ul>
@@ -651,205 +1023,38 @@
         `;
       }
     }
-
-    function toggleExtraRules() {
-      const extraRulesSection = document.getElementById('extra-rules-section');
-      extraRulesSection.style.display = extraRulesSection.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function calculateSentinelCost() {
-      const instances = document.getElementById('sentinel-instances').value;
-      const extraRules = document.getElementById('sentinel-extra-rules').value;
-      const baseHours = 120;
-      const extraRuleCost = extraRules * 5;
-      const totalHours = instances * (baseHours + extraRuleCost);
-      return totalHours * 190; // Assuming $190 per hour
-    }
-
-    function calculateEntraCost() {
-      const tenants = document.getElementById('entra-tenants').value;
-      const usersPerTenant = document.getElementById('entra-users-per-tenant').value;
-      let hoursPerTenant;
-      if (usersPerTenant <= 300) {
-        hoursPerTenant = 20;
-      } else if (usersPerTenant <= 750) {
-        hoursPerTenant = 30;
-      } else if (usersPerTenant <= 1000) {
-        hoursPerTenant = 40;
-      } else {
-        alert("Please contact sales for tenants with more than 1000 users.");
-        return 0;
-      }
-      const advancedHuntingCost = document.getElementById('entra-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
-      const serviceCost = tenants * hoursPerTenant * 190;
-      return serviceCost + advancedHuntingCost;
-    }
-
-    function calculateCost(quantityId, rate) {
-      const quantity = document.getElementById(quantityId).value;
-      return quantity * rate;
-    }
-
-    function calculateExchangeCost() {
-      const tenants = document.getElementById('tenants').value;
-      const usersPerTenant = document.getElementById('users-per-tenant').value;
-      let hoursPerTenant;
-      if (usersPerTenant <= 300) {
-        hoursPerTenant = 80;
-      } else if (usersPerTenant <= 750) {
-        hoursPerTenant = 120;
-      } else if (usersPerTenant <= 1000) {
-        hoursPerTenant = 160;
-      } else {
-        alert("Please contact Account Executive for tenants with more than 1000 users.");
-        return 0;
-      }
-      const advancedHuntingCost = document.getElementById('advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
-      const serviceCost = tenants * hoursPerTenant * 190;
-      return serviceCost + advancedHuntingCost;
-    }
-
-    function calculateCloudAppsCost() {
-      const tenants = document.getElementById('cloudapps-tenants').value;
-      const usersPerTenant = document.getElementById('cloudapps-users-per-tenant').value;
-      let hoursPerTenant;
-      if (usersPerTenant <= 300) {
-        hoursPerTenant = 80;
-      } else if (usersPerTenant <= 750) {
-        hoursPerTenant = 120;
-      } else if (usersPerTenant <= 1000) {
-        hoursPerTenant = 160;
-      } else {
-        alert("Please contact Account Executive for tenants with more than 1000 users.");
-        return 0;
-      }
-      const advancedHuntingCost = document.getElementById('cloudapps-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
-      const serviceCost = tenants * hoursPerTenant * 190;
-      return serviceCost + advancedHuntingCost;
-    }
-
-    function calculateEndpointCost() {
-      const devices = document.getElementById('devices').value;
-      const vulnMgmtDevices = document.getElementById('vuln-mgmt-checkbox').checked ? document.getElementById('vuln-mgmt-devices').value : 0;
-      const deviceCost = devices * 150;
-      const vulnMgmtCost = vulnMgmtDevices * 50;
-      return deviceCost + vulnMgmtCost;
-    }
-
-    function calculateIdentityCost() {
-      const tenants = document.getElementById('identity-tenants').value;
-      const usersPerTenant = document.getElementById('identity-users-per-tenant').value;
-      let hoursPerTenant;
-      if (usersPerTenant <= 300) {
-        hoursPerTenant = 40;
-      } else if (usersPerTenant <= 750) {
-        hoursPerTenant = 60;
-      } else if (usersPerTenant <= 1000) {
-        hoursPerTenant = 80;
-      } else {
-        alert("Please contact sales for tenants with more than 1000 users.");
-        return 0;
-      }
-      const advancedHuntingCost = document.getElementById('identity-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
-      const serviceCost = tenants * hoursPerTenant * 190;
-      return serviceCost + advancedHuntingCost;
-    }
-
-    function addToBill(serviceName, cost, details) {
-      const billItems = document.getElementById('bill-items');
-      // Check if the item already exists in the bill
-      const existingItem = Array.from(billItems.children).find(item => item.querySelector('.item-header span:first-child').textContent === serviceName);
-      let detailsText = '';
-      if (details.tenants) {
-        detailsText = `Tenants: ${details.tenants}, Users per Tenant: ${details.users}`;
-      }
-      if (details.advancedHunting) {
-        detailsText += ", Advanced Hunting Included";
-      }
-      if (details.instances) {
-        detailsText = `Instances: ${details.instances}`;
-      }
-      if (details.extraRules) {
-        detailsText += `, Extra Rules: ${details.extraRules}`;
-      }
-      if (details.devices) {
-        detailsText = `Devices: ${details.devices}`;
-      }
-      if (details.vulnMgmtDevices) {
-        detailsText += `, Vulnerability Management: ${details.vulnMgmtDevices} Devices`;
-      }
-      if (existingItem) {
-        // Update the existing item
-        const itemDetails = existingItem.querySelector('.item-details');
-        const itemPrice = existingItem.querySelector('.item-price');
-        itemDetails.textContent = detailsText;
-        const previousCost = parseFloat(itemPrice.dataset.previousCost || 0);
-        itemPrice.textContent = `$${cost.toFixed(2)}`;
-        totalCost = totalCost - previousCost + cost;
-        itemPrice.dataset.previousCost = cost.toFixed(2);
-      } else {
-        totalCost += cost;
-        const billItem = document.createElement('div');
-        billItem.classList.add('bill-item');
-        billItem.innerHTML = `
-          <div class="item-header">
-            <span>${serviceName}</span>
-            <span class="item-price" data-previous-cost="${cost.toFixed(2)}">$${cost.toFixed(2)}</span>
-            <span class="remove-item" onclick="removeItem(this, ${cost})">X</span>
-          </div>
-          <div class="item-details">${detailsText}</div>
-        `;
-        billItems.appendChild(billItem);
-      }
-      document.getElementById('total-cost').textContent = totalCost.toFixed(2);
-    }
-
-    function removeItem(element, cost) {
-      const billItem = element.parentElement.parentElement;
-      const previousCost = parseFloat(billItem.querySelector('.item-price').dataset.previousCost);
-      billItem.remove();
-      totalCost -= previousCost;
-      document.getElementById('total-cost').textContent = totalCost.toFixed(2);
-      if (totalCost < 0) {
-        totalCost = 0;
-      }
-    }
-
-    function exportToExcel() {
-      const companyName = prompt("Enter the Company Name:");
-      if (!companyName) {
-        alert("Company name is required to export the file.");
-        return;
-      }
-      const data = [];
-      const billItems = document.querySelectorAll('.bill-item');
-      data.push([`${companyName}`]);
-      data.push(['Service Name', 'Price', 'Details']);
-      billItems.forEach(item => {
-        const serviceName = item.querySelector('.item-header span:first-child').textContent;
-        const price = item.querySelector('.item-price').textContent;
-        const details = item.querySelector('.item-details').textContent.trim();
-        data.push([serviceName, price, details]);
-      });
-      data.push([]);
-      data.push(['Total Cost', document.getElementById('total-cost').textContent]);
-      const ws = XLSX.utils.aoa_to_sheet(data);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Bill Summary");
-      XLSX.writeFile(wb, `${companyName}_BillSummary.xlsx`);
-    }
-
-    function toggleVulnerabilityManagement() {
-      const vulnMgmtCheckbox = document.getElementById('vuln-mgmt-checkbox');
-      const vulnMgmtOptions = document.getElementById('vuln-mgmt-options');
-      vulnMgmtOptions.style.display = vulnMgmtCheckbox.checked ? 'block' : 'none';
-    }
-
-    skuSelect.addEventListener("change", updateTables);
-    window.addEventListener("DOMContentLoaded", () => {
-      skuSelect.selectedIndex = 0; // Default to first SKU
-      updateTables();
-    });
+    /***********************
+     * End of Dynamic Table Code
+     ***********************/
+    // Attach listener for SKU table update if already present on page load
+    // (This listener will only work when the Exchange tab is selected and the dynamic table is rendered)
   </script>
+</head>
+<body>
+  <div class="sidebar">
+    <img src="logo.png" alt="Company Logo" class="logo" onclick="window.location.href='https://www.ampiosolutions.com/'">
+    <h2>Services</h2>
+    <a onclick="showService('exchange')">Exchange Online Protection</a>
+    <a onclick="showService('defender')">Microsoft Defender for Cloud</a>
+    <a onclick="showService('cloudApps')">Microsoft Defender for Cloud Apps</a>
+    <a onclick="showService('endpoint')">Microsoft Defender for Endpoint</a>
+    <a onclick="showService('identity')">Microsoft Defender for Identity</a>
+    <a onclick="showService('entra')">Microsoft Entra ID Protection</a>
+    <a onclick="showService('sentinel')">Microsoft Sentinel</a>
+  </div>
+  <div class="title-bar">
+    <h1>Microsoft Security Calculator</h1>
+  </div>
+  <div class="content">
+    <h2 id="service-title">Select a Service</h2>
+    <div id="service-details" class="service-options"></div>
+  </div>
+  <div id="bill-summary" class="bill-summary">
+    <h3>Bill Summary</h3>
+    <div id="bill-items"></div>
+    <div class="total-cost">Total: $<span id="total-cost">0</span></div>
+    <button class="add-to-bill" onclick="exportToExcel()">Export to Excel</button>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
