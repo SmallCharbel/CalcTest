@@ -188,7 +188,8 @@
       display: inline-block;
       cursor: pointer;
       font-size: 20px;
-      padding-left: 10px;
+      padding-left: 5px;
+      color: #30475e;
     }
     .tooltip .tooltiptext {
       visibility: hidden;
@@ -220,7 +221,7 @@
       visibility: visible;
       opacity: 1;
     }
-    /* Dynamic Table Styles (for the SKU table in the EOP tab) */
+    /* Dynamic Table Styles for the SKU table in the EOP tab */
     .dynamic-table-container {
       margin-top: 20px;
     }
@@ -307,7 +308,6 @@
       }
     };
     const msalInstance = new msal.PublicClientApplication(msalConfig);
-
     // Check authentication on page load
     async function checkAuth() {
       try {
@@ -317,7 +317,6 @@
           window.location.href = 'login.html';
           return;
         }
-        // Append user info and logout button to sidebar after DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
           const sidebar = document.querySelector('.sidebar');
           if (sidebar) {
@@ -469,10 +468,7 @@
     }
     function exportToExcel() {
       const companyName = prompt("Enter the Company Name:");
-      if (!companyName) {
-        alert("Company name is required to export the file.");
-        return;
-      }
+      if (!companyName) { alert("Company name is required to export the file."); return; }
       const data = [];
       const billItems = document.querySelectorAll('.bill-item');
       data.push([`${companyName}`]);
@@ -498,7 +494,7 @@
     /***********************
      * Dynamic SKU Table Code for Exchange Online Protection Tab
      ***********************/
-    // SKU mapping and feature arrays (from our previous version)
+    // SKU Mapping and Feature Arrays (as previously defined)
     const skuMapping = {
       "Microsoft 365 Business Basic":         { endpoint: "P1", office: "None", extra: false },
       "Microsoft 365 Business Standard":      { endpoint: "P1", office: "None", extra: false },
@@ -514,106 +510,37 @@
       "Microsoft Defender for Office 365 P2": { endpoint: "None", office: "P2", extra: false }
     };
     const endpointP1Features = [
-      {
-        name: "Next-Generation Protection",
-        description: "Robust antimalware and antivirus protection, including behavior‑based, heuristic, and real‑time protection."
-      },
-      {
-        name: "Attack Surface Reduction (ASR)",
-        description: "Capabilities to harden devices and prevent zero‑day attacks."
-      },
-      {
-        name: "Manual Response Actions",
-        description: "Actions such as quarantining files and isolating devices."
-      },
-      {
-        name: "Centralized Configuration and Management",
-        description: "Integration with Microsoft Intune and management via the Microsoft Defender portal."
-      },
-      {
-        name: "Cross‑Platform Protection",
-        description: "Support for Windows, macOS, iOS, and Android devices."
-      }
+      { name: "Next-Generation Protection", description: "Robust antimalware and antivirus protection, including behavior‑based, heuristic, and real‑time protection." },
+      { name: "Attack Surface Reduction (ASR)", description: "Capabilities to harden devices and prevent zero‑day attacks." },
+      { name: "Manual Response Actions", description: "Actions such as quarantining files and isolating devices." },
+      { name: "Centralized Configuration and Management", description: "Integration with Microsoft Intune and management via the Microsoft Defender portal." },
+      { name: "Cross‑Platform Protection", description: "Support for Windows, macOS, iOS, and Android devices." }
     ];
     const endpointP2Features = [
-      {
-        name: "Endpoint Detection and Response (EDR)",
-        description: "Advanced threat detection and response capabilities."
-      },
-      {
-        name: "Threat and Vulnerability Management (TVM)",
-        description: "Identifies, assesses, and remediates endpoint vulnerabilities."
-      },
-      {
-        name: "Automated Investigation and Remediation (AIR)",
-        description: "Automates the investigation and remediation of threats."
-      },
-      {
-        name: "Threat Intelligence",
-        description: "Provides detailed threat intelligence and analysis."
-      },
-      {
-        name: "Microsoft Threat Experts",
-        description: "Access to Microsoft’s team of security experts for additional support."
-      }
+      { name: "Endpoint Detection and Response (EDR)", description: "Advanced threat detection and response capabilities." },
+      { name: "Threat and Vulnerability Management (TVM)", description: "Identifies, assesses, and remediates endpoint vulnerabilities." },
+      { name: "Automated Investigation and Remediation (AIR)", description: "Automates the investigation and remediation of threats." },
+      { name: "Threat Intelligence", description: "Provides detailed threat intelligence and analysis." },
+      { name: "Microsoft Threat Experts", description: "Access to Microsoft’s team of security experts for additional support." }
     ];
     const officeP1Features = [
-      {
-        name: "Safe Attachments",
-        description: "Protects against unknown malware and viruses by scanning email attachments."
-      },
-      {
-        name: "Safe Links",
-        description: "Provides time‑of‑click verification of URLs to protect against malicious links."
-      },
-      {
-        name: "Anti‑Phishing Policies",
-        description: "Detects and blocks phishing attempts."
-      },
-      {
-        name: "Real‑Time Detection",
-        description: "Monitors and alerts on suspicious activities in real‑time."
-      },
-      {
-        name: "Quarantine",
-        description: "Isolates potentially harmful emails for review."
-      },
-      {
-        name: "Reporting and Insights",
-        description: "Provides detailed reports and insights on threats and security incidents."
-      }
+      { name: "Safe Attachments", description: "Protects against unknown malware and viruses by scanning email attachments." },
+      { name: "Safe Links", description: "Provides time‑of‑click verification of URLs to protect against malicious links." },
+      { name: "Anti‑Phishing Policies", description: "Detects and blocks phishing attempts." },
+      { name: "Real‑Time Detection", description: "Monitors and alerts on suspicious activities in real‑time." },
+      { name: "Quarantine", description: "Isolates potentially harmful emails for review." },
+      { name: "Reporting and Insights", description: "Provides detailed reports and insights on threats and security incidents." }
     ];
     const officeP2Features = [
-      {
-        name: "Threat Explorer",
-        description: "Advanced threat hunting and investigation tool."
-      },
-      {
-        name: "Automated Investigation and Response (AIR)",
-        description: "Automates the investigation and remediation of threats."
-      },
-      {
-        name: "Attack Simulation Training",
-        description: "Simulates phishing attacks to train users on recognizing and responding to threats."
-      },
-      {
-        name: "Advanced Threat Protection (ATP) for SharePoint, OneDrive, and Teams",
-        description: "Extends protection to files stored in SharePoint, OneDrive, and Teams."
-      },
-      {
-        name: "Threat Intelligence",
-        description: "Provides detailed threat intelligence and analysis."
-      }
+      { name: "Threat Explorer", description: "Advanced threat hunting and investigation tool." },
+      { name: "Automated Investigation and Response (AIR)", description: "Automates the investigation and remediation of threats." },
+      { name: "Attack Simulation Training", description: "Simulates phishing attacks to train users on recognizing and responding to threats." },
+      { name: "Advanced Threat Protection (ATP) for SharePoint, OneDrive, and Teams", description: "Extends protection to files stored in SharePoint, OneDrive, and Teams." },
+      { name: "Threat Intelligence", description: "Provides detailed threat intelligence and analysis." }
     ];
     const additionalM365Features = [
-      {
-        name: "Conditional Access",
-        description: "Advanced access controls across Microsoft 365 applications."
-      },
-      {
-        name: "Identity Protection",
-        description: "Comprehensive identity security to protect against unauthorized access."
-      }
+      { name: "Conditional Access", description: "Advanced access controls across Microsoft 365 applications." },
+      { name: "Identity Protection", description: "Comprehensive identity security to protect against unauthorized access." }
     ];
     // Function to populate the SKU dropdown
     function populateSKU() {
@@ -627,15 +554,15 @@
       });
       skuSelect.addEventListener("change", updateTables);
     }
-    // Function to update the dynamic tables based on selected SKU
+    // Function to update the dynamic tables based on the selected SKU
     function updateTables() {
       const skuSelect = document.getElementById("skuSelect");
       const selectedSKU = skuSelect.value;
       const skuData = skuMapping[selectedSKU];
+      let row, cell;
       // Update Defender for Endpoint Table
       const endpointTbody = document.querySelector("#endpointTable tbody");
       endpointTbody.innerHTML = "";
-      let row, cell;
       // Section Header: Plan 1 Features
       row = document.createElement("tr");
       cell = document.createElement("td");
@@ -748,11 +675,32 @@
         m365Tbody.appendChild(row);
       });
     }
-    // Function to initialize the dynamic table for Exchange Online Protection
+    // Function to initialize the dynamic table and input fields for EOP
     function initEOPTable() {
       const container = document.createElement('div');
       container.className = 'dynamic-table-container';
       container.innerHTML = `
+        <div class="service-options">
+          <label for="tenants"><strong>Number of Tenants</strong>
+            <span class="tooltip">?
+              <span class="tooltiptext">A tenant represents a separate Exchange Online instance (e.g., a separate subscription or division).</span>
+            </span>
+          </label>
+          <input type="number" id="tenants" value="1" min="1">
+          <label for="users-per-tenant"><strong>Number of Users per Tenant</strong>
+            <span class="tooltip">?
+              <span class="tooltiptext">This number is used in the cost calculation. Typically, up to 300 users allocate 80 hours, 750 users 120 hours, and 1000 users 160 hours.</span>
+            </span>
+          </label>
+          <input type="number" id="users-per-tenant" value="1" min="1">
+        </div>
+        <div class="service-options">
+          <input type="checkbox" id="advanced-hunting-checkbox">
+          <label for="advanced-hunting-checkbox"><strong>Include Advanced Hunting</strong></label>
+          <span class="tooltip">?
+            <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats using Microsoft Defender queries.</span>
+          </span>
+        </div>
         <label for="skuSelect"><strong>Select a License SKU:</strong></label>
         <select id="skuSelect"></select>
         <h2>Microsoft Defender for Endpoint Features</h2>
@@ -804,21 +752,18 @@
       serviceDetails.innerHTML = ''; // Clear previous content
       if (service === 'exchange') {
         serviceTitle.textContent = 'Exchange Online Protection';
-        // Instead of a static summary, load our dynamic SKU table:
+        // Initialize the dynamic table and input fields for EOP
         initEOPTable();
-        // (The "Add to Bill" button for EOP is now below the table.)
-        // We also add our "Add to Bill" button below the table container.
+        // Add the "Add to Bill" button below the dynamic table container
         const addBtn = document.createElement("button");
         addBtn.className = "add-to-bill";
         addBtn.textContent = "Add to Bill";
         addBtn.onclick = function() {
-          // When adding to bill, we use the Exchange cost function
-          // and pass the details (tenants and users from your table inputs)
-          const tenants = document.getElementById('tenants') ? document.getElementById('tenants').value : "N/A";
-          const users = document.getElementById('users-per-tenant') ? document.getElementById('users-per-tenant').value : "N/A";
-          addToBill('Exchange Online Protection', calculateExchangeCost(), { tenants: tenants, users: users });
+          const tenants = document.getElementById('tenants').value;
+          const users = document.getElementById('users-per-tenant').value;
+          const advHunting = document.getElementById('advanced-hunting-checkbox').checked;
+          addToBill('Exchange Online Protection', calculateExchangeCost(), { tenants: tenants, users: users, advancedHunting: advHunting });
         };
-        // Append the button after the dynamic table container
         serviceDetails.appendChild(addBtn);
       } else if (service === 'defender') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud';
@@ -826,7 +771,7 @@
           <div class="service-options">
             <label for="workloads">Number of Azure Workloads 
               <span class="tooltip">?
-                <span class="tooltiptext">Examples of Azure Workloads: VM, Storage, Database, Server, etc.</span>
+                <span class="tooltiptext">Examples: VM, Storage, Database, Server, etc.</span>
               </span>
             </label>
             <input type="number" id="workloads" value="1" min="1">
@@ -837,15 +782,15 @@
             <ul>
               <li><strong>Improve Your Security Posture:</strong></li>
               <ul>
-                <li>Offers a Cloud Security Posture Management (CSPM) solution that helps identify vulnerabilities.</li>
-                <li>Provides actionable recommendations to enhance your cloud security and prevent breaches.</li>
+                <li>Offers Cloud Security Posture Management (CSPM) to identify vulnerabilities.</li>
+                <li>Provides actionable recommendations to enhance your cloud security.</li>
               </ul>
               <li><strong>Protect Cloud Workloads and Secure Cloud Applications:</strong></li>
               <ul>
-                <li>Includes a Cloud Workload Protection Platform (CWPP) with specialized security measures.</li>
-                <li>Protects servers, containers, storage, databases, and other cloud workloads from threats.</li>
+                <li>Includes a Cloud Workload Protection Platform (CWPP) with specialized measures.</li>
+                <li>Protects servers, containers, storage, databases, and more from threats.</li>
                 <li><strong>Secure Cloud Applications:</strong></li>
-                <li>A DevSecOps solution that integrates security management directly at the code level.</li>
+                <li>Integrates security management directly at the code level for multicloud environments.</li>
               </ul>
             </ul>
           </div>
@@ -863,7 +808,7 @@
             <input type="checkbox" id="cloudapps-advanced-hunting-checkbox">
             <label for="cloudapps-advanced-hunting-checkbox">Include Advanced Hunting</label>
             <span class="tooltip">?
-              <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats.</span>
+              <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats.</span>
             </span>
           </div>
           <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud Apps', calculateCloudAppsCost(), {tenants: document.getElementById('cloudapps-tenants').value, users: document.getElementById('cloudapps-users-per-tenant').value, advancedHunting: document.getElementById('cloudapps-advanced-hunting-checkbox').checked})">Add to Bill</button>
@@ -903,7 +848,7 @@
             <ul>
               <li><strong>Threat Indicators and Endpoint Protection:</strong></li>
               <ul>
-                <li><strong>Custom File and Network Indicators:</strong> Bans suspicious files and blocks/allows IPs, URLs, or domains.</li>
+                <li><strong>Custom File and Network Indicators:</strong> Bans suspicious files and blocks/allows IPs, URLs, or domains based on threat intelligence.</li>
                 <li><strong>Endpoint Detection and Response (EDR) Block:</strong> Detects and blocks malicious artifacts.</li>
               </ul>
               <li><strong>Response Capabilities and Vulnerability Management:</strong></li>
@@ -1023,11 +968,6 @@
         `;
       }
     }
-    /***********************
-     * End of Dynamic Table Code
-     ***********************/
-    // Attach listener for SKU table update if already present on page load
-    // (This listener will only work when the Exchange tab is selected and the dynamic table is rendered)
   </script>
 </head>
 <body>
