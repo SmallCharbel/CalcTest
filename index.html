@@ -221,8 +221,8 @@
       visibility: visible;
       opacity: 1;
     }
-    /* Custom Table Styles for Defender for Cloud Apps */
-    .cloudapps-table {
+    /* Custom Table Styles for Defender for Cloud */
+    .custom-table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
@@ -230,51 +230,28 @@
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .cloudapps-table th,
-    .cloudapps-table td {
+    .custom-table th,
+    .custom-table td {
       padding: 12px 15px;
       text-align: left;
-      border: 1px solid #444;
+      border: 1px solid #ccc;
     }
-    .cloudapps-table th {
-      background-color: #1a3b5d; /* navy blue */
+    .custom-table th {
+      background-color: #30475e;
       color: #fff;
       font-weight: bold;
     }
-    .cloudapps-table tr:nth-child(even) {
-      background-color: #BEBEBE; /* dark grey */
+    .custom-table tr:nth-child(even) {
+      background-color: #f3f3f3;
     }
-    .cloudapps-table tr:nth-child(odd) {
-      background-color: #333;
-    }
-    .cloudapps-table tr:hover {
-      background-color: #244a70;
+    .custom-table tr:hover {
+      background-color: #e9e9e9;
       transition: background-color 0.3s ease;
     }
-    /* Modern Dropdown for Cloud Apps SKU */
-    #skuSelectCloudApps {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #fff;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-image: url('data:image/svg+xml;utf8,<svg fill="%23666666" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      background-size: 16px;
-    }
     @media (max-width: 600px) {
-      .cloudapps-table th,
-      .cloudapps-table td {
+      .custom-table th,
+      .custom-table td {
         padding: 8px;
-        font-size: 14px;
-      }
-      #skuSelectCloudApps {
         font-size: 14px;
       }
     }
@@ -364,11 +341,11 @@
     }
     function calculateExchangeCost() {
       const tenants = document.getElementById('tenants').value;
-      const users = document.getElementById('users-per-tenant').value;
+      const usersPerTenant = document.getElementById('users-per-tenant').value;
       let hoursPerTenant;
-      if (users <= 300) { hoursPerTenant = 80; }
-      else if (users <= 750) { hoursPerTenant = 120; }
-      else if (users <= 1000) { hoursPerTenant = 160; }
+      if (usersPerTenant <= 300) { hoursPerTenant = 80; }
+      else if (usersPerTenant <= 750) { hoursPerTenant = 120; }
+      else if (usersPerTenant <= 1000) { hoursPerTenant = 160; }
       else { alert("Please contact Account Executive for tenants with more than 1000 users."); return 0; }
       const advancedHuntingCost = document.getElementById('advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
       const serviceCost = tenants * hoursPerTenant * 190;
@@ -376,11 +353,11 @@
     }
     function calculateCloudAppsCost() {
       const tenants = document.getElementById('cloudapps-tenants').value;
-      const users = document.getElementById('cloudapps-users-per-tenant').value;
+      const usersPerTenant = document.getElementById('cloudapps-users-per-tenant').value;
       let hoursPerTenant;
-      if (users <= 300) { hoursPerTenant = 80; }
-      else if (users <= 750) { hoursPerTenant = 120; }
-      else if (users <= 1000) { hoursPerTenant = 160; }
+      if (usersPerTenant <= 300) { hoursPerTenant = 80; }
+      else if (usersPerTenant <= 750) { hoursPerTenant = 120; }
+      else if (usersPerTenant <= 1000) { hoursPerTenant = 160; }
       else { alert("Please contact Account Executive for tenants with more than 1000 users."); return 0; }
       const advancedHuntingCost = document.getElementById('cloudapps-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
       const serviceCost = tenants * hoursPerTenant * 190;
@@ -395,11 +372,11 @@
     }
     function calculateIdentityCost() {
       const tenants = document.getElementById('identity-tenants').value;
-      const users = document.getElementById('identity-users-per-tenant').value;
+      const usersPerTenant = document.getElementById('identity-users-per-tenant').value;
       let hoursPerTenant;
-      if (users <= 300) { hoursPerTenant = 40; }
-      else if (users <= 750) { hoursPerTenant = 60; }
-      else if (users <= 1000) { hoursPerTenant = 80; }
+      if (usersPerTenant <= 300) { hoursPerTenant = 40; }
+      else if (usersPerTenant <= 750) { hoursPerTenant = 60; }
+      else if (usersPerTenant <= 1000) { hoursPerTenant = 80; }
       else { alert("Please contact sales for tenants with more than 1000 users."); return 0; }
       const advancedHuntingCost = document.getElementById('identity-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
       const serviceCost = tenants * hoursPerTenant * 190;
@@ -477,15 +454,16 @@
       vulnMgmtOptions.style.display = vulnMgmtCheckbox.checked ? 'block' : 'none';
     }
     /***********************
-     * Dynamic SKU Table Code for Exchange Online Protection
+     * Dynamic SKU Table Code for Exchange Online Protection Tab
      ***********************/
+    // SKU Mapping and Feature Arrays (as previously defined)
     const skuMapping = {
       "Microsoft 365 Business Basic":         { endpoint: "P1", office: "None", extra: false },
       "Microsoft 365 Business Standard":      { endpoint: "P1", office: "None", extra: false },
       "Microsoft 365 Business Premium":       { endpoint: "P1", office: "None", extra: false },
       "Microsoft 365 E3":                     { endpoint: "P1", office: "None", extra: false },
-      "Microsoft 365 E5":                     { endpoint: "P2", office: "P2", extra: true },
-      "Microsoft 365 A1/A3/A5":               { endpoint: "P2", office: "P2", extra: true },
+      "Microsoft 365 E5":                     { endpoint: "P2", office: "P2",  extra: true  },
+      "Microsoft 365 A1/A3/A5":               { endpoint: "P2", office: "P2",  extra: true  },
       "Microsoft 365 F1/F3":                  { endpoint: "P1", office: "None", extra: false },
       "Exchange Online Plan 1":               { endpoint: "P1", office: "None", extra: false },
       "Exchange Online Plan 2":               { endpoint: "P1", office: "None", extra: false },
@@ -526,6 +504,7 @@
       { name: "Conditional Access", description: "Advanced access controls across Microsoft 365 applications." },
       { name: "Identity Protection", description: "Comprehensive identity security to protect against unauthorized access." }
     ];
+    // Function to populate the SKU dropdown
     function populateSKU() {
       const skuSelect = document.getElementById("skuSelect");
       skuSelect.innerHTML = "";
@@ -537,6 +516,7 @@
       });
       skuSelect.addEventListener("change", updateTables);
     }
+    // Function to update the dynamic tables based on the selected SKU
     function updateTables() {
       const skuSelect = document.getElementById("skuSelect");
       const selectedSKU = skuSelect.value;
@@ -545,6 +525,7 @@
       // Update Defender for Endpoint Table
       const endpointTbody = document.querySelector("#endpointTable tbody");
       endpointTbody.innerHTML = "";
+      // Section Header: Plan 1 Features
       row = document.createElement("tr");
       cell = document.createElement("td");
       cell.textContent = "Plan 1 Features";
@@ -567,6 +548,7 @@
         row.appendChild(cell);
         endpointTbody.appendChild(row);
       });
+      // Section Header: Plan 2 Features
       row = document.createElement("tr");
       cell = document.createElement("td");
       cell.textContent = "Plan 2 Features";
@@ -655,91 +637,58 @@
         m365Tbody.appendChild(row);
       });
     }
-    /***********************
-     * New Dynamic Table for Microsoft Defender for Cloud Apps
-     ***********************/
-    // Allowed SKUs for Cloud Apps
-    const cloudAppsAllowedSKUs = [
-      "Microsoft 365 E5",
-      "Microsoft 365 A5",
-      "Microsoft 365 F5 Security",
-      "Enterprise Mobility + Security E5"
-    ];
-    // Cloud Apps Features Array
-    const cloudAppsFeatures = [
-      { name: "Shadow IT Discovery", description: "Identifies and monitors unsanctioned apps being used within the organization." },
-      { name: "App Governance", description: "Provides insights into app usage patterns, data flows, and potential risks." },
-      { name: "Threat Protection", description: "Detects and responds to threats using machine learning and behavioral analytics." },
-      { name: "Data Loss Prevention (DLP)", description: "Prevents sensitive data from being shared or leaked outside the organization." },
-      { name: "Information Protection", description: "Classifies and labels data to ensure proper handling based on sensitivity." },
-      { name: "Compliance and Governance", description: "Ensures cloud app usage complies with industry regulations and standards." },
-      { name: "ATP for SaaS Apps", description: "Extends protection to files stored in SaaS apps like SharePoint, OneDrive, and Teams." },
-      { name: "Automated Investigation and Response (AIR)", description: "Automates the investigation and remediation of threats." },
-      { name: "Threat Intelligence", description: "Provides detailed threat intelligence and analysis." },
-      { name: "App-to-App Protection", description: "Protects inter-app data exchange with application governance." }
-    ];
-    function populateSKUCloudApps() {
-      const skuSelect = document.getElementById("skuSelectCloudApps");
-      skuSelect.innerHTML = "";
-      cloudAppsAllowedSKUs.forEach(sku => {
-        const option = document.createElement("option");
-        option.value = sku;
-        option.textContent = sku;
-        skuSelect.appendChild(option);
-      });
-      skuSelect.addEventListener("change", updateTablesCloudApps);
-    }
-    function updateTablesCloudApps() {
-      const skuSelect = document.getElementById("skuSelectCloudApps");
-      const selectedSKU = skuSelect.value;
-      // For allowed SKUs, every feature is included.
-      let available = cloudAppsAllowedSKUs.includes(selectedSKU) ? "Yes" : "No";
-      let tbody = document.querySelector("#cloudAppsTable tbody");
-      tbody.innerHTML = "";
-      cloudAppsFeatures.forEach(feature => {
-        let row = document.createElement("tr");
-        let cell = document.createElement("td");
-        cell.textContent = feature.name;
-        row.appendChild(cell);
-        cell = document.createElement("td");
-        cell.textContent = feature.description;
-        row.appendChild(cell);
-        cell = document.createElement("td");
-        cell.textContent = available;
-        cell.className = available === "Yes" ? "yes" : "no";
-        row.appendChild(cell);
-        tbody.appendChild(row);
-      });
-    }
-    function initCloudAppsTable() {
-      let container = document.createElement('div');
+    // Function to initialize the dynamic table and additional input fields for Exchange Online Protection
+    function initEOPTable() {
+      const container = document.createElement('div');
       container.className = 'dynamic-table-container';
       container.innerHTML = `
         <div class="service-options">
-          <label for="cloudapps-tenants"><strong>Number of Tenants</strong>
+          <label for="tenants"><strong>Number of Tenants</strong>
             <span class="tooltip">?
-              <span class="tooltiptext">A tenant represents a separate instance (e.g., a separate subscription or division).</span>
+              <span class="tooltiptext">A tenant represents a separate Exchange Online instance (e.g., a separate subscription or division).</span>
             </span>
           </label>
-          <input type="number" id="cloudapps-tenants" value="1" min="1">
-          <label for="cloudapps-users-per-tenant"><strong>Number of Users per Tenant</strong>
+          <input type="number" id="tenants" value="1" min="1">
+          <label for="users-per-tenant"><strong>Number of Users per Tenant</strong>
             <span class="tooltip">?
-              <span class="tooltiptext">Used in cost calculations.</span>
+              <span class="tooltiptext">Used in cost calculations. Typically, up to 300 users allocate 80 hours, 750 users 120 hours, and 1000 users 160 hours.</span>
             </span>
           </label>
-          <input type="number" id="cloudapps-users-per-tenant" value="1" min="1">
+          <input type="number" id="users-per-tenant" value="1" min="1">
         </div>
         <div class="service-options">
-          <input type="checkbox" id="cloudapps-advanced-hunting-checkbox">
-          <label for="cloudapps-advanced-hunting-checkbox"><strong>Include Advanced Hunting</strong></label>
+          <input type="checkbox" id="advanced-hunting-checkbox">
+          <label for="advanced-hunting-checkbox"><strong>Include Advanced Hunting</strong></label>
           <span class="tooltip">?
-            <span class="tooltiptext">Advanced Hunting enables proactive threat detection.</span>
+            <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats using Microsoft Defender queries.</span>
           </span>
         </div>
-        <label for="skuSelectCloudApps"><strong>Select a License SKU:</strong></label>
-        <select id="skuSelectCloudApps"></select>
-        <h2>Cloud Apps Features</h2>
-        <table id="cloudAppsTable" class="cloudapps-table">
+        <label for="skuSelect"><strong>Select a License SKU:</strong></label>
+        <select id="skuSelect"></select>
+        <h2>Microsoft Defender for Endpoint Features</h2>
+        <table id="endpointTable">
+          <thead>
+            <tr>
+              <th>Feature Name</th>
+              <th>Feature Description</th>
+              <th>Availability</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <h2>Microsoft Defender for Office 365 Features</h2>
+        <table id="officeTable">
+          <thead>
+            <tr>
+              <th>Feature Name</th>
+              <th>Feature Description</th>
+              <th>Availability</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <h2>Additional Microsoft 365 Security Features</h2>
+        <table id="m365Table">
           <thead>
             <tr>
               <th>Feature Name</th>
@@ -753,8 +702,8 @@
       const serviceDetails = document.getElementById('service-details');
       serviceDetails.innerHTML = "";
       serviceDetails.appendChild(container);
-      populateSKUCloudApps();
-      updateTablesCloudApps();
+      populateSKU();
+      updateTables();
     }
     /***********************
      * Service Selection Logic
@@ -765,7 +714,9 @@
       serviceDetails.innerHTML = ''; // Clear previous content
       if (service === 'exchange') {
         serviceTitle.textContent = 'Exchange Online Protection';
+        // Initialize the dynamic table and input fields for EOP
         initEOPTable();
+        // Add the "Add to Bill" button below the dynamic table container
         const addBtn = document.createElement("button");
         addBtn.className = "add-to-bill";
         addBtn.textContent = "Add to Bill";
@@ -778,6 +729,7 @@
         serviceDetails.appendChild(addBtn);
       } else if (service === 'defender') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud';
+        // Updated Defender for Cloud Section with a small summary and a table of key features (without pricing)
         serviceDetails.innerHTML = `
           <div class="service-options">
             <label for="workloads">Number of Azure Workloads 
@@ -804,9 +756,9 @@
               <tbody>
                 <tr>
                   <td>Foundational CSPM</td>
-                  <td>Continuous assessments, security recommendations, Secure Score, and benchmark reporting across major clouds.</td>
+                  <td>Continuous assessments, security recommendations, Secure Score, and benchmark reporting across Azure, AWS, and Google Cloud.</td>
                   <td>Free Tier</td>
-                  <td><a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/concept-cloud-security-posture-management" target="_blank">View Details</a></td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
                 </tr>
                 <tr>
                   <td>Advanced CSPM</td>
@@ -816,49 +768,49 @@
                 </tr>
                 <tr>
                   <td>Defender for Servers</td>
-                  <td>Protects VMs and servers with EDR, vulnerability management, and file integrity monitoring.</td>
+                  <td>Protects virtual machines and servers with endpoint detection and response, vulnerability management, and file integrity monitoring.</td>
                   <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">View Details</a></td>
                 </tr>
                 <tr>
                   <td>Defender for App Service</td>
                   <td>Protects web applications running on Azure App Service.</td>
                   <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-app-service/" target="_blank">View Details</a></td>
                 </tr>
                 <tr>
                   <td>Defender for SQL</td>
                   <td>Provides advanced threat protection for SQL databases.</td>
                   <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/sql-database-threat-protection/" target="_blank">View Details</a></td>
                 </tr>
                 <tr>
                   <td>Defender for Storage</td>
                   <td>Protects Azure Storage accounts from threats.</td>
                   <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-storage/" target="_blank">View Details</a></td>
                 </tr>
                 <tr>
                   <td>Defender for Kubernetes</td>
                   <td>Secures Kubernetes clusters with threat detection and compliance monitoring.</td>
                   <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-kubernetes/" target="_blank">View Details</a></td>
                 </tr>
                 <tr>
                   <td>Defender for Containers</td>
                   <td>Protects containerized applications and environments.</td>
                   <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-containers/" target="_blank">View Details</a></td>
                 </tr>
                 <tr>
                   <td>DevOps Security Management</td>
-                  <td>Integrates security into CI/CD pipelines and scans IaC for misconfigurations.</td>
+                  <td>Integrates security into CI/CD pipelines and scans Infrastructure as Code for misconfigurations.</td>
                   <td>Enhanced Security</td>
                   <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
                 </tr>
                 <tr>
                   <td>Threat Intelligence</td>
-                  <td>Uses machine learning and behavioral analytics to detect threats.</td>
+                  <td>Uses machine learning and behavioral analytics to detect threats with integrated threat intelligence.</td>
                   <td>Enhanced Security</td>
                   <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
                 </tr>
@@ -871,25 +823,36 @@
               </tbody>
             </table>
             <p>
-              <strong>License Options:</strong> Defender for Cloud Free Tier (Foundational CSPM) or Enhanced Security (includes advanced CSPM, CWP, DevOps security, threat intelligence, and compliance management).
+              <strong>License Options:</strong> Microsoft Defender for Cloud Free Tier (Foundational CSPM) or Enhanced Security (includes advanced CSPM, CWP, DevOps security, threat intelligence, and compliance management).
             </p>
           </div>
           <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud', calculateCost('workloads', 150), {workloads: document.getElementById('workloads').value})">Add to Bill</button>
         `;
       } else if (service === 'cloudApps') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud Apps';
-        // Initialize the Cloud Apps dynamic table section using our new functions
-        initCloudAppsTable();
-        const addBtn = document.createElement("button");
-        addBtn.className = "add-to-bill";
-        addBtn.textContent = "Add to Bill";
-        addBtn.onclick = function() {
-          const tenants = document.getElementById('cloudapps-tenants').value;
-          const users = document.getElementById('cloudapps-users-per-tenant').value;
-          const advHunting = document.getElementById('cloudapps-advanced-hunting-checkbox').checked;
-          addToBill('Microsoft Defender for Cloud Apps', calculateCloudAppsCost(), { tenants: tenants, users: users, advancedHunting: advHunting });
-        };
-        document.getElementById('service-details').appendChild(addBtn);
+        serviceDetails.innerHTML = `
+          <div class="service-options">
+            <label for="cloudapps-tenants">Number of Tenants</label>
+            <input type="number" id="cloudapps-tenants" value="1" min="1">
+            <label for="cloudapps-users-per-tenant">Number of Users per Tenant</label>
+            <input type="number" id="cloudapps-users-per-tenant" value="1" min="1">
+          </div>
+          <div class="service-options">
+            <input type="checkbox" id="cloudapps-advanced-hunting-checkbox">
+            <label for="cloudapps-advanced-hunting-checkbox">Include Advanced Hunting</label>
+            <span class="tooltip">?
+              <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats.</span>
+            </span>
+          </div>
+          <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud Apps', calculateCloudAppsCost(), {tenants: document.getElementById('cloudapps-tenants').value, users: document.getElementById('cloudapps-users-per-tenant').value, advancedHunting: document.getElementById('cloudapps-advanced-hunting-checkbox').checked})">Add to Bill</button>
+          <div class="service-details">
+            <h3>Microsoft Defender for Cloud Apps Summary</h3>
+            <ul>
+              <li><strong>Cloud Discovery and App Governance:</strong> Analyzes traffic logs for insights into compliance and security.</li>
+              <li><strong>Policy Management:</strong> Enables setting policies to detect risky actions and suspicious activities.</li>
+            </ul>
+          </div>
+        `;
       } else if (service === 'endpoint') {
         serviceTitle.textContent = 'Microsoft Defender for Endpoint';
         serviceDetails.innerHTML = `
