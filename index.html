@@ -767,7 +767,7 @@
         serviceDetails.appendChild(addBtn);
       } else if (service === 'defender') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud';
-        // Updated Defender for Cloud Summary
+        // Updated Defender for Cloud Section
         serviceDetails.innerHTML = `
           <div class="service-options">
             <label for="workloads">Number of Azure Workloads 
@@ -777,75 +777,78 @@
             </label>
             <input type="number" id="workloads" value="1" min="1">
           </div>
-          <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud', calculateCost('workloads', 150), {workloads: document.getElementById('workloads').value})">Add to Bill</button>
           <div class="service-details">
             <h3>Microsoft Defender for Cloud Summary</h3>
-            <ul>
-              <li>
-                <strong>Cloud Security Posture Management (CSPM):</strong>
-                <ul>
-                  <li><em>Foundational CSPM:</em> Provides continuous assessments, security recommendations, Secure Score, and the Microsoft cloud security benchmark across Azure, AWS, and Google Cloud. <span style="font-style: italic;">(Included in Free Tier)</span></li>
-                  <li><em>Advanced CSPM:</em> Includes advanced threat detection and compliance management. <span style="font-style: italic;">(Included in Enhanced Security)</span></li>
-                </ul>
-              </li>
-              <li>
-                <strong>Cloud Workload Protection (CWP):</strong>
-                <ul>
-                  <li>
-                    <strong>Defender for Servers:</strong> Protects VMs and servers with EDR, vulnerability management, and file integrity monitoring.
-                    <ul>
-                      <li>Plan 1: $5 per node per month (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">Pricing</a>)</li>
-                      <li>Plan 2: $15 per node per month (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">Pricing</a>)</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Defender for App Service:</strong> Protects web applications running on Azure App Service (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-app-service/" target="_blank">Pricing: $0.02 per instance per hour</a>).
-                  </li>
-                  <li>
-                    <strong>Defender for SQL:</strong> Provides advanced threat protection for SQL databases.
-                    <ul>
-                      <li>Azure SQL Database: $15 per server per month (<a href="https://azure.microsoft.com/en-us/pricing/details/sql-database-threat-protection/" target="_blank">Pricing</a>)</li>
-                      <li>SQL Managed Instance: $15 per instance per month (<a href="https://azure.microsoft.com/en-us/pricing/details/sql-managed-instance-threat-protection/" target="_blank">Pricing</a>)</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <strong>Defender for Storage:</strong> Protects Azure Storage accounts (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-storage/" target="_blank">Pricing: $0.02 per 10,000 transactions</a>).
-                  </li>
-                  <li>
-                    <strong>Defender for Kubernetes:</strong> Secures Kubernetes clusters (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-kubernetes/" target="_blank">Pricing: $0.006 per vCore per hour</a>).
-                  </li>
-                  <li>
-                    <strong>Defender for Containers:</strong> Protects containerized applications (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-containers/" target="_blank">Pricing: $0.006 per vCore per hour</a>).
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <strong>DevOps Security Management:</strong>
-                <ul>
-                  <li>CI/CD Pipeline Security and Infrastructure as Code (IaC) Scanning are included in Enhanced Security.</li>
-                </ul>
-              </li>
-              <li>
-                <strong>Threat Intelligence:</strong>
-                <ul>
-                  <li>Uses machine learning and behavioral analytics to detect threats; integrated with Microsoft Threat Intelligence. (Included in Enhanced Security)</li>
-                </ul>
-              </li>
-              <li>
-                <strong>Compliance Management:</strong>
-                <ul>
-                  <li>Provides regulatory compliance assessments and policy management. (Included in Enhanced Security)</li>
-                </ul>
-              </li>
-              <li>
-                <strong>License SKUs:</strong>
-                <ul>
-                  <li><em>Microsoft Defender for Cloud Free Tier</em>: Includes foundational CSPM capabilities.</li>
-                  <li><em>Microsoft Defender for Cloud Enhanced Security</em>: Includes advanced CSPM, CWP, DevOps security management, threat intelligence, and compliance management. Pricing varies based on workload and usage.</li>
-                </ul>
-              </li>
-            </ul>
+            <p>
+              Microsoft Defender for Cloud provides comprehensive security across your cloud environments by combining Cloud Security Posture Management (CSPM) and Cloud Workload Protection (CWP) with DevOps security, threat intelligence, and compliance management.
+            </p>
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Workload</th>
+                  <th>Description</th>
+                  <th>Pricing</th>
+                  <th>Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Defender for Servers (Plan 1)</td>
+                  <td>Protects VMs and servers with EDR, vulnerability management, and file integrity monitoring.</td>
+                  <td>$5 per node/month</td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">View Pricing</a></td>
+                </tr>
+                <tr>
+                  <td>Defender for Servers (Plan 2)</td>
+                  <td>Enhanced protection with additional threat intelligence.</td>
+                  <td>$15 per node/month</td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">View Pricing</a></td>
+                </tr>
+                <tr>
+                  <td>Defender for App Service</td>
+                  <td>Protects web apps running on Azure App Service.</td>
+                  <td>$0.02 per instance/hour</td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-app-service/" target="_blank">View Pricing</a></td>
+                </tr>
+                <tr>
+                  <td>Defender for SQL (Azure SQL Database)</td>
+                  <td>Advanced threat protection for SQL databases.</td>
+                  <td>$15 per server/month</td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/sql-database-threat-protection/" target="_blank">View Pricing</a></td>
+                </tr>
+                <tr>
+                  <td>Defender for SQL (SQL Managed Instance)</td>
+                  <td>Advanced threat protection for SQL Managed Instances.</td>
+                  <td>$15 per instance/month</td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/sql-managed-instance-threat-protection/" target="_blank">View Pricing</a></td>
+                </tr>
+                <tr>
+                  <td>Defender for Storage</td>
+                  <td>Protects Azure Storage accounts from threats.</td>
+                  <td>$0.02 per 10,000 transactions</td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-storage/" target="_blank">View Pricing</a></td>
+                </tr>
+                <tr>
+                  <td>Defender for Kubernetes</td>
+                  <td>Secures Kubernetes clusters with threat detection and compliance monitoring.</td>
+                  <td>$0.006 per vCore/hour</td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-kubernetes/" target="_blank">View Pricing</a></td>
+                </tr>
+                <tr>
+                  <td>Defender for Containers</td>
+                  <td>Protects containerized applications and environments.</td>
+                  <td>$0.006 per vCore/hour</td>
+                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-containers/" target="_blank">View Pricing</a></td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              License Options:
+              <br><em>Microsoft Defender for Cloud Free Tier</em> – Includes foundational CSPM capabilities.
+              <br><em>Microsoft Defender for Cloud Enhanced Security</em> – Includes advanced CSPM, CWP, DevOps security management, threat intelligence, and compliance management. Pricing varies based on workload and usage.
+            </p>
           </div>
+          <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud', calculateCost('workloads', 150), {workloads: document.getElementById('workloads').value})">Add to Bill</button>
         `;
       } else if (service === 'cloudApps') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud Apps';
