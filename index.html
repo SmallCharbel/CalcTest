@@ -491,6 +491,145 @@
       const vulnMgmtOptions = document.getElementById('vuln-mgmt-options');
       vulnMgmtOptions.style.display = vulnMgmtCheckbox.checked ? 'block' : 'none';
     }
+    function updateEndpointTable() {
+  const sku = document.getElementById('endpoint-sku-select').value;
+  const tbody = document.querySelector('#endpointTable tbody');
+  tbody.innerHTML = '';
+
+  // Determine feature availability based on the selected SKU
+  // For "Plan 1 (P1)": Only Plan 1 features are included.
+  // For "Plan 2 (P2)": Both Plan 1 and Plan 2 features are included.
+  // For Microsoft 365 SKUs (E5, A5, F5, G5): All features are included.
+  let includePlan1 = false;
+  let includePlan2 = false;
+  let includeM365 = false;
+  if(sku === "Microsoft Defender for Endpoint Plan 1 (P1)") {
+      includePlan1 = true;
+      includePlan2 = false;
+      includeM365 = false;
+  } else if(sku === "Microsoft Defender for Endpoint Plan 2 (P2)") {
+      includePlan1 = true;
+      includePlan2 = true;
+      includeM365 = false;
+  } else {
+      // For Microsoft 365 E5, A5, F5, G5—include all Defender features.
+      includePlan1 = true;
+      includePlan2 = true;
+      includeM365 = true;
+  }
+
+  // Define the features for each section.
+  const plan1Features = [
+    { name: "Next-Generation Protection", description: "Robust antimalware and antivirus protection, including behavior-based, heuristic, and real-time protection." },
+    { name: "Attack Surface Reduction (ASR)", description: "Capabilities to harden devices and prevent zero-day attacks." },
+    { name: "Manual Response Actions", description: "Actions such as quarantining files and isolating devices." },
+    { name: "Centralized Configuration and Management", description: "Integration with Microsoft Intune and management through the Microsoft Defender portal." },
+    { name: "Cross-Platform Protection", description: "Support for Windows, macOS, iOS, and Android devices." }
+  ];
+
+  const plan2Features = [
+    { name: "Endpoint Detection and Response (EDR)", description: "Advanced threat detection and response capabilities." },
+    { name: "Threat and Vulnerability Management (TVM)", description: "Identifies, assesses, and remediates endpoint vulnerabilities." },
+    { name: "Automated Investigation and Remediation (AIR)", description: "Automates the investigation and remediation of threats." },
+    { name: "Threat Intelligence", description: "Provides detailed threat intelligence and analysis." },
+    { name: "Advanced Hunting", description: "Allows security teams to proactively hunt for threats using custom queries." },
+    { name: "Microsoft Threat Experts", description: "Access to Microsoft’s team of security experts for additional support." }
+  ];
+
+  // Add a section header row for Plan 1 features.
+  let row = document.createElement('tr');
+  let cell = document.createElement('td');
+  cell.colSpan = 3;
+  cell.style.backgroundColor = "#e0e0e0";
+  cell.style.fontWeight = "bold";
+  cell.style.textAlign = "center";
+  cell.style.border = "1px solid #ccc";
+  cell.style.padding = "8px";
+  cell.textContent = "Microsoft Defender for Endpoint Plan 1 (P1)";
+  row.appendChild(cell);
+  tbody.appendChild(row);
+
+  // Add rows for each Plan 1 feature.
+  plan1Features.forEach(feature => {
+    row = document.createElement('tr');
+    const nameCell = document.createElement('td');
+    nameCell.style.border = "1px solid #ccc";
+    nameCell.style.padding = "8px";
+    nameCell.textContent = feature.name;
+
+    const descCell = document.createElement('td');
+    descCell.style.border = "1px solid #ccc";
+    descCell.style.padding = "8px";
+    descCell.textContent = feature.description;
+
+    const availCell = document.createElement('td');
+    availCell.style.border = "1px solid #ccc";
+    availCell.style.padding = "8px";
+    availCell.textContent = includePlan1 ? "Yes" : "No";
+    availCell.className = includePlan1 ? "yes" : "no";
+
+    row.appendChild(nameCell);
+    row.appendChild(descCell);
+    row.appendChild(availCell);
+    tbody.appendChild(row);
+  });
+
+  // Add a section header row for Plan 2 features.
+  row = document.createElement('tr');
+  cell = document.createElement('td');
+  cell.colSpan = 3;
+  cell.style.backgroundColor = "#e0e0e0";
+  cell.style.fontWeight = "bold";
+  cell.style.textAlign = "center";
+  cell.style.border = "1px solid #ccc";
+  cell.style.padding = "8px";
+  cell.textContent = "Microsoft Defender for Endpoint Plan 2 (P2)";
+  row.appendChild(cell);
+  tbody.appendChild(row);
+
+  // Add rows for each Plan 2 feature.
+  plan2Features.forEach(feature => {
+    row = document.createElement('tr');
+    const nameCell = document.createElement('td');
+    nameCell.style.border = "1px solid #ccc";
+    nameCell.style.padding = "8px";
+    nameCell.textContent = feature.name;
+
+    const descCell = document.createElement('td');
+    descCell.style.border = "1px solid #ccc";
+    descCell.style.padding = "8px";
+    descCell.textContent = feature.description;
+
+    const availCell = document.createElement('td');
+    availCell.style.border = "1px solid #ccc";
+    availCell.style.padding = "8px";
+    availCell.textContent = includePlan2 ? "Yes" : "No";
+    availCell.className = includePlan2 ? "yes" : "no";
+
+    row.appendChild(nameCell);
+    row.appendChild(descCell);
+    row.appendChild(availCell);
+    tbody.appendChild(row);
+  });
+
+  // Add a final row to note Microsoft 365 Security.
+  row = document.createElement('tr');
+  cell = document.createElement('td');
+  cell.colSpan = 3;
+  cell.style.backgroundColor = "#e0e0e0";
+  cell.style.fontWeight = "bold";
+  cell.style.textAlign = "center";
+  cell.style.border = "1px solid #ccc";
+  cell.style.padding = "8px";
+  if(includeM365) {
+    cell.textContent = "Microsoft 365 E5/A5/F5/G5 Security: All Defender for Endpoint features are included plus additional Microsoft 365 security features.";
+  } else {
+    cell.textContent = "Microsoft 365 E5/A5/F5/G5 Security";
+  }
+  row.appendChild(cell);
+  tbody.appendChild(row);
+}
+
     /***********************
      * Dynamic SKU Table Code for Exchange Online Protection Tab
      ***********************/
@@ -1005,39 +1144,40 @@ else if (service === 'cloudApps') {
     </table>
   `;
 }
- else if (service === 'endpoint') {
-        serviceTitle.textContent = 'Microsoft Defender for Endpoint';
-        serviceDetails.innerHTML = `
-          <div class="service-options">
-            <label for="devices">Number of Devices</label>
-            <input type="number" id="devices" value="1" min="1">
-          </div>
-          <div class="service-options">
-            <input type="checkbox" id="vuln-mgmt-checkbox" onclick="toggleVulnerabilityManagement()">
-            <label for="vuln-mgmt-checkbox">Include Vulnerability Management</label>
-          </div>
-          <div class="service-options" id="vuln-mgmt-options" style="display: none;">
-            <label for="vuln-mgmt-devices">Number of Devices for Vulnerability Management</label>
-            <input type="number" id="vuln-mgmt-devices" value="0" min="0">
-          </div>
-          <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Endpoint', calculateEndpointCost(), {devices: document.getElementById('devices').value, vulnMgmtDevices: document.getElementById('vuln-mgmt-devices').value})">Add to Bill</button>
-          <div class="service-details">
-            <h3>Microsoft Defender for Endpoint Summary</h3>
-            <ul>
-              <li><strong>Threat Indicators and Endpoint Protection:</strong></li>
-              <ul>
-                <li><strong>Custom File and Network Indicators:</strong> Bans suspicious files and blocks/allows IPs, URLs, or domains based on threat intelligence.</li>
-                <li><strong>Endpoint Detection and Response (EDR) Block:</strong> Detects and blocks malicious artifacts.</li>
-              </ul>
-              <li><strong>Response Capabilities and Vulnerability Management:</strong></li>
-              <ul>
-                <li><strong>Device and Live Response Capabilities:</strong> Isolates devices and allows real-time investigation.</li>
-                <li><strong>Vulnerability Management:</strong> Provides visibility, assessments, and remediation tools.</li>
-              </ul>
-            </ul>
-          </div>
-        `;
-      } else if (service === 'identity') {
+else if (service === 'endpoint') {
+  serviceTitle.textContent = 'Microsoft Defender for Endpoint';
+  serviceDetails.innerHTML = `
+    <div class="service-options">
+      <label for="devices"><strong>Number of Devices</strong></label>
+      <input type="number" id="devices" value="1" min="1">
+    </div>
+    <div class="service-options">
+      <label for="endpoint-sku-select"><strong>Select SKU</strong></label>
+      <select id="endpoint-sku-select" onchange="updateEndpointTable()">
+        <option value="Microsoft Defender for Endpoint Plan 1 (P1)">Microsoft Defender for Endpoint Plan 1 (P1)</option>
+        <option value="Microsoft Defender for Endpoint Plan 2 (P2)">Microsoft Defender for Endpoint Plan 2 (P2)</option>
+        <option value="Microsoft 365 E5">Microsoft 365 E5</option>
+        <option value="Microsoft 365 A5">Microsoft 365 A5</option>
+        <option value="Microsoft 365 F5">Microsoft 365 F5</option>
+        <option value="Microsoft 365 G5">Microsoft 365 G5</option>
+      </select>
+    </div>
+    <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Endpoint', calculateEndpointCost(), {devices: document.getElementById('devices').value})">Add to Bill</button>
+    <table id="endpointTable" style="width:100%; border-collapse:collapse; margin-top:20px;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:30%;">Feature/Service</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:50%;">Description</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:20%;">Included</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  `;
+  updateEndpointTable(); // initialize the table based on the default selection
+}
+ else if (service === 'identity') {
         serviceTitle.textContent = 'Microsoft Defender for Identity';
         serviceDetails.innerHTML = `
           <div class="service-options">
