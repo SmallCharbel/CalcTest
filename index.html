@@ -675,7 +675,7 @@
         m365Tbody.appendChild(row);
       });
     }
-    // Function to initialize the dynamic table and additional input fields for EOP
+    // Function to initialize the dynamic table and additional input fields for Exchange Online Protection
     function initEOPTable() {
       const container = document.createElement('div');
       container.className = 'dynamic-table-container';
@@ -767,7 +767,7 @@
         serviceDetails.appendChild(addBtn);
       } else if (service === 'defender') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud';
-        // Updated Defender for Cloud Section
+        // Updated Defender for Cloud Section with a small summary and a pricing table removed
         serviceDetails.innerHTML = `
           <div class="service-options">
             <label for="workloads">Number of Azure Workloads 
@@ -780,73 +780,15 @@
           <div class="service-details">
             <h3>Microsoft Defender for Cloud Summary</h3>
             <p>
-              Microsoft Defender for Cloud provides comprehensive security across your cloud environments by combining Cloud Security Posture Management (CSPM) and Cloud Workload Protection (CWP) with DevOps security, threat intelligence, and compliance management.
+              Microsoft Defender for Cloud offers a unified security solution for your cloud environments. It combines:
             </p>
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>Workload</th>
-                  <th>Description</th>
-                  <th>Pricing</th>
-                  <th>Link</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Defender for Servers (Plan 1)</td>
-                  <td>Protects VMs and servers with EDR, vulnerability management, and file integrity monitoring.</td>
-                  <td>$5 per node/month</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">View Pricing</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for Servers (Plan 2)</td>
-                  <td>Enhanced protection with additional threat intelligence.</td>
-                  <td>$15 per node/month</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">View Pricing</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for App Service</td>
-                  <td>Protects web apps running on Azure App Service.</td>
-                  <td>$0.02 per instance/hour</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-app-service/" target="_blank">View Pricing</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for SQL (Azure SQL Database)</td>
-                  <td>Advanced threat protection for SQL databases.</td>
-                  <td>$15 per server/month</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/sql-database-threat-protection/" target="_blank">View Pricing</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for SQL (SQL Managed Instance)</td>
-                  <td>Advanced threat protection for SQL Managed Instances.</td>
-                  <td>$15 per instance/month</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/sql-managed-instance-threat-protection/" target="_blank">View Pricing</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for Storage</td>
-                  <td>Protects Azure Storage accounts from threats.</td>
-                  <td>$0.02 per 10,000 transactions</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-storage/" target="_blank">View Pricing</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for Kubernetes</td>
-                  <td>Secures Kubernetes clusters with threat detection and compliance monitoring.</td>
-                  <td>$0.006 per vCore/hour</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-kubernetes/" target="_blank">View Pricing</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for Containers</td>
-                  <td>Protects containerized applications and environments.</td>
-                  <td>$0.006 per vCore/hour</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-containers/" target="_blank">View Pricing</a></td>
-                </tr>
-              </tbody>
-            </table>
-            <p>
-              License Options:
-              <br><em>Microsoft Defender for Cloud Free Tier</em> – Includes foundational CSPM capabilities.
-              <br><em>Microsoft Defender for Cloud Enhanced Security</em> – Includes advanced CSPM, CWP, DevOps security management, threat intelligence, and compliance management. Pricing varies based on workload and usage.
-            </p>
+            <ul>
+              <li><strong>Cloud Security Posture Management (CSPM):</strong> Provides continuous security assessments across Azure, AWS, and Google Cloud – available as a Free Tier (Foundational) or Enhanced Security (Advanced).</li>
+              <li><strong>Cloud Workload Protection (CWP):</strong> Safeguards virtual machines, web apps, SQL databases, storage accounts, Kubernetes clusters, and containerized applications.</li>
+              <li><strong>DevOps Security Management:</strong> Integrates security into CI/CD pipelines and scans Infrastructure as Code for misconfigurations.</li>
+              <li><strong>Threat Intelligence & Compliance:</strong> Leverages advanced analytics and regulatory assessments to protect and ensure compliance across your cloud resources.</li>
+              <li><strong>License Options:</strong> Choose from the Defender for Cloud Free Tier or the Enhanced Security tier for additional features.</li>
+            </ul>
           </div>
           <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud', calculateCost('workloads', 150), {workloads: document.getElementById('workloads').value})">Add to Bill</button>
         `;
@@ -870,15 +812,8 @@
           <div class="service-details">
             <h3>Microsoft Defender for Cloud Apps Summary</h3>
             <ul>
-              <li><strong>Cloud Discovery and App Governance:</strong></li>
-              <ul>
-                <li><strong>Cloud Discovery:</strong> Analyzes traffic logs for insights into compliance and security.</li>
-                <li><strong>App Governance:</strong> Helps decide on blocking/restricting high-risk apps.</li>
-              </ul>
-              <li><strong>Manage Cloud Apps with Policies:</strong></li>
-              <ul>
-                <li>Defines policies to detect risky actions and suspicious activities.</li>
-              </ul>
+              <li><strong>Cloud Discovery and App Governance:</strong> Analyzes traffic logs to provide insights and govern cloud applications.</li>
+              <li><strong>Policy Management:</strong> Enables setting policies to detect risky actions and suspicious activities.</li>
             </ul>
           </div>
         `;
@@ -901,16 +836,18 @@
           <div class="service-details">
             <h3>Microsoft Defender for Endpoint Summary</h3>
             <ul>
-              <li><strong>Threat Indicators and Endpoint Protection:</strong></li>
-              <ul>
-                <li><strong>Custom File and Network Indicators:</strong> Bans suspicious files and blocks/allows IPs, URLs, or domains based on threat intelligence.</li>
-                <li><strong>Endpoint Detection and Response (EDR) Block:</strong> Detects and blocks malicious artifacts.</li>
-              </ul>
-              <li><strong>Response Capabilities and Vulnerability Management:</strong></li>
-              <ul>
-                <li><strong>Device and Live Response Capabilities:</strong> Isolates devices and allows real-time investigation.</li>
-                <li><strong>Vulnerability Management:</strong> Provides visibility, assessments, and remediation tools.</li>
-              </ul>
+              <li><strong>Threat Indicators and Endpoint Protection:</strong>
+                <ul>
+                  <li>Custom File and Network Indicators for banning suspicious files and blocking/allowing IPs, URLs, or domains.</li>
+                  <li>Endpoint Detection and Response (EDR) to detect and block malicious artifacts.</li>
+                </ul>
+              </li>
+              <li><strong>Response Capabilities and Vulnerability Management:</strong>
+                <ul>
+                  <li>Device and Live Response capabilities for rapid threat mitigation.</li>
+                  <li>Vulnerability Management for visibility, assessments, and remediation.</li>
+                </ul>
+              </li>
             </ul>
           </div>
         `;
@@ -934,16 +871,18 @@
           <div class="service-details">
             <h3>Microsoft Defender for Identity Summary</h3>
             <ul>
-              <li><strong>Modern Identity Threat Detection (ITDR):</strong></li>
-              <ul>
-                <li>Uses signals from on-premises AD and cloud identities to detect advanced threats.</li>
-                <li>Provides comprehensive protection against identity-based attacks.</li>
-              </ul>
-              <li><strong>Entity Tags:</strong></li>
-              <ul>
-                <li>Tags sensitive accounts for enhanced event detection.</li>
-                <li>Honeytoken accounts trigger alerts on unauthorized access.</li>
-              </ul>
+              <li><strong>Modern Identity Threat Detection (ITDR):</strong>
+                <ul>
+                  <li>Uses signals from on-premises AD and cloud identities to detect advanced threats.</li>
+                  <li>Provides comprehensive protection against identity-based attacks.</li>
+                </ul>
+              </li>
+              <li><strong>Entity Tags:</strong>
+                <ul>
+                  <li>Tags sensitive accounts for enhanced event detection.</li>
+                  <li>Honeytoken accounts trigger alerts on unauthorized access.</li>
+                </ul>
+              </li>
             </ul>
           </div>
         `;
@@ -967,16 +906,18 @@
           <div class="service-details">
             <h3>Microsoft Entra ID Protection Summary</h3>
             <ul>
-              <li><strong>Risk-Based Access Policies:</strong></li>
-              <ul>
-                <li>Enhances security with Conditional Access that responds to sign-in risks.</li>
-                <li>Evaluates authentication attempts and applies controls based on risk levels.</li>
-              </ul>
-              <li><strong>Advanced Risk Detection and Response:</strong></li>
-              <ul>
-                <li>Continuously monitors identity signals for threats and unauthorized access.</li>
-                <li>Automatically adjusts access policies in response to detected risks.</li>
-              </ul>
+              <li><strong>Risk-Based Access Policies:</strong>
+                <ul>
+                  <li>Enhances security with Conditional Access that responds to sign-in risks.</li>
+                  <li>Evaluates authentication attempts and applies controls based on risk levels.</li>
+                </ul>
+              </li>
+              <li><strong>Advanced Risk Detection and Response:</strong>
+                <ul>
+                  <li>Continuously monitors identity signals for threats and unauthorized access.</li>
+                  <li>Automatically adjusts access policies in response to detected risks.</li>
+                </ul>
+              </li>
             </ul>
           </div>
         `;
