@@ -769,14 +769,20 @@
   serviceTitle.textContent = 'Microsoft Defender for Cloud';
   serviceDetails.innerHTML = `
     <div class="service-options">
-      <h3>Microsoft Defender for Cloud Details</h3>
+      <label for="workloads">Number of Azure Workloads 
+        <span class="tooltip">?
+          <span class="tooltiptext">Examples: VM, Storage, Database, Server, etc.</span>
+        </span>
+      </label>
+      <input type="number" id="workloads" value="1" min="1">
     </div>
+    <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud', calculateCost('workloads', 150), {workloads: document.getElementById('workloads').value})">Add to Bill</button>
     <table class="defender-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
       <thead>
         <tr>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:20%;">Feature/Service</th>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:50%;">Description / Pricing</th>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:30%;">Included in</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:30%;">Feature/Service</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:50%;">Description</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:20%;">Included in</th>
         </tr>
       </thead>
       <tbody>
@@ -805,48 +811,42 @@
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Defender for Servers</td>
           <td style="border:1px solid #ccc; padding:8px;">
-            Protects virtual machines and servers with capabilities like endpoint detection and response (EDR), vulnerability management, and file integrity monitoring.<br>
-            <strong>Pricing:</strong> Plan 1: $5 per node per month; Plan 2: $15 per node per month.
+            Protects virtual machines and servers with capabilities like endpoint detection and response (EDR), vulnerability management, and file integrity monitoring.
           </td>
           <td style="border:1px solid #ccc; padding:8px;">-</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Defender for App Service</td>
           <td style="border:1px solid #ccc; padding:8px;">
-            Protects web applications running on Azure App Service.<br>
-            <strong>Pricing:</strong> $0.02 per instance per hour.
+            Protects web applications running on Azure App Service.
           </td>
           <td style="border:1px solid #ccc; padding:8px;">-</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Defender for SQL</td>
           <td style="border:1px solid #ccc; padding:8px;">
-            Provides advanced threat protection for SQL databases.<br>
-            <strong>Pricing:</strong> Azure SQL Database: $15 per server per month; SQL Managed Instance: $15 per instance per month.
+            Provides advanced threat protection for SQL databases.
           </td>
           <td style="border:1px solid #ccc; padding:8px;">-</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Defender for Storage</td>
           <td style="border:1px solid #ccc; padding:8px;">
-            Protects Azure Storage accounts from threats.<br>
-            <strong>Pricing:</strong> $0.02 per 10,000 transactions.
+            Protects Azure Storage accounts from threats.
           </td>
           <td style="border:1px solid #ccc; padding:8px;">-</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Defender for Kubernetes</td>
           <td style="border:1px solid #ccc; padding:8px;">
-            Secures Kubernetes clusters with threat detection and compliance monitoring.<br>
-            <strong>Pricing:</strong> $0.006 per vCore per hour.
+            Secures Kubernetes clusters with threat detection and compliance monitoring.
           </td>
           <td style="border:1px solid #ccc; padding:8px;">-</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Defender for Containers</td>
           <td style="border:1px solid #ccc; padding:8px;">
-            Protects containerized applications and environments.<br>
-            <strong>Pricing:</strong> $0.006 per vCore per hour.
+            Protects containerized applications and environments.
           </td>
           <td style="border:1px solid #ccc; padding:8px;">-</td>
         </tr>
@@ -904,29 +904,11 @@
           </td>
           <td style="border:1px solid #ccc; padding:8px;">Enhanced Security</td>
         </tr>
-        <!-- License SKUs and Pricing -->
-        <tr style="background-color:#e0e0e0; font-weight:bold; text-align:center;">
-          <td colspan="3" style="border:1px solid #ccc; padding:8px;">License SKUs and Pricing</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft Defender for Cloud Free Tier</td>
-          <td style="border:1px solid #ccc; padding:8px;">
-            Includes foundational CSPM capabilities.
-          </td>
-          <td style="border:1px solid #ccc; padding:8px;">-</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft Defender for Cloud Enhanced Security</td>
-          <td style="border:1px solid #ccc; padding:8px;">
-            Includes advanced CSPM, CWP, DevOps security management, threat intelligence, and compliance management capabilities.<br>
-            Pricing varies based on the specific workload and usage.
-          </td>
-          <td style="border:1px solid #ccc; padding:8px;">-</td>
-        </tr>
       </tbody>
     </table>
   `;
 }
+
  else if (service === 'cloudApps') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud Apps';
         serviceDetails.innerHTML = `
