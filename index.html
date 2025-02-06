@@ -364,11 +364,11 @@
     }
     function calculateExchangeCost() {
       const tenants = document.getElementById('tenants').value;
-      const usersPerTenant = document.getElementById('users-per-tenant').value;
+      const users = document.getElementById('users-per-tenant').value;
       let hoursPerTenant;
-      if (usersPerTenant <= 300) { hoursPerTenant = 80; }
-      else if (usersPerTenant <= 750) { hoursPerTenant = 120; }
-      else if (usersPerTenant <= 1000) { hoursPerTenant = 160; }
+      if (users <= 300) { hoursPerTenant = 80; }
+      else if (users <= 750) { hoursPerTenant = 120; }
+      else if (users <= 1000) { hoursPerTenant = 160; }
       else { alert("Please contact Account Executive for tenants with more than 1000 users."); return 0; }
       const advancedHuntingCost = document.getElementById('advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
       const serviceCost = tenants * hoursPerTenant * 190;
@@ -376,11 +376,11 @@
     }
     function calculateCloudAppsCost() {
       const tenants = document.getElementById('cloudapps-tenants').value;
-      const usersPerTenant = document.getElementById('cloudapps-users-per-tenant').value;
+      const users = document.getElementById('cloudapps-users-per-tenant').value;
       let hoursPerTenant;
-      if (usersPerTenant <= 300) { hoursPerTenant = 80; }
-      else if (usersPerTenant <= 750) { hoursPerTenant = 120; }
-      else if (usersPerTenant <= 1000) { hoursPerTenant = 160; }
+      if (users <= 300) { hoursPerTenant = 80; }
+      else if (users <= 750) { hoursPerTenant = 120; }
+      else if (users <= 1000) { hoursPerTenant = 160; }
       else { alert("Please contact Account Executive for tenants with more than 1000 users."); return 0; }
       const advancedHuntingCost = document.getElementById('cloudapps-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
       const serviceCost = tenants * hoursPerTenant * 190;
@@ -395,11 +395,11 @@
     }
     function calculateIdentityCost() {
       const tenants = document.getElementById('identity-tenants').value;
-      const usersPerTenant = document.getElementById('identity-users-per-tenant').value;
+      const users = document.getElementById('identity-users-per-tenant').value;
       let hoursPerTenant;
-      if (usersPerTenant <= 300) { hoursPerTenant = 40; }
-      else if (usersPerTenant <= 750) { hoursPerTenant = 60; }
-      else if (usersPerTenant <= 1000) { hoursPerTenant = 80; }
+      if (users <= 300) { hoursPerTenant = 40; }
+      else if (users <= 750) { hoursPerTenant = 60; }
+      else if (users <= 1000) { hoursPerTenant = 80; }
       else { alert("Please contact sales for tenants with more than 1000 users."); return 0; }
       const advancedHuntingCost = document.getElementById('identity-advanced-hunting-checkbox').checked ? tenants * 20 * 190 : 0;
       const serviceCost = tenants * hoursPerTenant * 190;
@@ -479,6 +479,53 @@
     /***********************
      * Dynamic SKU Table Code for Exchange Online Protection
      ***********************/
+    const skuMapping = {
+      "Microsoft 365 Business Basic":         { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 Business Standard":      { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 Business Premium":       { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 E3":                     { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 E5":                     { endpoint: "P2", office: "P2", extra: true },
+      "Microsoft 365 A1/A3/A5":               { endpoint: "P2", office: "P2", extra: true },
+      "Microsoft 365 F1/F3":                  { endpoint: "P1", office: "None", extra: false },
+      "Exchange Online Plan 1":               { endpoint: "P1", office: "None", extra: false },
+      "Exchange Online Plan 2":               { endpoint: "P1", office: "None", extra: false },
+      "Standalone EOP":                       { endpoint: "P1", office: "None", extra: false },
+      "Microsoft Defender for Office 365 P1": { endpoint: "None", office: "P1", extra: false },
+      "Microsoft Defender for Office 365 P2": { endpoint: "None", office: "P2", extra: false }
+    };
+    const endpointP1Features = [
+      { name: "Next-Generation Protection", description: "Robust antimalware and antivirus protection, including behavior‑based, heuristic, and real‑time protection." },
+      { name: "Attack Surface Reduction (ASR)", description: "Capabilities to harden devices and prevent zero‑day attacks." },
+      { name: "Manual Response Actions", description: "Actions such as quarantining files and isolating devices." },
+      { name: "Centralized Configuration and Management", description: "Integration with Microsoft Intune and management via the Microsoft Defender portal." },
+      { name: "Cross‑Platform Protection", description: "Support for Windows, macOS, iOS, and Android devices." }
+    ];
+    const endpointP2Features = [
+      { name: "Endpoint Detection and Response (EDR)", description: "Advanced threat detection and response capabilities." },
+      { name: "Threat and Vulnerability Management (TVM)", description: "Identifies, assesses, and remediates endpoint vulnerabilities." },
+      { name: "Automated Investigation and Remediation (AIR)", description: "Automates the investigation and remediation of threats." },
+      { name: "Threat Intelligence", description: "Provides detailed threat intelligence and analysis." },
+      { name: "Microsoft Threat Experts", description: "Access to Microsoft’s team of security experts for additional support." }
+    ];
+    const officeP1Features = [
+      { name: "Safe Attachments", description: "Protects against unknown malware and viruses by scanning email attachments." },
+      { name: "Safe Links", description: "Provides time‑of‑click verification of URLs to protect against malicious links." },
+      { name: "Anti‑Phishing Policies", description: "Detects and blocks phishing attempts." },
+      { name: "Real‑Time Detection", description: "Monitors and alerts on suspicious activities in real‑time." },
+      { name: "Quarantine", description: "Isolates potentially harmful emails for review." },
+      { name: "Reporting and Insights", description: "Provides detailed reports and insights on threats and security incidents." }
+    ];
+    const officeP2Features = [
+      { name: "Threat Explorer", description: "Advanced threat hunting and investigation tool." },
+      { name: "Automated Investigation and Response (AIR)", description: "Automates the investigation and remediation of threats." },
+      { name: "Attack Simulation Training", description: "Simulates phishing attacks to train users on recognizing and responding to threats." },
+      { name: "Advanced Threat Protection (ATP) for SharePoint, OneDrive, and Teams", description: "Extends protection to files stored in SharePoint, OneDrive, and Teams." },
+      { name: "Threat Intelligence", description: "Provides detailed threat intelligence and analysis." }
+    ];
+    const additionalM365Features = [
+      { name: "Conditional Access", description: "Advanced access controls across Microsoft 365 applications." },
+      { name: "Identity Protection", description: "Comprehensive identity security to protect against unauthorized access." }
+    ];
     function populateSKU() {
       const skuSelect = document.getElementById("skuSelect");
       skuSelect.innerHTML = "";
