@@ -221,37 +221,75 @@
       visibility: visible;
       opacity: 1;
     }
-    /* Custom Table Styles for Defender for Cloud */
-    .custom-table {
+    /* Dynamic Table Styles for the SKU table in the EOP tab */
+    .dynamic-table-container {
+      margin-top: 20px;
+    }
+    .dynamic-table-container label {
+      font-weight: bold;
+    }
+    .dynamic-table-container select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .dynamic-table-container h2 {
+      margin-top: 30px;
+      color: #30475e;
+    }
+    .dynamic-table-container table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-bottom: 40px;
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .custom-table th,
-    .custom-table td {
+    .dynamic-table-container th,
+    .dynamic-table-container td {
       padding: 12px 15px;
       text-align: left;
       border: 1px solid #ccc;
     }
-    .custom-table th {
+    .dynamic-table-container th {
       background-color: #30475e;
       color: #fff;
       font-weight: bold;
     }
-    .custom-table tr:nth-child(even) {
+    .dynamic-table-container tr:nth-child(even) {
       background-color: #f3f3f3;
     }
-    .custom-table tr:hover {
+    .dynamic-table-container tr:hover {
       background-color: #e9e9e9;
       transition: background-color 0.3s ease;
     }
+    .section-header {
+      background-color: #e0e0e0;
+      font-weight: bold;
+      text-align: center;
+    }
+    .yes {
+      background-color: #c8e6c9;
+      color: #256029;
+      font-weight: bold;
+      text-align: center;
+    }
+    .no {
+      background-color: #ffcdd2;
+      color: #c62828;
+      font-weight: bold;
+      text-align: center;
+    }
     @media (max-width: 600px) {
-      .custom-table th,
-      .custom-table td {
+      .dynamic-table-container th, 
+      .dynamic-table-container td {
         padding: 8px;
+        font-size: 14px;
+      }
+      .dynamic-table-container select {
         font-size: 14px;
       }
     }
@@ -637,7 +675,7 @@
         m365Tbody.appendChild(row);
       });
     }
-    // Function to initialize the dynamic table and additional input fields for Exchange Online Protection
+    // Function to initialize the dynamic table and input fields for EOP
     function initEOPTable() {
       const container = document.createElement('div');
       container.className = 'dynamic-table-container';
@@ -651,7 +689,7 @@
           <input type="number" id="tenants" value="1" min="1">
           <label for="users-per-tenant"><strong>Number of Users per Tenant</strong>
             <span class="tooltip">?
-              <span class="tooltiptext">Used in cost calculations. Typically, up to 300 users allocate 80 hours, 750 users 120 hours, and 1000 users 160 hours.</span>
+              <span class="tooltiptext">This number is used in the cost calculation. Typically, up to 300 users allocate 80 hours, 750 users 120 hours, and 1000 users 160 hours.</span>
             </span>
           </label>
           <input type="number" id="users-per-tenant" value="1" min="1">
@@ -660,7 +698,7 @@
           <input type="checkbox" id="advanced-hunting-checkbox">
           <label for="advanced-hunting-checkbox"><strong>Include Advanced Hunting</strong></label>
           <span class="tooltip">?
-            <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats using Microsoft Defender queries.</span>
+            <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats using Microsoft Defender queries.</span>
           </span>
         </div>
         <label for="skuSelect"><strong>Select a License SKU:</strong></label>
@@ -729,104 +767,33 @@
         serviceDetails.appendChild(addBtn);
       } else if (service === 'defender') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud';
-        // Updated Defender for Cloud Section with a small summary and a table of key features (without pricing)
         serviceDetails.innerHTML = `
           <div class="service-options">
             <label for="workloads">Number of Azure Workloads 
               <span class="tooltip">?
-                <span class="tooltiptext">Examples: VMs, Storage, Databases, Servers, etc.</span>
+                <span class="tooltiptext">Examples: VM, Storage, Database, Server, etc.</span>
               </span>
             </label>
             <input type="number" id="workloads" value="1" min="1">
           </div>
+          <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud', calculateCost('workloads', 150), {workloads: document.getElementById('workloads').value})">Add to Bill</button>
           <div class="service-details">
             <h3>Microsoft Defender for Cloud Summary</h3>
-            <p>
-              Defender for Cloud provides unified security across your cloud environments by combining Cloud Security Posture Management (CSPM) and Cloud Workload Protection (CWP) along with DevOps security, threat intelligence, and compliance management.
-            </p>
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>Feature</th>
-                  <th>Description</th>
-                  <th>Included In</th>
-                  <th>View Details</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Foundational CSPM</td>
-                  <td>Continuous assessments, security recommendations, Secure Score, and benchmark reporting across Azure, AWS, and Google Cloud.</td>
-                  <td>Free Tier</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Advanced CSPM</td>
-                  <td>Advanced threat detection and compliance management for deeper security insights.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for Servers</td>
-                  <td>Protects virtual machines and servers with endpoint detection and response, vulnerability management, and file integrity monitoring.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for App Service</td>
-                  <td>Protects web applications running on Azure App Service.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-app-service/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for SQL</td>
-                  <td>Provides advanced threat protection for SQL databases.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/sql-database-threat-protection/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for Storage</td>
-                  <td>Protects Azure Storage accounts from threats.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-storage/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for Kubernetes</td>
-                  <td>Secures Kubernetes clusters with threat detection and compliance monitoring.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-kubernetes/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Defender for Containers</td>
-                  <td>Protects containerized applications and environments.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-containers/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>DevOps Security Management</td>
-                  <td>Integrates security into CI/CD pipelines and scans Infrastructure as Code for misconfigurations.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Threat Intelligence</td>
-                  <td>Uses machine learning and behavioral analytics to detect threats with integrated threat intelligence.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>Compliance Management</td>
-                  <td>Provides regulatory compliance assessments and enforces security policies.</td>
-                  <td>Enhanced Security</td>
-                  <td><a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-cloud/" target="_blank">View Details</a></td>
-                </tr>
-              </tbody>
-            </table>
-            <p>
-              <strong>License Options:</strong> Microsoft Defender for Cloud Free Tier (Foundational CSPM) or Enhanced Security (includes advanced CSPM, CWP, DevOps security, threat intelligence, and compliance management).
-            </p>
+            <ul>
+              <li><strong>Improve Your Security Posture:</strong></li>
+              <ul>
+                <li>Offers Cloud Security Posture Management (CSPM) to identify vulnerabilities.</li>
+                <li>Provides actionable recommendations to enhance your cloud security.</li>
+              </ul>
+              <li><strong>Protect Cloud Workloads and Secure Cloud Applications:</strong></li>
+              <ul>
+                <li>Includes a Cloud Workload Protection Platform (CWPP) with specialized measures.</li>
+                <li>Protects servers, containers, storage, databases, and more from threats.</li>
+                <li><strong>Secure Cloud Applications:</strong></li>
+                <li>Integrates security management directly at the code level for multicloud environments.</li>
+              </ul>
+            </ul>
           </div>
-          <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud', calculateCost('workloads', 150), {workloads: document.getElementById('workloads').value})">Add to Bill</button>
         `;
       } else if (service === 'cloudApps') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud Apps';
@@ -848,8 +815,15 @@
           <div class="service-details">
             <h3>Microsoft Defender for Cloud Apps Summary</h3>
             <ul>
-              <li><strong>Cloud Discovery and App Governance:</strong> Analyzes traffic logs for insights into compliance and security.</li>
-              <li><strong>Policy Management:</strong> Enables setting policies to detect risky actions and suspicious activities.</li>
+              <li><strong>Cloud Discovery and App Governance:</strong></li>
+              <ul>
+                <li><strong>Cloud Discovery:</strong> Analyzes traffic logs for insights into compliance and security.</li>
+                <li><strong>App Governance:</strong> Helps decide on blocking/restricting high-risk apps.</li>
+              </ul>
+              <li><strong>Manage Cloud Apps with Policies:</strong></li>
+              <ul>
+                <li>Defines policies to detect risky actions and suspicious activities.</li>
+              </ul>
             </ul>
           </div>
         `;
@@ -872,18 +846,16 @@
           <div class="service-details">
             <h3>Microsoft Defender for Endpoint Summary</h3>
             <ul>
-              <li><strong>Threat Indicators and Endpoint Protection:</strong>
-                <ul>
-                  <li>Custom File and Network Indicators for banning suspicious files and blocking/allowing IPs, URLs, or domains.</li>
-                  <li>Endpoint Detection and Response (EDR) to detect and block malicious artifacts.</li>
-                </ul>
-              </li>
-              <li><strong>Response Capabilities and Vulnerability Management:</strong>
-                <ul>
-                  <li>Device and Live Response capabilities for rapid threat mitigation.</li>
-                  <li>Vulnerability Management for visibility, assessments, and remediation.</li>
-                </ul>
-              </li>
+              <li><strong>Threat Indicators and Endpoint Protection:</strong></li>
+              <ul>
+                <li><strong>Custom File and Network Indicators:</strong> Bans suspicious files and blocks/allows IPs, URLs, or domains based on threat intelligence.</li>
+                <li><strong>Endpoint Detection and Response (EDR) Block:</strong> Detects and blocks malicious artifacts.</li>
+              </ul>
+              <li><strong>Response Capabilities and Vulnerability Management:</strong></li>
+              <ul>
+                <li><strong>Device and Live Response Capabilities:</strong> Isolates devices and allows real-time investigation.</li>
+                <li><strong>Vulnerability Management:</strong> Provides visibility, assessments, and remediation tools.</li>
+              </ul>
             </ul>
           </div>
         `;
@@ -907,18 +879,16 @@
           <div class="service-details">
             <h3>Microsoft Defender for Identity Summary</h3>
             <ul>
-              <li><strong>Modern Identity Threat Detection (ITDR):</strong>
-                <ul>
-                  <li>Uses signals from on-premises AD and cloud identities to detect advanced threats.</li>
-                  <li>Provides comprehensive protection against identity-based attacks.</li>
-                </ul>
-              </li>
-              <li><strong>Entity Tags:</strong>
-                <ul>
-                  <li>Tags sensitive accounts for enhanced event detection.</li>
-                  <li>Honeytoken accounts trigger alerts on unauthorized access.</li>
-                </ul>
-              </li>
+              <li><strong>Modern Identity Threat Detection (ITDR):</strong></li>
+              <ul>
+                <li>Uses signals from on-premises AD and cloud identities to detect advanced threats.</li>
+                <li>Provides comprehensive protection against identity-based attacks.</li>
+              </ul>
+              <li><strong>Entity Tags:</strong></li>
+              <ul>
+                <li>Tags sensitive accounts for enhanced event detection.</li>
+                <li>Honeytoken accounts trigger alerts on unauthorized access.</li>
+              </ul>
             </ul>
           </div>
         `;
@@ -942,18 +912,16 @@
           <div class="service-details">
             <h3>Microsoft Entra ID Protection Summary</h3>
             <ul>
-              <li><strong>Risk-Based Access Policies:</strong>
-                <ul>
-                  <li>Enhances security with Conditional Access that responds to sign-in risks.</li>
-                  <li>Evaluates authentication attempts and applies controls based on risk levels.</li>
-                </ul>
-              </li>
-              <li><strong>Advanced Risk Detection and Response:</strong>
-                <ul>
-                  <li>Continuously monitors identity signals for threats and unauthorized access.</li>
-                  <li>Automatically adjusts access policies in response to detected risks.</li>
-                </ul>
-              </li>
+              <li><strong>Risk-Based Access Policies:</strong></li>
+              <ul>
+                <li>Enhances security with Conditional Access that responds to sign-in risks.</li>
+                <li>Evaluates authentication attempts and applies controls based on risk levels.</li>
+              </ul>
+              <li><strong>Advanced Risk Detection and Response:</strong></li>
+              <ul>
+                <li>Continuously monitors identity signals for threats and unauthorized access.</li>
+                <li>Automatically adjusts access policies in response to detected risks.</li>
+              </ul>
             </ul>
           </div>
         `;
