@@ -1203,54 +1203,50 @@ else if (service === 'endpoint') {
       </span>
     </div>
     <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Identity', calculateIdentityCost(), {tenants: document.getElementById('identity-tenants').value, users: document.getElementById('identity-users-per-tenant').value, advancedHunting: document.getElementById('identity-advanced-hunting-checkbox').checked})">Add to Bill</button>
-    <table class="identity-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
+    <p style="margin-top:20px; font-style: italic;">
+      The below features are included in these licenses: Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License
+    </p>
+    <table class="identity-table" style="width:100%; border-collapse:collapse; margin-top:10px;">
       <thead>
         <tr>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:25%;">Feature/Service</th>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:50%;">Description</th>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:25%;">Included in</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:40%;">Feature/Service</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:60%;">Description</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">User and Entity Behavioral Analytics (UEBA)</td>
           <td style="border:1px solid #ccc; padding:8px;">Detects suspicious activities and potential threats by analyzing user and entity behavior.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Advanced Threat Detection</td>
           <td style="border:1px solid #ccc; padding:8px;">Identifies advanced threats, compromised identities, and malicious insider actions.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Lateral Movement Path (LMP) Detection</td>
           <td style="border:1px solid #ccc; padding:8px;">Detects potential lateral movement paths that attackers might use to move within the network.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Security Alerts</td>
           <td style="border:1px solid #ccc; padding:8px;">Provides real-time alerts on suspicious activities and potential threats.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Integration with Microsoft 365 Defender</td>
           <td style="border:1px solid #ccc; padding:8px;">Integrates with other Microsoft 365 Defender products for a unified security experience.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Identity Security Posture Management</td>
           <td style="border:1px solid #ccc; padding:8px;">Assesses and improves the security posture of identities within the organization.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
         </tr>
         <tr>
           <td style="border:1px solid #ccc; padding:8px;">Incident Investigation and Response</td>
           <td style="border:1px solid #ccc; padding:8px;">Facilitates the investigation and response to security incidents involving identities.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
         </tr>
       </tbody>
     </table>
   `;
 }
+
  else if (service === 'entra') {
         serviceTitle.textContent = 'Microsoft Entra ID Protection';
         serviceDetails.innerHTML = `
