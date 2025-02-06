@@ -699,18 +699,18 @@
      ***********************/
     // SKU Mapping and Feature Arrays (as previously defined)
     const skuMapping = {
-      "Microsoft 365 Business Basic":         { endpoint: "P1", office: "None", extra: false },
-      "Microsoft 365 Business Standard":      { endpoint: "P1", office: "None", extra: false },
-      "Microsoft 365 Business Premium":       { endpoint: "P1", office: "None", extra: false },
-      "Microsoft 365 E3":                     { endpoint: "P1", office: "None", extra: false },
+      "Microsoft 365 Business Basic":         { endpoint: "P1", office: "P2", extra: false },
+      "Microsoft 365 Business Standard":      { endpoint: "P1", office: "P2", extra: false },
+      "Microsoft 365 Business Premium":       { endpoint: "P1", office: "P2", extra: false },
+      "Microsoft 365 E3":                     { endpoint: "P1", office: "P2", extra: false },
       "Microsoft 365 E5":                     { endpoint: "P2", office: "P2",  extra: true  },
       "Microsoft 365 A1/A3/A5":               { endpoint: "P2", office: "P2",  extra: true  },
-      "Microsoft 365 F1/F3":                  { endpoint: "P1", office: "None", extra: false },
-      "Exchange Online Plan 1":               { endpoint: "P1", office: "None", extra: false },
-      "Exchange Online Plan 2":               { endpoint: "P1", office: "None", extra: false },
-      "Standalone EOP":                       { endpoint: "P1", office: "None", extra: false },
-      "Microsoft Defender for Office 365 P1": { endpoint: "None", office: "P1", extra: false },
-      "Microsoft Defender for Office 365 P2": { endpoint: "None", office: "P2", extra: false }
+      "Microsoft 365 F1/F3":                  { endpoint: "P1", office: "P2", extra: false },
+      "Exchange Online Plan 1":               { endpoint: "P1", office: "P2", extra: false },
+      "Exchange Online Plan 2":               { endpoint: "P1", office: "P2", extra: false },
+      "Standalone EOP":                       { endpoint: "P1", office: "P2", extra: false },
+      "Microsoft Defender for Office 365 P1": { endpoint: "P1", office: "P1", extra: false },
+      "Microsoft Defender for Office 365 P2": { endpoint: "P1", office: "P2", extra: false }
     };
     const endpointP1Features = [
       { name: "Next-Generation Protection", description: "Robust antimalware and antivirus protection, including behavior‑based, heuristic, and real‑time protection." },
