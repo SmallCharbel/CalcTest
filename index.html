@@ -242,7 +242,7 @@
       font-weight: bold;
     }
     .cloudapps-table tr:nth-child(even) {
-      background-color: #2e2e2e; /* dark grey */
+      background-color: #BEBEBE; /* dark grey */
     }
     .cloudapps-table tr:nth-child(odd) {
       background-color: #333;
@@ -608,73 +608,6 @@
         m365Tbody.appendChild(row);
       });
     }
-    function initEOPTable() {
-      const container = document.createElement('div');
-      container.className = 'dynamic-table-container';
-      container.innerHTML = `
-        <div class="service-options">
-          <label for="tenants"><strong>Number of Tenants</strong>
-            <span class="tooltip">?
-              <span class="tooltiptext">A tenant represents a separate Exchange Online instance (e.g., a separate subscription or division).</span>
-            </span>
-          </label>
-          <input type="number" id="tenants" value="1" min="1">
-          <label for="users-per-tenant"><strong>Number of Users per Tenant</strong>
-            <span class="tooltip">?
-              <span class="tooltiptext">Used in cost calculations. Typically, up to 300 users allocate 80 hours, 750 users 120 hours, and 1000 users 160 hours.</span>
-            </span>
-          </label>
-          <input type="number" id="users-per-tenant" value="1" min="1">
-        </div>
-        <div class="service-options">
-          <input type="checkbox" id="advanced-hunting-checkbox">
-          <label for="advanced-hunting-checkbox"><strong>Include Advanced Hunting</strong></label>
-          <span class="tooltip">?
-            <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats using Microsoft Defender queries.</span>
-          </span>
-        </div>
-        <label for="skuSelect"><strong>Select a License SKU:</strong></label>
-        <select id="skuSelect"></select>
-        <h2>Microsoft Defender for Endpoint Features</h2>
-        <table id="endpointTable">
-          <thead>
-            <tr>
-              <th>Feature Name</th>
-              <th>Feature Description</th>
-              <th>Availability</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <h2>Microsoft Defender for Office 365 Features</h2>
-        <table id="officeTable">
-          <thead>
-            <tr>
-              <th>Feature Name</th>
-              <th>Feature Description</th>
-              <th>Availability</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <h2>Additional Microsoft 365 Security Features</h2>
-        <table id="m365Table">
-          <thead>
-            <tr>
-              <th>Feature Name</th>
-              <th>Feature Description</th>
-              <th>Availability</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      `;
-      const serviceDetails = document.getElementById('service-details');
-      serviceDetails.innerHTML = "";
-      serviceDetails.appendChild(container);
-      populateSKU();
-      updateTables();
-    }
     /***********************
      * New Dynamic Table for Microsoft Defender for Cloud Apps
      ***********************/
@@ -712,7 +645,7 @@
     function updateTablesCloudApps() {
       const skuSelect = document.getElementById("skuSelectCloudApps");
       const selectedSKU = skuSelect.value;
-      // Since only allowed SKUs are in the dropdown, every feature will be included.
+      // For allowed SKUs, every feature is included.
       let available = cloudAppsAllowedSKUs.includes(selectedSKU) ? "Yes" : "No";
       let tbody = document.querySelector("#cloudAppsTable tbody");
       tbody.innerHTML = "";
