@@ -361,6 +361,15 @@
       const totalHours = instances * (baseHours + extraRuleCost);
       return totalHours * 190; // Assuming $190 per hour
     }
+    function toggleExtraRules() {
+  const extraRulesSection = document.getElementById("extra-rules-section");
+  if (extraRulesSection.style.display === "none" || extraRulesSection.style.display === "") {
+    extraRulesSection.style.display = "block";
+  } else {
+    extraRulesSection.style.display = "none";
+  }
+}
+
     function calculateEntraCost() {
       const tenants = document.getElementById('entra-tenants').value;
       const usersPerTenant = document.getElementById('entra-users-per-tenant').value;
