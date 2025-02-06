@@ -373,6 +373,23 @@
       const serviceCost = tenants * hoursPerTenant * 190;
       return serviceCost + advancedHuntingCost;
     }
+    function calculateEndpointCost() {
+  const devices = parseInt(document.getElementById('devices').value) || 0;
+  let vulnMgmtDevices = 0;
+  const vulnMgmtCheckbox = document.getElementById('vuln-mgmt-checkbox');
+  if (vulnMgmtCheckbox && vulnMgmtCheckbox.checked) {
+    vulnMgmtDevices = parseInt(document.getElementById('vuln-mgmt-devices').value) || 0;
+  }
+  // Cost calculation: $150 per device plus $50 per vulnerability-managed device.
+  return (devices * 150) + (vulnMgmtDevices * 50);
+}
+
+// Toggles the display of vulnerability management options.
+function toggleVulnerabilityManagement() {
+  const checkbox = document.getElementById('vuln-mgmt-checkbox');
+  const options = document.getElementById('vuln-mgmt-options');
+  options.style.display = checkbox.checked ? 'block' : 'none';
+}
     function calculateCost(quantityId, rate) {
       const quantity = document.getElementById(quantityId).value;
       return quantity * rate;
@@ -401,12 +418,7 @@
       const serviceCost = tenants * hoursPerTenant * 190;
       return serviceCost + advancedHuntingCost;
     }
-    function calculateEndpointCost() {
-      const devices = document.getElementById('devices').value;
-      const vulnMgmtDevices = document.getElementById('vuln-mgmt-checkbox').checked ? document.getElementById('vuln-mgmt-devices').value : 0;
-      const deviceCost = devices * 150;
-      const vulnMgmtCost = vulnMgmtDevices * 50;
-      return deviceCost + vulnMgmtCost;
+
     }
     function calculateIdentityCost() {
       const tenants = document.getElementById('identity-tenants').value;
@@ -1152,6 +1164,14 @@ else if (service === 'endpoint') {
       <input type="number" id="devices" value="1" min="1">
     </div>
     <div class="service-options">
+      <input type="checkbox" id="vuln-mgmt-checkbox" onclick="toggleVulnerabilityManagement()">
+      <label for="vuln-mgmt-checkbox"><strong>Include Vulnerability Management</strong></label>
+    </div>
+    <div class="service-options" id="vuln-mgmt-options" style="display: none;">
+      <label for="vuln-mgmt-devices"><strong>Number of Devices for Vulnerability Management</strong></label>
+      <input type="number" id="vuln-mgmt-devices" value="0" min="0">
+    </div>
+    <div class="service-options">
       <label for="endpoint-sku-select"><strong>Select SKU</strong></label>
       <select id="endpoint-sku-select" onchange="updateEndpointTable()">
         <option value="Microsoft Defender for Endpoint Plan 1 (P1)">Microsoft Defender for Endpoint Plan 1 (P1)</option>
@@ -1162,7 +1182,7 @@ else if (service === 'endpoint') {
         <option value="Microsoft 365 G5">Microsoft 365 G5</option>
       </select>
     </div>
-    <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Endpoint', calculateEndpointCost(), {devices: document.getElementById('devices').value})">Add to Bill</button>
+    <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Endpoint', calculateEndpointCost(), {devices: document.getElementById('devices').value, vulnMgmtDevices: document.getElementById('vuln-mgmt-devices').value})">Add to Bill</button>
     <table id="endpointTable" style="width:100%; border-collapse:collapse; margin-top:20px;">
       <thead>
         <tr>
@@ -1172,10 +1192,11 @@ else if (service === 'endpoint') {
         </tr>
       </thead>
       <tbody>
+        <!-- Rows will be dynamically injected here based on the SKU selection -->
       </tbody>
     </table>
   `;
-  updateEndpointTable(); // initialize the table based on the default selection
+  updateEndpointTable(); // Initialize table based on the default SKU
 }
  else if (service === 'identity') {
         serviceTitle.textContent = 'Microsoft Defender for Identity';
