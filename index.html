@@ -1290,74 +1290,91 @@ else if (service === 'entra') {
       } else if (service === 'sentinel') {
   serviceTitle.textContent = 'Microsoft Sentinel';
   serviceDetails.innerHTML = `
-    <div class="service-options">
-      <label for="sentinel-instances"><strong>Number of Instances</strong></label>
-      <input type="number" id="sentinel-instances" value="1" min="1">
+    <div class="service-options" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+      <label for="sentinel-instances" style="font-weight: bold;">Number of Instances</label>
+      <input type="number" id="sentinel-instances" value="1" min="1" style="width: 80px; padding: 4px;">
     </div>
-    <div class="service-options">
+    <div class="service-options" style="margin-bottom: 10px;">
       <!-- Modern styled Include Rules button -->
-      <button style="padding: 10px 20px; background-color: #007bb5; color: #fff; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s;"
+      <button style="padding: 8px 16px; background-color: #007bb5; color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s;"
               onclick="toggleExtraRules()">Include Rules</button>
     </div>
-    <div id="extra-rules-section" class="service-options" style="display: none; margin-top: 10px;">
-      <p style="margin: 0; font-style: italic;">Extra Rules: 14 rules included by default</p>
-      <label for="sentinel-extra-rules" style="display: block; margin-top: 5px;"><strong>Adjust Extra Rules:</strong></label>
-      <input type="number" id="sentinel-extra-rules" value="0" min="0">
+    <div id="extra-rules-section" class="service-options" style="display: none; margin-bottom: 10px; padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
+      <p style="margin: 0; font-style: italic; font-size: 0.9em;">Extra Rules: 14 rules included by default</p>
+      <label for="sentinel-extra-rules" style="display: block; margin-top: 5px; font-weight: bold;">Adjust Extra Rules:</label>
+      <input type="number" id="sentinel-extra-rules" value="0" min="0" style="width: 70px; padding: 4px;">
     </div>
-    <button class="add-to-bill" onclick="addToBill('Microsoft Sentinel', calculateSentinelCost(), {instances: document.getElementById('sentinel-instances').value, extraRules: document.getElementById('sentinel-extra-rules').value})">Add to Bill</button>
+    <button class="add-to-bill" style="padding: 10px 16px; background-color: #28a745; color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s; margin-bottom: 15px;"
+            onclick="addToBill('Microsoft Sentinel', calculateSentinelCost(), {instances: document.getElementById('sentinel-instances').value, extraRules: document.getElementById('sentinel-extra-rules').value})">Add to Bill</button>
     
-    <div class="sentinel-summary" style="margin-top: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-      <h3 style="color: #30475e;">Microsoft Sentinel</h3>
+    <div class="sentinel-summary" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 6px;">
+      <h3 style="color: #30475e; margin-bottom: 8px;">Microsoft Sentinel</h3>
       
-      <h4 style="margin-bottom: 5px; color: #007bb5;">Data Collection</h4>
-      <p style="margin: 0 0 10px 0;">
-        <strong>Out-of-the-Box Data Connectors:</strong> Integrates with various Microsoft and non-Microsoft sources, including Microsoft Entra ID, Azure Activity, and more.<br>
-        <strong>Custom Data Collection:</strong> Supports data collection using common event format (CEF), Syslog, or REST-API.
-      </p>
+      <div class="section" style="margin-bottom: 10px;">
+        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Data Collection</h4>
+        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
+          <strong>Out-of-the-Box Data Connectors:</strong> Integrates with various Microsoft and non‑Microsoft sources, including Microsoft Entra ID, Azure Activity, and more.<br>
+          <strong>Custom Data Collection:</strong> Supports data collection using common event format (CEF), Syslog, or REST‑API.
+        </p>
+      </div>
       
-      <h4 style="margin-bottom: 5px; color: #007bb5;">Threat Detection</h4>
-      <p style="margin: 0 0 10px 0;">
-        <strong>Built-in Analytics:</strong> Uses machine learning and behavioral analytics to detect threats.<br>
-        <strong>Custom Analytics Rules:</strong> Allows creation of custom rules to detect specific threats.
-      </p>
+      <div class="section" style="margin-bottom: 10px;">
+        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Threat Detection</h4>
+        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
+          <strong>Built‑in Analytics:</strong> Uses machine learning and behavioral analytics to detect threats.<br>
+          <strong>Custom Analytics Rules:</strong> Allows creation of custom rules to detect specific threats.
+        </p>
+      </div>
       
-      <h4 style="margin-bottom: 5px; color: #007bb5;">Investigation</h4>
-      <p style="margin: 0 0 10px 0;">
-        <strong>Investigation Graph:</strong> Visualizes the relationships between entities involved in an alert to help investigate incidents.<br>
-        <strong>Hunting Queries:</strong> Provides tools for proactive threat hunting using KQL (Kusto Query Language).
-      </p>
+      <div class="section" style="margin-bottom: 10px;">
+        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Investigation</h4>
+        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
+          <strong>Investigation Graph:</strong> Visualizes relationships between entities in an alert to help investigate incidents.<br>
+          <strong>Hunting Queries:</strong> Provides tools for proactive threat hunting using KQL (Kusto Query Language).
+        </p>
+      </div>
       
-      <h4 style="margin-bottom: 5px; color: #007bb5;">Response</h4>
-      <p style="margin: 0 0 10px 0;">
-        <strong>Automated Response:</strong> Uses playbooks to automate responses to threats.<br>
-        <strong>Manual Response Actions:</strong> Allows security teams to take manual actions based on investigation findings.
-      </p>
+      <div class="section" style="margin-bottom: 10px;">
+        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Response</h4>
+        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
+          <strong>Automated Response:</strong> Uses playbooks to automate responses to threats.<br>
+          <strong>Manual Response Actions:</strong> Allows security teams to take manual actions based on investigation findings.
+        </p>
+      </div>
       
-      <h4 style="margin-bottom: 5px; color: #007bb5;">Security Orchestration, Automation, and Response (SOAR)</h4>
-      <p style="margin: 0 0 10px 0;">
-        <strong>Playbooks:</strong> Automates workflows and responses to incidents.<br>
-        <strong>Integration with Logic Apps:</strong> Leverages Azure Logic Apps for complex automation scenarios.
-      </p>
+      <div class="section" style="margin-bottom: 10px;">
+        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Security Orchestration, Automation, and Response (SOAR)</h4>
+        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
+          <strong>Playbooks:</strong> Automates workflows and responses to incidents.<br>
+          <strong>Integration with Logic Apps:</strong> Leverages Azure Logic Apps for complex automation scenarios.
+        </p>
+      </div>
       
-      <h4 style="margin-bottom: 5px; color: #007bb5;">Threat Intelligence</h4>
-      <p style="margin: 0 0 10px 0;">
-        <strong>Built-in Threat Intelligence:</strong> Integrates with Microsoft Threat Intelligence.<br>
-        <strong>Bring Your Own Threat Intelligence:</strong> Allows integration of third-party threat intelligence feeds.
-      </p>
+      <div class="section" style="margin-bottom: 10px;">
+        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Threat Intelligence</h4>
+        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
+          <strong>Built‑in Threat Intelligence:</strong> Integrates with Microsoft Threat Intelligence.<br>
+          <strong>Bring Your Own Threat Intelligence:</strong> Allows integration of third‑party threat intelligence feeds.
+        </p>
+      </div>
       
-      <h4 style="margin-bottom: 5px; color: #007bb5;">Compliance and Reporting</h4>
-      <p style="margin: 0 0 10px 0;">
-        <strong>Regulatory Compliance:</strong> Provides compliance assessments and reporting for various regulatory standards.<br>
-        <strong>Custom Dashboards and Reports:</strong> Allows creation of custom dashboards and reports to monitor security posture.
-      </p>
+      <div class="section" style="margin-bottom: 10px;">
+        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Compliance and Reporting</h4>
+        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
+          <strong>Regulatory Compliance:</strong> Provides compliance assessments and reporting for various regulatory standards.<br>
+          <strong>Custom Dashboards and Reports:</strong> Allows creation of custom dashboards and reports to monitor security posture.
+        </p>
+      </div>
       
-      <h4 style="margin-bottom: 5px; color: #007bb5;">Included Rules</h4>
-      <ul style="margin-top: 0; padding-left: 20px;">
-        <li>2 Automation Rules</li>
-        <li>5 Scheduled Analytic Rules</li>
-        <li>5 Near Real-Time Analytic Rules</li>
-        <li>2 Automation Rules including Playbooks</li>
-      </ul>
+      <div class="section" style="margin-bottom: 0;">
+        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Included Rules</h4>
+        <ul style="margin: 3px 0 0 20px; font-size: 0.95em; line-height: 1.3;">
+          <li>2 Automation Rules</li>
+          <li>5 Scheduled Analytic Rules</li>
+          <li>5 Near Real‑Time Analytic Rules</li>
+          <li>2 Automation Rules including Playbooks</li>
+        </ul>
+      </div>
     </div>
   `;
 }
