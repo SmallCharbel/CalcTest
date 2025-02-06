@@ -912,16 +912,33 @@ else if (service === 'cloudApps') {
   serviceTitle.textContent = 'Microsoft Defender for Cloud Apps';
   serviceDetails.innerHTML = `
     <div class="service-options">
-      <label for="cloudapps-tenants">Number of Tenants</label>
+      <label for="cloudapps-tenants">
+        <strong>Number of Tenants</strong>
+        <span class="tooltip">?
+          <span class="tooltiptext">
+            Each tenant represents a separate instance of your cloud environment. This number is used to determine overall resource allocation and cost.
+          </span>
+        </span>
+      </label>
       <input type="number" id="cloudapps-tenants" value="1" min="1">
-      <label for="cloudapps-users-per-tenant">Number of Users per Tenant</label>
+      
+      <label for="cloudapps-users-per-tenant">
+        <strong>Number of Users per Tenant</strong>
+        <span class="tooltip">?
+          <span class="tooltiptext">
+            Specifies the user count per tenant. The pricing calculation is based on user volume ranges (e.g., 1–300 users: 80 hours, 301–750 users: 120 hours, 751–1000 users: 160 hours).
+          </span>
+        </span>
+      </label>
       <input type="number" id="cloudapps-users-per-tenant" value="1" min="1">
     </div>
     <div class="service-options">
       <input type="checkbox" id="cloudapps-advanced-hunting-checkbox">
       <label for="cloudapps-advanced-hunting-checkbox">Include Advanced Hunting</label>
       <span class="tooltip">?
-        <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats.</span>
+        <span class="tooltiptext">
+          Advanced Hunting enables proactive inspection for potential threats.
+        </span>
       </span>
     </div>
     <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud Apps', calculateCloudAppsCost(), {tenants: document.getElementById('cloudapps-tenants').value, users: document.getElementById('cloudapps-users-per-tenant').value, advancedHunting: document.getElementById('cloudapps-advanced-hunting-checkbox').checked})">Add to Bill</button>
