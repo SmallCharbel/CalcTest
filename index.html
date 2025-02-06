@@ -675,7 +675,7 @@
         m365Tbody.appendChild(row);
       });
     }
-    // Function to initialize the dynamic table and input fields for EOP
+    // Function to initialize the dynamic table and additional input fields for EOP
     function initEOPTable() {
       const container = document.createElement('div');
       container.className = 'dynamic-table-container';
@@ -683,13 +683,13 @@
         <div class="service-options">
           <label for="tenants"><strong>Number of Tenants</strong>
             <span class="tooltip">?
-              <span class="tooltiptext">A tenant represents a separate Exchange Online instance (e.g., a separate subscription or division).</span>
+              <span class="tooltiptext">A tenant represents a separate Exchange Online instance (for example, a separate subscription or division).</span>
             </span>
           </label>
           <input type="number" id="tenants" value="1" min="1">
           <label for="users-per-tenant"><strong>Number of Users per Tenant</strong>
             <span class="tooltip">?
-              <span class="tooltiptext">This number is used in the cost calculation. Typically, up to 300 users allocate 80 hours, 750 users 120 hours, and 1000 users 160 hours.</span>
+              <span class="tooltiptext">Used in cost calculations. Typically, up to 300 users allocate 80 hours, 750 users 120 hours, and 1000 users 160 hours.</span>
             </span>
           </label>
           <input type="number" id="users-per-tenant" value="1" min="1">
@@ -698,7 +698,7 @@
           <input type="checkbox" id="advanced-hunting-checkbox">
           <label for="advanced-hunting-checkbox"><strong>Include Advanced Hunting</strong></label>
           <span class="tooltip">?
-            <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats using Microsoft Defender queries.</span>
+            <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats using Microsoft Defender queries.</span>
           </span>
         </div>
         <label for="skuSelect"><strong>Select a License SKU:</strong></label>
@@ -767,11 +767,12 @@
         serviceDetails.appendChild(addBtn);
       } else if (service === 'defender') {
         serviceTitle.textContent = 'Microsoft Defender for Cloud';
+        // Updated Defender for Cloud Summary
         serviceDetails.innerHTML = `
           <div class="service-options">
             <label for="workloads">Number of Azure Workloads 
               <span class="tooltip">?
-                <span class="tooltiptext">Examples: VM, Storage, Database, Server, etc.</span>
+                <span class="tooltiptext">Examples: VMs, Storage, Databases, Servers, etc.</span>
               </span>
             </label>
             <input type="number" id="workloads" value="1" min="1">
@@ -780,18 +781,69 @@
           <div class="service-details">
             <h3>Microsoft Defender for Cloud Summary</h3>
             <ul>
-              <li><strong>Improve Your Security Posture:</strong></li>
-              <ul>
-                <li>Offers Cloud Security Posture Management (CSPM) to identify vulnerabilities.</li>
-                <li>Provides actionable recommendations to enhance your cloud security.</li>
-              </ul>
-              <li><strong>Protect Cloud Workloads and Secure Cloud Applications:</strong></li>
-              <ul>
-                <li>Includes a Cloud Workload Protection Platform (CWPP) with specialized measures.</li>
-                <li>Protects servers, containers, storage, databases, and more from threats.</li>
-                <li><strong>Secure Cloud Applications:</strong></li>
-                <li>Integrates security management directly at the code level for multicloud environments.</li>
-              </ul>
+              <li>
+                <strong>Cloud Security Posture Management (CSPM):</strong>
+                <ul>
+                  <li><em>Foundational CSPM:</em> Provides continuous assessments, security recommendations, Secure Score, and the Microsoft cloud security benchmark across Azure, AWS, and Google Cloud. <span style="font-style: italic;">(Included in Free Tier)</span></li>
+                  <li><em>Advanced CSPM:</em> Includes advanced threat detection and compliance management. <span style="font-style: italic;">(Included in Enhanced Security)</span></li>
+                </ul>
+              </li>
+              <li>
+                <strong>Cloud Workload Protection (CWP):</strong>
+                <ul>
+                  <li>
+                    <strong>Defender for Servers:</strong> Protects VMs and servers with EDR, vulnerability management, and file integrity monitoring.
+                    <ul>
+                      <li>Plan 1: $5 per node per month (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">Pricing</a>)</li>
+                      <li>Plan 2: $15 per node per month (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-servers/" target="_blank">Pricing</a>)</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Defender for App Service:</strong> Protects web applications running on Azure App Service (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-app-service/" target="_blank">Pricing: $0.02 per instance per hour</a>).
+                  </li>
+                  <li>
+                    <strong>Defender for SQL:</strong> Provides advanced threat protection for SQL databases.
+                    <ul>
+                      <li>Azure SQL Database: $15 per server per month (<a href="https://azure.microsoft.com/en-us/pricing/details/sql-database-threat-protection/" target="_blank">Pricing</a>)</li>
+                      <li>SQL Managed Instance: $15 per instance per month (<a href="https://azure.microsoft.com/en-us/pricing/details/sql-managed-instance-threat-protection/" target="_blank">Pricing</a>)</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Defender for Storage:</strong> Protects Azure Storage accounts (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-storage/" target="_blank">Pricing: $0.02 per 10,000 transactions</a>).
+                  </li>
+                  <li>
+                    <strong>Defender for Kubernetes:</strong> Secures Kubernetes clusters (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-kubernetes/" target="_blank">Pricing: $0.006 per vCore per hour</a>).
+                  </li>
+                  <li>
+                    <strong>Defender for Containers:</strong> Protects containerized applications (<a href="https://azure.microsoft.com/en-us/pricing/details/defender-for-containers/" target="_blank">Pricing: $0.006 per vCore per hour</a>).
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>DevOps Security Management:</strong>
+                <ul>
+                  <li>CI/CD Pipeline Security and Infrastructure as Code (IaC) Scanning are included in Enhanced Security.</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Threat Intelligence:</strong>
+                <ul>
+                  <li>Uses machine learning and behavioral analytics to detect threats; integrated with Microsoft Threat Intelligence. (Included in Enhanced Security)</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Compliance Management:</strong>
+                <ul>
+                  <li>Provides regulatory compliance assessments and policy management. (Included in Enhanced Security)</li>
+                </ul>
+              </li>
+              <li>
+                <strong>License SKUs:</strong>
+                <ul>
+                  <li><em>Microsoft Defender for Cloud Free Tier</em>: Includes foundational CSPM capabilities.</li>
+                  <li><em>Microsoft Defender for Cloud Enhanced Security</em>: Includes advanced CSPM, CWP, DevOps security management, threat intelligence, and compliance management. Pricing varies based on workload and usage.</li>
+                </ul>
+              </li>
             </ul>
           </div>
         `;
