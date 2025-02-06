@@ -1187,39 +1187,71 @@ else if (service === 'endpoint') {
   updateEndpointTable(); // Initialize table based on the default SKU
 }
  else if (service === 'identity') {
-        serviceTitle.textContent = 'Microsoft Defender for Identity';
-        serviceDetails.innerHTML = `
-          <div class="service-options">
-            <label for="identity-tenants">Number of Tenants</label>
-            <input type="number" id="identity-tenants" value="1" min="1">
-            <label for="identity-users-per-tenant">Number of Users per Tenant</label>
-            <input type="number" id="identity-users-per-tenant" value="1" min="1">
-          </div>
-          <div class="service-options">
-            <input type="checkbox" id="identity-advanced-hunting-checkbox">
-            <label for="identity-advanced-hunting-checkbox">Include Advanced Hunting</label>
-            <span class="tooltip">?
-              <span class="tooltiptext">Advanced Hunting enables proactive threat inspection.</span>
-            </span>
-          </div>
-          <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Identity', calculateIdentityCost(), {tenants: document.getElementById('identity-tenants').value, users: document.getElementById('identity-users-per-tenant').value, advancedHunting: document.getElementById('identity-advanced-hunting-checkbox').checked})">Add to Bill</button>
-          <div class="service-details">
-            <h3>Microsoft Defender for Identity Summary</h3>
-            <ul>
-              <li><strong>Modern Identity Threat Detection (ITDR):</strong></li>
-              <ul>
-                <li>Uses signals from on-premises AD and cloud identities to detect advanced threats.</li>
-                <li>Provides comprehensive protection against identity-based attacks.</li>
-              </ul>
-              <li><strong>Entity Tags:</strong></li>
-              <ul>
-                <li>Tags sensitive accounts for enhanced event detection.</li>
-                <li>Honeytoken accounts trigger alerts on unauthorized access.</li>
-              </ul>
-            </ul>
-          </div>
-        `;
-      } else if (service === 'entra') {
+  serviceTitle.textContent = 'Microsoft Defender for Identity';
+  serviceDetails.innerHTML = `
+    <div class="service-options">
+      <label for="identity-tenants"><strong>Number of Tenants</strong></label>
+      <input type="number" id="identity-tenants" value="1" min="1">
+      <label for="identity-users-per-tenant"><strong>Number of Users per Tenant</strong></label>
+      <input type="number" id="identity-users-per-tenant" value="1" min="1">
+    </div>
+    <div class="service-options">
+      <input type="checkbox" id="identity-advanced-hunting-checkbox">
+      <label for="identity-advanced-hunting-checkbox">Include Advanced Hunting</label>
+      <span class="tooltip">?
+        <span class="tooltiptext">Advanced Hunting enables proactive threat inspection.</span>
+      </span>
+    </div>
+    <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Identity', calculateIdentityCost(), {tenants: document.getElementById('identity-tenants').value, users: document.getElementById('identity-users-per-tenant').value, advancedHunting: document.getElementById('identity-advanced-hunting-checkbox').checked})">Add to Bill</button>
+    <table class="identity-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:25%;">Feature/Service</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:50%;">Description</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:25%;">Included in</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="border:1px solid #ccc; padding:8px;">User and Entity Behavioral Analytics (UEBA)</td>
+          <td style="border:1px solid #ccc; padding:8px;">Detects suspicious activities and potential threats by analyzing user and entity behavior.</td>
+          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #ccc; padding:8px;">Advanced Threat Detection</td>
+          <td style="border:1px solid #ccc; padding:8px;">Identifies advanced threats, compromised identities, and malicious insider actions.</td>
+          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #ccc; padding:8px;">Lateral Movement Path (LMP) Detection</td>
+          <td style="border:1px solid #ccc; padding:8px;">Detects potential lateral movement paths that attackers might use to move within the network.</td>
+          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #ccc; padding:8px;">Security Alerts</td>
+          <td style="border:1px solid #ccc; padding:8px;">Provides real-time alerts on suspicious activities and potential threats.</td>
+          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #ccc; padding:8px;">Integration with Microsoft 365 Defender</td>
+          <td style="border:1px solid #ccc; padding:8px;">Integrates with other Microsoft 365 Defender products for a unified security experience.</td>
+          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #ccc; padding:8px;">Identity Security Posture Management</td>
+          <td style="border:1px solid #ccc; padding:8px;">Assesses and improves the security posture of identities within the organization.</td>
+          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #ccc; padding:8px;">Incident Investigation and Response</td>
+          <td style="border:1px solid #ccc; padding:8px;">Facilitates the investigation and response to security incidents involving identities.</td>
+          <td style="border:1px solid #ccc; padding:8px;">Enterprise Mobility + Security E5 (EMS E5/A5) / Microsoft 365 E5 (Microsoft E5/A5/G5) / Microsoft 365 E5/A5/G5/F5 Security / Standalone Defender for Identity License</td>
+        </tr>
+      </tbody>
+    </table>
+  `;
+}
+ else if (service === 'entra') {
         serviceTitle.textContent = 'Microsoft Entra ID Protection';
         serviceDetails.innerHTML = `
           <div class="service-options">
