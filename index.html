@@ -429,6 +429,61 @@
       const serviceCost = tenants * hoursPerTenant * 190;
       return serviceCost + advancedHuntingCost;
     }
+    function updateIntuneTable() {
+  const sku = document.getElementById('intune-sku-select').value;
+  const tbody = document.querySelector('#intuneTable tbody');
+  tbody.innerHTML = '';
+
+  // For features 1-7, all SKUs include them.
+  // For features 8-10, they are only included if the SKU is "Microsoft Intune Plan 2" or "Microsoft Intune Suite".
+  const advancedIncluded = (sku === "Microsoft Intune Plan 2" || sku === "Microsoft Intune Suite");
+
+  // Define the list of features.
+  const features = [
+    { name: "Cross-Platform Endpoint Management", description: "Manage devices across Windows, macOS, iOS, and Android platforms.", type: "basic" },
+    { name: "Mobile Application Management (MAM)", description: "Manage and protect corporate data within mobile apps.", type: "basic" },
+    { name: "Endpoint Security", description: "Implement security policies to protect devices and data.", type: "basic" },
+    { name: "Conditional Access", description: "Control access to apps and data based on conditions.", type: "basic" },
+    { name: "Compliance Policies", description: "Define and enforce compliance policies for devices.", type: "basic" },
+    { name: "Device Configuration", description: "Configure device settings and profiles.", type: "basic" },
+    { name: "Endpoint Analytics", description: "Gain insights into device performance and user experience.", type: "basic" },
+    { name: "Microsoft Tunnel for Mobile Application Management", description: "A lightweight VPN solution for iOS and Android devices that does not require device enrollment.", type: "advanced" },
+    { name: "Management of Specialty Devices", description: "Manage and protect special-purpose devices such as AR/VR headsets and conference room devices.", type: "advanced" },
+    { name: "Advanced Endpoint Management", description: "Advanced capabilities for managing and securing endpoints.", type: "advanced" }
+  ];
+
+  features.forEach(feature => {
+    const row = document.createElement('tr');
+
+    const nameCell = document.createElement('td');
+    nameCell.style.border = "1px solid #ccc";
+    nameCell.style.padding = "8px";
+    nameCell.textContent = feature.name;
+
+    const descCell = document.createElement('td');
+    descCell.style.border = "1px solid #ccc";
+    descCell.style.padding = "8px";
+    descCell.textContent = feature.description;
+
+    const includedCell = document.createElement('td');
+    includedCell.style.border = "1px solid #ccc";
+    includedCell.style.padding = "8px";
+    let isIncluded = false;
+    if (feature.type === "basic") {
+      isIncluded = true; // Features 1-7 are always included
+    } else if (feature.type === "advanced") {
+      isIncluded = advancedIncluded;
+    }
+    includedCell.textContent = isIncluded ? "Yes" : "No";
+    includedCell.className = isIncluded ? "yes" : "no";
+
+    row.appendChild(nameCell);
+    row.appendChild(descCell);
+    row.appendChild(includedCell);
+    tbody.appendChild(row);
+  });
+}
+
     /***********************
      * Billing Functions (unchanged)
      ***********************/
@@ -1378,6 +1433,52 @@ else if (service === 'entra') {
     </div>
   `;
 }
+else if (service === 'intune') {
+  serviceTitle.textContent = 'Microsoft Intune';
+  serviceDetails.innerHTML = `
+    <div class="service-options">
+      <label for="devices"><strong>Number of Devices</strong></label>
+      <input type="number" id="devices" value="1" min="1">
+    </div>
+    <div class="service-options">
+      <input type="checkbox" id="vuln-mgmt-checkbox" onclick="toggleVulnerabilityManagement()">
+      <label for="vuln-mgmt-checkbox"><strong>Include Vulnerability Management</strong></label>
+    </div>
+    <div class="service-options" id="vuln-mgmt-options" style="display: none;">
+      <label for="vuln-mgmt-devices"><strong>Number of Devices for Vulnerability Management</strong></label>
+      <input type="number" id="vuln-mgmt-devices" value="0" min="0">
+    </div>
+    <div class="service-options">
+      <label for="intune-sku-select"><strong>Select SKU</strong></label>
+      <select id="intune-sku-select" onchange="updateIntuneTable()">
+        <option value="Microsoft Intune Plan 1">Microsoft Intune Plan 1</option>
+        <option value="Microsoft Intune Plan 2">Microsoft Intune Plan 2</option>
+        <option value="Microsoft Intune Suite">Microsoft Intune Suite</option>
+        <option value="Microsoft 365 E3">Microsoft 365 E3</option>
+        <option value="Microsoft 365 E5">Microsoft 365 E5</option>
+        <option value="Enterprise Mobility + Security E3">Enterprise Mobility + Security E3</option>
+        <option value="Enterprise Mobility + Security E5">Enterprise Mobility + Security E5</option>
+        <option value="Microsoft 365 Business Premium">Microsoft 365 Business Premium</option>
+        <option value="Microsoft 365 F1">Microsoft 365 F1</option>
+        <option value="Microsoft 365 F3">Microsoft 365 F3</option>
+      </select>
+    </div>
+    <button class="add-to-bill" onclick="addToBill('Microsoft Intune', calculateEndpointCost(), {devices: document.getElementById('devices').value, vulnMgmtDevices: document.getElementById('vuln-mgmt-devices').value})">Add to Bill</button>
+    <table id="intuneTable" style="width:100%; border-collapse:collapse; margin-top:20px;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:30%;">Feature/Service</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:50%;">Description</th>
+          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:20%;">Included</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  `;
+  updateIntuneTable();
+}
+
     }
   </script>
 </head>
@@ -1392,6 +1493,7 @@ else if (service === 'entra') {
     <a onclick="showService('identity')">Microsoft Defender for Identity</a>
     <a onclick="showService('entra')">Microsoft Entra ID Protection</a>
     <a onclick="showService('sentinel')">Microsoft Sentinel</a>
+    <a onclick="showService('intune')">Microsoft Intune</a>
   </div>
   <div class="title-bar">
     <h1>Microsoft Security Calculator</h1>
