@@ -419,6 +419,35 @@
       margin-bottom: 24px;
       border: 1px solid rgba(0, 0, 0, 0.03);
     }
+
+    /* Add these specific styles for checkbox alignment */
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+      margin: 0;
+      width: 18px;
+      height: 18px;
+    }
+
+    .checkbox-wrapper label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      color: #1a237e;
+    }
+
+    .checkbox-wrapper .tooltip {
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
   </style>
   <script>
     // MSAL Configuration
@@ -1024,11 +1053,15 @@
           <input type="number" id="users-per-tenant" value="1" min="1">
         </div>
         <div class="service-options">
-          <input type="checkbox" id="advanced-hunting-checkbox">
-          <label for="advanced-hunting-checkbox"><strong>Include Advanced Hunting</strong></label>
-          <span class="tooltip">?
-            <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats using custom queries.</span>
-          </span>
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id="advanced-hunting-checkbox">
+            <label for="advanced-hunting-checkbox">
+              Include Advanced Hunting
+              <span class="tooltip">?
+                <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats using custom queries.</span>
+              </span>
+            </label>
+          </div>
         </div>
         <label for="skuSelect"><strong>Select a License SKU:</strong></label>
         <select id="skuSelect"></select>
