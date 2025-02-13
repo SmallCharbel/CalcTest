@@ -1080,7 +1080,7 @@
       const serviceTitle = document.getElementById('service-title');
       serviceDetails.innerHTML = ''; // Clear previous content
       if (service === 'exchange') {
-        serviceTitle.textContent = 'Exchange Online Protection';
+        serviceTitle.textContent = 'Microsoft Defender for Office 365/EOP';
         // Initialize the dynamic table and input fields for EOP
         initEOPTable();
         // Add the "Add to Bill" button below the dynamic table container
@@ -1655,7 +1655,7 @@ else if (service === 'intune') {
   <div class="sidebar">
     <img src="logo.png" alt="Company Logo" class="logo" onclick="window.location.href='https://www.ampiosolutions.com/'">
     <h2>Services</h2>
-    <a onclick="showService('exchange')">Exchange Online Protection</a>
+    <a onclick="showService('exchange')">Microsoft Defender for Office 365/EOP</a>
     <a onclick="showService('defender')">Microsoft Defender for Cloud</a>
     <a onclick="showService('cloudApps')">Microsoft Defender for Cloud Apps</a>
     <a onclick="showService('endpoint')">Microsoft Defender for Endpoint</a>
