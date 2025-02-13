@@ -788,7 +788,7 @@
       { name: "Threat and Vulnerability Management (TVM)", description: "Identifies, assesses, and remediates endpoint vulnerabilities." },
       { name: "Automated Investigation and Remediation (AIR)", description: "Automates the investigation and remediation of threats." },
       { name: "Threat Intelligence", description: "Provides detailed threat intelligence and analysis." },
-      { name: "Microsoft Threat Experts", description: "Access to Microsoft’s team of security experts for additional support." }
+      { name: "Microsoft Threat Experts", description: "Access to Microsoft's team of security experts for additional support." }
     ];
     const officeP1Features = [
       { name: "Safe Attachments", description: "Protects against unknown malware and viruses by scanning email attachments." },
@@ -1288,15 +1288,17 @@ else if (service === 'endpoint') {
       <input type="number" id="vuln-mgmt-devices" value="0" min="0">
     </div>
     <div class="service-options">
-      <label for="endpoint-sku-select"><strong>Select SKU</strong></label>
-      <select id="endpoint-sku-select" onchange="updateEndpointTable()">
-        <option value="Microsoft Defender for Endpoint Plan 1 (P1)">Microsoft Defender for Endpoint Plan 1 (P1)</option>
-        <option value="Microsoft Defender for Endpoint Plan 2 (P2)">Microsoft Defender for Endpoint Plan 2 (P2)</option>
-        <option value="Microsoft 365 E5">Microsoft 365 E5</option>
-        <option value="Microsoft 365 A5">Microsoft 365 A5</option>
-        <option value="Microsoft 365 F5">Microsoft 365 F5</option>
-        <option value="Microsoft 365 G5">Microsoft 365 G5</option>
-      </select>
+      <label class="license-label" for="endpoint-sku-select">Select License</label>
+      <div class="license-selector">
+        <select id="endpoint-sku-select" onchange="updateEndpointTable()">
+          <option value="Microsoft Defender for Endpoint Plan 1 (P1)">Microsoft Defender for Endpoint Plan 1 (P1)</option>
+          <option value="Microsoft Defender for Endpoint Plan 2 (P2)">Microsoft Defender for Endpoint Plan 2 (P2)</option>
+          <option value="Microsoft 365 E5">Microsoft 365 E5</option>
+          <option value="Microsoft 365 A5">Microsoft 365 A5</option>
+          <option value="Microsoft 365 F5">Microsoft 365 F5</option>
+          <option value="Microsoft 365 G5">Microsoft 365 G5</option>
+        </select>
+      </div>
     </div>
     <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Endpoint', calculateEndpointCost(), {devices: document.getElementById('devices').value, vulnMgmtDevices: document.getElementById('vuln-mgmt-devices').value})">Add to Bill</button>
     <table id="endpointTable" style="width:100%; border-collapse:collapse; margin-top:20px;">
@@ -1513,19 +1515,21 @@ else if (service === 'intune') {
       <input type="number" id="vuln-mgmt-devices" value="0" min="0">
     </div>
     <div class="service-options">
-      <label for="intune-sku-select"><strong>Select SKU</strong></label>
-      <select id="intune-sku-select" onchange="updateIntuneTable()">
-        <option value="Microsoft Intune Plan 1">Microsoft Intune Plan 1</option>
-        <option value="Microsoft Intune Plan 2">Microsoft Intune Plan 2</option>
-        <option value="Microsoft Intune Suite">Microsoft Intune Suite</option>
-        <option value="Microsoft 365 E3">Microsoft 365 E3</option>
-        <option value="Microsoft 365 E5">Microsoft 365 E5</option>
-        <option value="Enterprise Mobility + Security E3">Enterprise Mobility + Security E3</option>
-        <option value="Enterprise Mobility + Security E5">Enterprise Mobility + Security E5</option>
-        <option value="Microsoft 365 Business Premium">Microsoft 365 Business Premium</option>
-        <option value="Microsoft 365 F1">Microsoft 365 F1</option>
-        <option value="Microsoft 365 F3">Microsoft 365 F3</option>
-      </select>
+      <label class="license-label" for="intune-sku-select">Select License</label>
+      <div class="license-selector">
+        <select id="intune-sku-select" onchange="updateIntuneTable()">
+          <option value="Microsoft Intune Plan 1">Microsoft Intune Plan 1</option>
+          <option value="Microsoft Intune Plan 2">Microsoft Intune Plan 2</option>
+          <option value="Microsoft Intune Suite">Microsoft Intune Suite</option>
+          <option value="Microsoft 365 E3">Microsoft 365 E3</option>
+          <option value="Microsoft 365 E5">Microsoft 365 E5</option>
+          <option value="Enterprise Mobility + Security E3">Enterprise Mobility + Security E3</option>
+          <option value="Enterprise Mobility + Security E5">Enterprise Mobility + Security E5</option>
+          <option value="Microsoft 365 Business Premium">Microsoft 365 Business Premium</option>
+          <option value="Microsoft 365 F1">Microsoft 365 F1</option>
+          <option value="Microsoft 365 F3">Microsoft 365 F3</option>
+        </select>
+      </div>
     </div>
     <button class="add-to-bill" onclick="addToBill('Microsoft Intune', calculateEndpointCost(), {devices: document.getElementById('devices').value, vulnMgmtDevices: document.getElementById('vuln-mgmt-devices').value})">Add to Bill</button>
     <table id="intuneTable" style="width:100%; border-collapse:collapse; margin-top:20px;">
