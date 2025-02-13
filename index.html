@@ -27,8 +27,11 @@
       height: 100vh;
       overflow-y: auto;
       position: fixed;
+      left: 0;
+      top: 0;
       border-radius: 0 24px 24px 0;
       box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
     }
     .logo {
       width: 100px;
@@ -47,6 +50,8 @@
       border-radius: 12px;
       background-color: transparent;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: block;
+      text-align: left;
     }
     .sidebar a:hover {
       background-color: rgba(255, 255, 255, 0.1);
@@ -56,9 +61,9 @@
     .title-bar {
       position: fixed;
       top: 0;
-      left: 220px;
-      right: 380px;
-      z-index: 1000;
+      left: 260px; /* Adjusted to account for sidebar width + padding */
+      right: 400px; /* Adjusted to account for bill summary width */
+      z-index: 999;
       padding: 20px 0;
       text-align: center;
       background-color: rgba(255, 255, 255, 0.9);
@@ -74,15 +79,17 @@
     }
     .content {
       margin-top: 100px;
-      margin-left: 240px;
-      margin-right: 400px;
+      margin-left: 260px; /* Adjusted to match title-bar left margin */
+      margin-right: 420px; /* Adjusted to account for bill summary */
       padding: 24px;
       background-color: white;
       overflow-y: auto;
-      height: calc(100vh - 120px);
+      height: calc(100vh - 140px);
       box-sizing: border-box;
       border-radius: 24px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      position: relative;
+      z-index: 1;
     }
     .content h2 {
       color: #30475e;
@@ -108,8 +115,9 @@
       border: 2px solid #e5e7eb;
       border-radius: 12px;
       font-size: 16px;
-      width: 95%;
+      width: calc(100% - 32px);
       transition: border-color 0.2s ease;
+      box-sizing: border-box;
     }
     input[type="number"]:focus {
       outline: none;
@@ -126,6 +134,8 @@
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      box-sizing: border-box;
     }
     .add-to-bill:hover {
       transform: translateY(-3px);
@@ -142,6 +152,8 @@
       overflow-y: auto;
       border-radius: 24px 0 0 24px;
       box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      z-index: 1000;
     }
     .bill-summary h3 {
       color: #2d3e50;
@@ -162,6 +174,8 @@
       justify-content: space-between;
       align-items: flex-start;
       transition: transform 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
     }
     .bill-summary .bill-item:hover {
       transform: translateY(-2px);
@@ -197,6 +211,7 @@
       white-space: normal;
       word-break: break-word;
       line-height: 1.5;
+      width: 100%;
     }
     .bill-summary .total-cost {
       font-size: 28px;
@@ -206,6 +221,7 @@
       padding-top: 24px;
       border-top: 2px solid #f4f4f4;
       margin-top: 24px;
+      width: 100%;
     }
     .tooltip {
       position: relative;
@@ -224,7 +240,7 @@
       border-radius: 8px;
       padding: 10px;
       position: absolute;
-      z-index: 1;
+      z-index: 1001;
       bottom: 125%;
       left: 50%;
       margin-left: -110px;
@@ -252,10 +268,13 @@
     /* Dynamic Table Styles */
     .dynamic-table-container {
       margin-top: 24px;
+      width: 100%;
     }
     .dynamic-table-container label {
       font-weight: 600;
       color: #30475e;
+      display: block;
+      margin-bottom: 8px;
     }
     .dynamic-table-container select {
       width: 100%;
@@ -265,6 +284,7 @@
       border: 2px solid #e5e7eb;
       border-radius: 12px;
       transition: all 0.2s ease;
+      box-sizing: border-box;
     }
     .dynamic-table-container select:focus {
       outline: none;
@@ -316,6 +336,16 @@
       color: #991b1b;
       font-weight: 600;
       text-align: center;
+    }
+    @media (max-width: 1200px) {
+      .content {
+        margin-right: 400px;
+        margin-left: 240px;
+      }
+      .title-bar {
+        left: 240px;
+        right: 400px;
+      }
     }
     @media (max-width: 600px) {
       .dynamic-table-container th, 
