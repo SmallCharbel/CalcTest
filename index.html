@@ -226,44 +226,31 @@
     .tooltip {
       position: relative;
       display: inline-block;
-      cursor: pointer;
-      font-size: 20px;
-      padding-left: 5px;
-      color: #30475e;
+      margin-left: 8px;
+      cursor: help;
     }
     .tooltip .tooltiptext {
       visibility: hidden;
-      width: 220px;
-      background-color: #333;
+      width: 280px;
+      background-color: #1a237e;
       color: #fff;
       text-align: center;
-      border-radius: 8px;
-      padding: 10px;
+      border-radius: 12px;
+      padding: 12px 16px;
       position: absolute;
-      z-index: 1001;
+      z-index: 1;
       bottom: 125%;
       left: 50%;
-      margin-left: -110px;
+      margin-left: -140px;
       opacity: 0;
-      transition: opacity 0.3s, transform 0.3s;
-      transform: translateY(10px);
+      transition: opacity 0.3s;
       font-size: 14px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    .tooltip .tooltiptext::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #333 transparent transparent transparent;
+      line-height: 1.5;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     }
     .tooltip:hover .tooltiptext {
       visibility: visible;
       opacity: 1;
-      transform: translateY(0);
     }
     /* Dynamic Table Styles */
     .dynamic-table-container {
@@ -356,65 +343,6 @@
       .dynamic-table-container select {
         font-size: 14px;
       }
-    }
-    /* Add this new CSS section after the existing .dynamic-table-container select styles */
-    .license-selector {
-      position: relative;
-      width: 100%;
-      margin-bottom: 24px;
-    }
-
-    .license-selector select {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 100%;
-      padding: 14px 20px;
-      font-size: 16px;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      background-color: white;
-      cursor: pointer;
-      color: #1f2937;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .license-selector select:hover {
-      border-color: #007bb5;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .license-selector select:focus {
-      outline: none;
-      border-color: #007bb5;
-      box-shadow: 0 0 0 3px rgba(0, 123, 181, 0.1);
-    }
-
-    .license-selector::after {
-      content: '▼';
-      font-size: 12px;
-      color: #64748b;
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      transition: transform 0.2s ease;
-    }
-
-    .license-selector:hover::after {
-      color: #007bb5;
-    }
-
-    .license-selector select:focus + .license-selector::after {
-      transform: translateY(-50%) rotate(180deg);
-    }
-
-    .license-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #1f2937;
     }
   </style>
   <script>
@@ -1009,13 +937,13 @@
         <div class="service-options">
           <label for="tenants"><strong>Number of Tenants</strong>
             <span class="tooltip">?
-              <span class="tooltiptext">A tenant represents a separate Exchange Online instance (e.g., a separate subscription or division).</span>
+              <span class="tooltiptext">A tenant represents a separate Microsoft 365 instance (e.g., a separate subscription or division).</span>
             </span>
           </label>
           <input type="number" id="tenants" value="1" min="1">
           <label for="users-per-tenant"><strong>Number of Users per Tenant</strong>
             <span class="tooltip">?
-              <span class="tooltiptext">This number is used in the cost calculation. Typically, up to 300 users allocate 80 hours, 750 users 120 hours, and 1000 users 160 hours.</span>
+              <span class="tooltiptext">The total number of users that need to be protected within each tenant.</span>
             </span>
           </label>
           <input type="number" id="users-per-tenant" value="1" min="1">
@@ -1024,17 +952,11 @@
           <input type="checkbox" id="advanced-hunting-checkbox">
           <label for="advanced-hunting-checkbox"><strong>Include Advanced Hunting</strong></label>
           <span class="tooltip">?
-            <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats using Microsoft Defender queries.</span>
+            <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats using custom queries.</span>
           </span>
         </div>
-        <div class="service-options">
-          <label class="license-label" for="skuSelect">Select License</label>
-          <div class="license-selector">
-            <select id="skuSelect" onchange="updateTables()">
-              <!-- Existing SKU options -->
-            </select>
-          </div>
-        </div>
+        <label for="skuSelect"><strong>Select a License SKU:</strong></label>
+        <select id="skuSelect"></select>
         <h2>Exchange Online Protection Features</h2>
         <table id="endpointTable">
           <thead>
@@ -1247,9 +1169,7 @@ else if (service === 'cloudApps') {
       <label for="cloudapps-tenants">
         <strong>Number of Tenants</strong>
         <span class="tooltip">?
-          <span class="tooltiptext">
-            Each tenant represents a separate instance of your cloud environment. This number is used to determine overall resource allocation and cost.
-          </span>
+          <span class="tooltiptext">Each tenant represents a separate instance of your cloud environment. This number is used to determine overall resource allocation.</span>
         </span>
       </label>
       <input type="number" id="cloudapps-tenants" value="1" min="1">
@@ -1257,9 +1177,7 @@ else if (service === 'cloudApps') {
       <label for="cloudapps-users-per-tenant">
         <strong>Number of Users per Tenant</strong>
         <span class="tooltip">?
-          <span class="tooltiptext">
-            Specifies the user count per tenant. The pricing calculation is based on user volume ranges (e.g., 1–300 users: 80 hours, 301–750 users: 120 hours, 751–1000 users: 160 hours).
-          </span>
+          <span class="tooltiptext">Specifies the user count per tenant. This helps determine the appropriate level of protection and resources needed.</span>
         </span>
       </label>
       <input type="number" id="cloudapps-users-per-tenant" value="1" min="1">
@@ -1268,9 +1186,7 @@ else if (service === 'cloudApps') {
       <input type="checkbox" id="cloudapps-advanced-hunting-checkbox">
       <label for="cloudapps-advanced-hunting-checkbox">Include Advanced Hunting</label>
       <span class="tooltip">?
-        <span class="tooltiptext">
-          Advanced Hunting enables proactive inspection for potential threats.
-        </span>
+        <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats.</span>
       </span>
     </div>
     <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud Apps', calculateCloudAppsCost(), {tenants: document.getElementById('cloudapps-tenants').value, users: document.getElementById('cloudapps-users-per-tenant').value, advancedHunting: document.getElementById('cloudapps-advanced-hunting-checkbox').checked})">Add to Bill</button>
@@ -1385,17 +1301,30 @@ else if (service === 'endpoint') {
   serviceTitle.textContent = 'Microsoft Defender for Identity';
   serviceDetails.innerHTML = `
     <div class="service-options">
-      <label for="identity-tenants"><strong>Number of Tenants</strong></label>
+      <label for="identity-tenants">
+        <strong>Number of Tenants</strong>
+        <span class="tooltip">?
+          <span class="tooltiptext">Each tenant represents a separate organizational environment that needs identity protection.</span>
+        </span>
+      </label>
       <input type="number" id="identity-tenants" value="1" min="1">
-      <label for="identity-users-per-tenant"><strong>Number of Users per Tenant</strong></label>
+      
+      <label for="identity-users-per-tenant">
+        <strong>Number of Users per Tenant</strong>
+        <span class="tooltip">?
+          <span class="tooltiptext">The number of users whose identity activities need to be monitored and protected within each tenant.</span>
+        </span>
+      </label>
       <input type="number" id="identity-users-per-tenant" value="1" min="1">
     </div>
     <div class="service-options">
       <input type="checkbox" id="identity-advanced-hunting-checkbox">
-      <label for="identity-advanced-hunting-checkbox">Include Advanced Hunting</label>
-      <span class="tooltip">?
-        <span class="tooltiptext">Advanced Hunting enables proactive threat inspection.</span>
-      </span>
+      <label for="identity-advanced-hunting-checkbox">
+        Include Advanced Hunting
+        <span class="tooltip">?
+          <span class="tooltiptext">Enables deep investigation capabilities to proactively hunt for identity-based threats across your organization.</span>
+        </span>
+      </label>
     </div>
     <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Identity', calculateIdentityCost(), {tenants: document.getElementById('identity-tenants').value, users: document.getElementById('identity-users-per-tenant').value, advancedHunting: document.getElementById('identity-advanced-hunting-checkbox').checked})">Add to Bill</button>
     <p style="margin-top:20px; font-style: italic;">
@@ -1445,35 +1374,63 @@ else if (service === 'entra') {
   serviceTitle.textContent = 'Microsoft Entra ID Protection';
   serviceDetails.innerHTML = `
     <div class="service-options">
-      <label for="entra-tenants"><strong>Number of Tenants</strong></label>
+      <label for="entra-tenants">
+        <strong>Number of Tenants</strong>
+        <span class="tooltip">?
+          <span class="tooltiptext">A tenant represents a separate Microsoft 365 instance (e.g., a separate subscription or division).</span>
+        </span>
+      </label>
       <input type="number" id="entra-tenants" value="1" min="1">
-      <label for="entra-users-per-tenant"><strong>Number of Users per Tenant</strong></label>
+      
+      <label for="entra-users-per-tenant">
+        <strong>Number of Users per Tenant</strong>
+        <span class="tooltip">?
+          <span class="tooltiptext">The total number of users that need identity protection within each tenant.</span>
+        </span>
+      </label>
       <input type="number" id="entra-users-per-tenant" value="1" min="1">
     </div>
     <div class="service-options">
       <input type="checkbox" id="entra-advanced-hunting-checkbox">
-      <label for="entra-advanced-hunting-checkbox">Include Advanced Hunting</label>
-      <span class="tooltip">?
-        <span class="tooltiptext">Advanced Hunting enables proactive threat inspection.</span>
-      </span>
+      <label for="entra-advanced-hunting-checkbox">
+        Include Advanced Hunting
+        <span class="tooltip">?
+          <span class="tooltiptext">Enables proactive threat hunting capabilities using custom queries to search through identity-related events and activities.</span>
+        </span>
+      </label>
     </div>
     <button class="add-to-bill" onclick="addToBill('Microsoft Entra ID Protection', calculateEntraCost(), {tenants: document.getElementById('entra-tenants').value, users: document.getElementById('entra-users-per-tenant').value, advancedHunting: document.getElementById('entra-advanced-hunting-checkbox').checked})">Add to Bill</button>
     
     <div class="entra-summary" style="margin-top: 20px;">
-      <h3>Microsoft Entra ID Protection Summary</h3>
+      <h3>
+        Microsoft Entra ID Protection Summary
+        <span class="tooltip">?
+          <span class="tooltiptext">A comprehensive identity protection service that helps secure user identities and access in your organization.</span>
+        </span>
+      </h3>
       <div class="card-container" style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 10px;">
         <div class="card" style="flex: 1 1 calc(50% - 20px); background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <h4 style="margin-top: 0; color: #30475e;">Risk-Based Access Policies</h4>
+          <h4 style="margin-top: 0; color: #30475e;">
+            Risk-Based Access Policies
+            <span class="tooltip">?
+              <span class="tooltiptext">Automatically adjusts access requirements based on detected risk levels during sign-in attempts.</span>
+            </span>
+          </h4>
           <p style="margin: 0;">Enhances security with Conditional Access that responds to sign-in risks. Evaluates authentication attempts and applies controls based on risk levels.</p>
         </div>
         <div class="card" style="flex: 1 1 calc(50% - 20px); background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <h4 style="margin-top: 0; color: #30475e;">Advanced Risk Detection and Response</h4>
+          <h4 style="margin-top: 0; color: #30475e;">
+            Advanced Risk Detection and Response
+            <span class="tooltip">?
+              <span class="tooltiptext">Uses machine learning to detect and respond to suspicious identity-related activities in real-time.</span>
+            </span>
+          </h4>
           <p style="margin: 0;">Continuously monitors identity signals for threats and unauthorized access. Automatically adjusts access policies in response to detected risks.</p>
         </div>
       </div>
     </div>
   `;
-      } else if (service === 'sentinel') {
+} else if (service === 'sentinel') {
   serviceTitle.textContent = 'Microsoft Sentinel';
   serviceDetails.innerHTML = `
     <div class="service-options" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
