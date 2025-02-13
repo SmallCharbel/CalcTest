@@ -10,343 +10,234 @@
     /* Global Page Styles */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f8fafc;
+      background-color: #f0f2f5;
       margin: 0;
       padding: 0;
       display: flex;
       height: 100vh;
       overflow: hidden;
     }
+
+    /* Modernized Sidebar */
     .sidebar {
-      width: 220px;
-      background: linear-gradient(180deg, #30475e 0%, #1f3346 100%);
+      width: 240px;
+      background: linear-gradient(180deg, #1a237e 0%, #0d47a1 100%);
       color: white;
       display: flex;
       flex-direction: column;
-      padding: 20px;
+      padding: 24px;
       height: 100vh;
       overflow-y: auto;
       position: fixed;
       left: 0;
       top: 0;
-      border-radius: 0 24px 24px 0;
-      box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+      border-radius: 0 32px 32px 0;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
       z-index: 1000;
     }
-    .logo {
-      width: 100px;
-      margin: 0 auto 20px auto;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .sidebar h2 {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.5rem;
+      margin: 24px 0 16px;
+      padding-left: 12px;
     }
-    .logo:hover {
-      transform: rotate(360deg) scale(1.05);
-    }
+
     .sidebar a {
       color: white;
       text-decoration: none;
-      padding: 14px;
-      font-size: 18px;
-      margin-bottom: 15px;
+      padding: 16px;
+      font-size: 16px;
+      margin-bottom: 8px;
       border-radius: 12px;
       background-color: transparent;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       display: block;
       text-align: left;
+      border: 1px solid transparent;
     }
+
     .sidebar a:hover {
       background-color: rgba(255, 255, 255, 0.1);
       transform: translateX(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+
+    /* Modernized Title Bar */
     .title-bar {
       position: fixed;
       top: 0;
-      left: 260px; /* Adjusted to account for sidebar width + padding */
-      right: 400px; /* Adjusted to account for bill summary width */
+      left: 280px;
+      right: 420px;
       z-index: 999;
-      padding: 20px 0;
+      padding: 24px 0;
       text-align: center;
-      background-color: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+      border-radius: 0 0 24px 24px;
     }
+
     .title-bar h1 {
       margin: 0;
-      color: #30475e;
+      color: #1a237e;
       font-size: 32px;
       font-weight: 600;
       letter-spacing: -0.5px;
     }
+
+    /* Modernized Content Area */
     .content {
-      margin-top: 100px;
-      margin-left: 260px; /* Adjusted to match title-bar left margin */
-      margin-right: 420px; /* Adjusted to account for bill summary */
-      padding: 24px;
+      margin-top: 120px;
+      margin-left: 280px;
+      margin-right: 440px;
+      padding: 32px;
       background-color: white;
       overflow-y: auto;
-      height: calc(100vh - 140px);
+      height: calc(100vh - 160px);
       box-sizing: border-box;
-      border-radius: 24px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border-radius: 32px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
       position: relative;
       z-index: 1;
     }
+
     .content h2 {
-      color: #30475e;
+      color: #1a237e;
       margin-bottom: 24px;
       font-size: 28px;
       font-weight: 600;
-      border-bottom: 3px solid #f0f4f7;
-      padding-bottom: 12px;
+      border-bottom: 3px solid #e8eaf6;
+      padding-bottom: 16px;
       padding-left: 20px;
     }
-    .service-options,
-    .service-details {
+
+    /* Modernized Service Options */
+    .service-options {
       padding: 24px;
       background-color: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
       margin-bottom: 24px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    input[type="number"] {
-      padding: 14px;
-      margin-bottom: 20px;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      font-size: 16px;
-      width: calc(100% - 32px);
-      transition: border-color 0.2s ease;
-      box-sizing: border-box;
+
+    .service-options:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
     }
-    input[type="number"]:focus {
-      outline: none;
-      border-color: #007bb5;
-      box-shadow: 0 0 0 3px rgba(0, 123, 181, 0.1);
-    }
-    .add-to-bill {
-      padding: 14px 28px;
-      background: linear-gradient(135deg, #007bb5 0%, #005f8d 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 18px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .add-to-bill:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0, 123, 181, 0.2);
-    }
+
+    /* Modernized Bill Summary */
     .bill-summary {
-      width: 380px;
+      width: 400px;
       background-color: #ffffff;
-      padding: 30px;
+      padding: 32px;
       position: fixed;
       right: 0;
       top: 0;
       height: 100vh;
       overflow-y: auto;
-      border-radius: 24px 0 0 24px;
-      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+      border-radius: 32px 0 0 32px;
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
       box-sizing: border-box;
       z-index: 1000;
     }
+
     .bill-summary h3 {
-      color: #2d3e50;
-      margin-bottom: 16px;
+      color: #1a237e;
+      margin-bottom: 24px;
       font-size: 24px;
       font-weight: 600;
-      border-bottom: 2px solid #f4f4f4;
-      padding-bottom: 12px;
+      border-bottom: 2px solid #e8eaf6;
+      padding-bottom: 16px;
       text-align: center;
     }
-    .bill-summary .bill-item {
-      padding: 16px;
+
+    /* Modernized Bill Items */
+    .bill-item {
+      padding: 20px;
       margin-bottom: 16px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid #e8eaf6;
       border-radius: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-start;
-      transition: transform 0.2s ease;
-      width: 100%;
-      box-sizing: border-box;
+      background-color: #ffffff;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      transition: all 0.3s ease;
     }
-    .bill-summary .bill-item:hover {
+
+    .bill-item:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     }
-    .bill-summary .item-header {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      align-items: center;
-    }
-    .bill-summary .remove-item {
-      color: #dc3545;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 6px 10px;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-    }
-    .bill-summary .remove-item:hover {
-      background-color: #fff5f5;
-      color: #dc3545;
-      transform: scale(1.1);
-    }
-    .bill-summary .item-price {
-      font-weight: 600;
-      color: #007bb5;
-      margin-bottom: 6px;
-      font-size: 18px;
-    }
-    .bill-summary .item-details {
-      color: #64748b;
-      white-space: normal;
-      word-break: break-word;
-      line-height: 1.5;
-      width: 100%;
-    }
-    .bill-summary .total-cost {
-      font-size: 28px;
-      font-weight: 700;
-      color: #007bb5;
-      text-align: right;
-      padding-top: 24px;
-      border-top: 2px solid #f4f4f4;
-      margin-top: 24px;
-      width: 100%;
-    }
-    .tooltip {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-      font-size: 20px;
-      padding-left: 5px;
-      color: #30475e;
-    }
-    .tooltip .tooltiptext {
-      visibility: hidden;
-      width: 220px;
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      border-radius: 8px;
-      padding: 10px;
-      position: absolute;
-      z-index: 1001;
-      bottom: 125%;
-      left: 50%;
-      margin-left: -110px;
-      opacity: 0;
-      transition: opacity 0.3s, transform 0.3s;
-      transform: translateY(10px);
-      font-size: 14px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    .tooltip .tooltiptext::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #333 transparent transparent transparent;
-    }
-    .tooltip:hover .tooltiptext {
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    /* Dynamic Table Styles */
-    .dynamic-table-container {
-      margin-top: 24px;
-      width: 100%;
-    }
-    .dynamic-table-container label {
-      font-weight: 600;
-      color: #30475e;
-      display: block;
-      margin-bottom: 8px;
-    }
-    .dynamic-table-container select {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      margin-bottom: 24px;
-      border: 2px solid #e5e7eb;
+
+    /* Modernized Buttons */
+    .add-to-bill {
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+      color: white;
+      border: none;
       border-radius: 12px;
-      transition: all 0.2s ease;
-      box-sizing: border-box;
-    }
-    .dynamic-table-container select:focus {
-      outline: none;
-      border-color: #007bb5;
-      box-shadow: 0 0 0 3px rgba(0, 123, 181, 0.1);
-    }
-    .dynamic-table-container table {
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-bottom: 40px;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
     }
-    .dynamic-table-container th,
-    .dynamic-table-container td {
-      padding: 14px 16px;
-      text-align: left;
-      border: 1px solid #e5e7eb;
+
+    .add-to-bill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(26, 35, 126, 0.3);
     }
-    .dynamic-table-container th {
-      background: linear-gradient(135deg, #30475e 0%, #1f3346 100%);
+
+    /* Modernized Inputs */
+    input[type="number"] {
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 2px solid #e8eaf6;
+      border-radius: 12px;
+      font-size: 16px;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #1a237e;
+      box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+    }
+
+    /* Modernized Tooltips */
+    .tooltip .tooltiptext {
+      background-color: #1a237e;
       color: #fff;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      font-size: 14px;
+      line-height: 1.5;
     }
-    .dynamic-table-container tr:nth-child(even) {
-      background-color: #f8fafc;
+
+    .tooltip .tooltiptext::after {
+      border-color: #1a237e transparent transparent transparent;
     }
-    .dynamic-table-container tr:hover {
-      background-color: #f1f5f9;
-      transition: background-color 0.2s ease;
-    }
-    .section-header {
-      background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
-      font-weight: 600;
-      text-align: center;
-      color: #1f2937;
-    }
-    .yes {
-      background-color: #dcfce7;
-      color: #166534;
-      font-weight: 600;
-      text-align: center;
-    }
-    .no {
-      background-color: #fee2e2;
-      color: #991b1b;
-      font-weight: 600;
-      text-align: center;
-    }
+
+    /* Keep existing responsive styles */
     @media (max-width: 1200px) {
       .content {
-        margin-right: 400px;
-        margin-left: 240px;
+        margin-right: 420px;
+        margin-left: 260px;
       }
       .title-bar {
-        left: 240px;
-        right: 400px;
+        left: 260px;
+        right: 420px;
       }
     }
+
     @media (max-width: 600px) {
       .dynamic-table-container th, 
       .dynamic-table-container td {
