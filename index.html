@@ -1290,75 +1290,49 @@ else if (service === 'cloudApps') {
       </label>
       <input type="number" id="cloudapps-users-per-tenant" value="1" min="1">
     </div>
-    <div class="service-options">
-      <input type="checkbox" id="cloudapps-advanced-hunting-checkbox">
-      <label for="cloudapps-advanced-hunting-checkbox">Include Advanced Hunting</label>
-      <span class="tooltip">?
-        <span class="tooltiptext">Advanced Hunting enables proactive inspection for potential threats.</span>
-      </span>
+
+    <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud Apps', calculateCloudAppsCost(), {tenants: document.getElementById('cloudapps-tenants').value, users: document.getElementById('cloudapps-users-per-tenant').value})">Add to Bill</button>
+
+    <div class="features-section" style="margin-top: 24px;">
+      <p style="margin-bottom: 16px; padding: 12px; background-color: #f8f9fa; border-radius: 8px; color: #1a237e; font-style: italic;">
+        All features below are included in: Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, and Enterprise Mobility + Security E5 (EMS E5)
+      </p>
+      
+      <table style="width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 16px;">
+        <thead>
+          <tr>
+            <th style="width: 30%; background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); color: white; padding: 12px; border-radius: 8px 0 0 0;">Feature</th>
+            <th style="width: 70%; background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); color: white; padding: 12px; border-radius: 0 8px 0 0;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Discovery</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Discover and identify all cloud apps in your environment, assess their risk levels, and get detailed insights about their usage.</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Information Protection</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Protect sensitive information across cloud apps. Apply labels automatically, trigger alerts, and take actions when sensitive data is detected.</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Threat Protection</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Detect and protect against cyber threats across all your cloud services using behavioral analytics and anomaly detection.</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">App Governance</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Monitor and control app behaviors, enforce compliance policies, and protect against app-based risks.</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Cloud Security Posture Management</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">Assess and improve your security posture across multiple cloud platforms. Identify misconfigurations and security gaps.</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px;">Compliance Management</td>
+            <td style="padding: 12px;">Ensure compliance with regulations and internal policies across all your cloud apps and services.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <button class="add-to-bill" onclick="addToBill('Microsoft Defender for Cloud Apps', calculateCloudAppsCost(), {tenants: document.getElementById('cloudapps-tenants').value, users: document.getElementById('cloudapps-users-per-tenant').value, advancedHunting: document.getElementById('cloudapps-advanced-hunting-checkbox').checked})">Add to Bill</button>
-    <table class="cloudapps-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
-      <thead>
-        <tr>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:25%;">Feature/Service</th>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:50%;">Description</th>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:25%;">Included in</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Shadow IT Discovery</td>
-          <td style="border:1px solid #ccc; padding:8px;">Identifies and monitors unsanctioned apps being used within the organization.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">App Governance</td>
-          <td style="border:1px solid #ccc; padding:8px;">Provides insights into app usage patterns, data flows, and potential risks associated with third-party applications.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Threat Protection</td>
-          <td style="border:1px solid #ccc; padding:8px;">Detects and responds to threats using machine learning and behavioral analytics.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Data Loss Prevention (DLP)</td>
-          <td style="border:1px solid #ccc; padding:8px;">Implements policies to prevent sensitive data from being shared or leaked outside the organization.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Information Protection</td>
-          <td style="border:1px solid #ccc; padding:8px;">Classifies and labels data to ensure it is handled appropriately based on its sensitivity.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Compliance and Governance</td>
-          <td style="border:1px solid #ccc; padding:8px;">Ensures that cloud app usage complies with industry regulations and standards.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">ATP for SaaS Apps</td>
-          <td style="border:1px solid #ccc; padding:8px;">Extends protection to files stored in SaaS applications like SharePoint, OneDrive, and Teams.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Automated Investigation and Response (AIR)</td>
-          <td style="border:1px solid #ccc; padding:8px;">Automates the investigation and remediation of threats.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">Threat Intelligence</td>
-          <td style="border:1px solid #ccc; padding:8px;">Provides detailed threat intelligence and analysis.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #ccc; padding:8px;">App-to-App Protection</td>
-          <td style="border:1px solid #ccc; padding:8px;">Protects inter-app data exchange with application governance.</td>
-          <td style="border:1px solid #ccc; padding:8px;">Microsoft 365 E5, Microsoft 365 A5, Microsoft 365 F5 Security, EMS E5</td>
-        </tr>
-      </tbody>
-    </table>
   `;
 }
 else if (service === 'endpoint') {
