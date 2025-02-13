@@ -1638,20 +1638,18 @@ else if (service === 'intune') {
   serviceTitle.textContent = 'Microsoft Intune';
   serviceDetails.innerHTML = `
     <div class="service-options">
-      <label for="devices"><strong>Number of Devices</strong></label>
+      <label for="devices">
+        <strong>Number of Devices</strong>
+        <span class="tooltip">?
+          <span class="tooltiptext">Devices can include Windows PCs, Macs, iOS/iPadOS devices, Android phones and tablets, and Windows Mobile devices. Each user can enroll multiple devices.</span>
+        </span>
+      </label>
       <input type="number" id="devices" value="1" min="1">
     </div>
-    <div class="service-options">
-      <input type="checkbox" id="vuln-mgmt-checkbox" onclick="toggleVulnerabilityManagement()">
-      <label for="vuln-mgmt-checkbox"><strong>Include Vulnerability Management</strong></label>
-    </div>
-    <div class="service-options" id="vuln-mgmt-options" style="display: none;">
-      <label for="vuln-mgmt-devices"><strong>Number of Devices for Vulnerability Management</strong></label>
-      <input type="number" id="vuln-mgmt-devices" value="0" min="0">
-    </div>
+
     <div class="service-options">
       <div class="license-container">
-        <label class="license-label" for="intune-sku-select">Select License</label>
+        <label class="license-label">Select License</label>
         <select class="license-select" id="intune-sku-select" onchange="updateIntuneTable()">
           <option value="Microsoft Intune Plan 1">Microsoft Intune Plan 1</option>
           <option value="Microsoft Intune Plan 2">Microsoft Intune Plan 2</option>
@@ -1666,13 +1664,15 @@ else if (service === 'intune') {
         </select>
       </div>
     </div>
-    <button class="add-to-bill" onclick="addToBill('Microsoft Intune', calculateEndpointCost(), {devices: document.getElementById('devices').value, vulnMgmtDevices: document.getElementById('vuln-mgmt-devices').value})">Add to Bill</button>
-    <table id="intuneTable" style="width:100%; border-collapse:collapse; margin-top:20px;">
+
+    <button class="add-to-bill" onclick="addToBill('Microsoft Intune', calculateEndpointCost(), {devices: document.getElementById('devices').value})">Add to Bill</button>
+
+    <table id="intuneTable" style="width: 100%; border-collapse: collapse; margin-top: 16px;">
       <thead>
         <tr>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:30%;">Feature/Service</th>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:50%;">Description</th>
-          <th style="border:1px solid #ccc; padding:8px; background-color:#30475e; color:#fff; width:20%;">Included</th>
+          <th style="width: 30%; background-color: #30475e; color: white; padding: 12px; text-align: left; border: 1px solid #dee2e6;">Feature/Service</th>
+          <th style="width: 50%; background-color: #30475e; color: white; padding: 12px; text-align: left; border: 1px solid #dee2e6;">Description</th>
+          <th style="width: 20%; background-color: #30475e; color: white; padding: 12px; text-align: left; border: 1px solid #dee2e6;">Included</th>
         </tr>
       </thead>
       <tbody>
