@@ -357,6 +357,65 @@
         font-size: 14px;
       }
     }
+    /* Add this new CSS section after the existing .dynamic-table-container select styles */
+    .license-selector {
+      position: relative;
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    .license-selector select {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      background-color: white;
+      cursor: pointer;
+      color: #1f2937;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .license-selector select:hover {
+      border-color: #007bb5;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .license-selector select:focus {
+      outline: none;
+      border-color: #007bb5;
+      box-shadow: 0 0 0 3px rgba(0, 123, 181, 0.1);
+    }
+
+    .license-selector::after {
+      content: '▼';
+      font-size: 12px;
+      color: #64748b;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      transition: transform 0.2s ease;
+    }
+
+    .license-selector:hover::after {
+      color: #007bb5;
+    }
+
+    .license-selector select:focus + .license-selector::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    .license-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #1f2937;
+    }
   </style>
   <script>
     // MSAL Configuration
@@ -968,8 +1027,14 @@
             <span class="tooltiptext">Advanced Hunting enables proactive inspection of data for potential threats using Microsoft Defender queries.</span>
           </span>
         </div>
-        <label for="skuSelect"><strong>Select a License SKU:</strong></label>
-        <select id="skuSelect"></select>
+        <div class="service-options">
+          <label class="license-label" for="skuSelect">Select License</label>
+          <div class="license-selector">
+            <select id="skuSelect" onchange="updateTables()">
+              <!-- Existing SKU options -->
+            </select>
+          </div>
+        </div>
         <h2>Exchange Online Protection Features</h2>
         <table id="endpointTable">
           <thead>
