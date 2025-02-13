@@ -448,6 +448,30 @@
       display: flex;
       align-items: center;
     }
+
+    /* Add these styles for the modern button */
+    .modern-button {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #007bb5 0%, #005f8d 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .modern-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 123, 181, 0.2);
+    }
+
+    .modern-button .tooltip {
+      margin-left: 4px;
+    }
   </style>
   <script>
     // MSAL Configuration
@@ -1530,91 +1554,83 @@ else if (service === 'entra') {
 } else if (service === 'sentinel') {
   serviceTitle.textContent = 'Microsoft Sentinel';
   serviceDetails.innerHTML = `
-    <div class="service-options" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
-      <label for="sentinel-instances" style="font-weight: bold;">Number of Instances</label>
-      <input type="number" id="sentinel-instances" value="1" min="1" style="width: 80px; padding: 4px;">
+    <div class="service-options">
+      <label for="sentinel-instances">
+        <strong>Number of Instances</strong>
+        <span class="tooltip">?
+          <span class="tooltiptext">An instance represents a separate Microsoft Sentinel workspace. Each workspace can collect and analyze data from multiple sources.</span>
+        </span>
+      </label>
+      <input type="number" id="sentinel-instances" value="1" min="1">
     </div>
-    <div class="service-options" style="margin-bottom: 10px;">
-      <!-- Modern styled Include Rules button -->
-      <button style="padding: 8px 16px; background-color: #007bb5; color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s;"
-              onclick="toggleExtraRules()">Include Rules</button>
+
+    <div class="service-options">
+      <div class="checkbox-wrapper">
+        <button class="modern-button" onclick="toggleExtraRules()">
+          Include Rules
+          <span class="tooltip">?
+            <span class="tooltiptext">Rules help detect specific threats and automate responses. By default, 14 rules are included (2 Automation Rules, 5 Scheduled Analytic Rules, 5 Near Real-Time Analytic Rules, 2 Automation Rules with Playbooks).</span>
+          </span>
+        </button>
+      </div>
+      
+      <div id="extra-rules-section" style="display: none; margin-top: 16px;">
+        <p style="margin: 0 0 8px 0; color: #666;">Extra Rules: 14 rules included by default</p>
+        <label for="sentinel-extra-rules">
+          <strong>Adjust Extra Rules</strong>
+        </label>
+        <input type="number" id="sentinel-extra-rules" value="0" min="0">
+      </div>
     </div>
-    <div id="extra-rules-section" class="service-options" style="display: none; margin-bottom: 10px; padding: 8px; background-color: #f9f9f9; border-radius: 4px;">
-      <p style="margin: 0; font-style: italic; font-size: 0.9em;">Extra Rules: 14 rules included by default</p>
-      <label for="sentinel-extra-rules" style="display: block; margin-top: 5px; font-weight: bold;">Adjust Extra Rules:</label>
-      <input type="number" id="sentinel-extra-rules" value="0" min="0" style="width: 70px; padding: 4px;">
-    </div>
-    <button class="add-to-bill" style="padding: 10px 16px; background-color: #28a745; color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s; margin-bottom: 15px;"
-            onclick="addToBill('Microsoft Sentinel', calculateSentinelCost(), {instances: document.getElementById('sentinel-instances').value, extraRules: document.getElementById('sentinel-extra-rules').value})">Add to Bill</button>
-    
-    <div class="sentinel-summary" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 6px;">
-      <h3 style="color: #30475e; margin-bottom: 8px;">Microsoft Sentinel</h3>
-      
-      <div class="section" style="margin-bottom: 10px;">
-        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Data Collection</h4>
-        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
-          <strong>Out-of-the-Box Data Connectors:</strong> Integrates with various Microsoft and non‑Microsoft sources, including Microsoft Entra ID, Azure Activity, and more.<br>
-          <strong>Custom Data Collection:</strong> Supports data collection using common event format (CEF), Syslog, or REST‑API.
-        </p>
-      </div>
-      
-      <div class="section" style="margin-bottom: 10px;">
-        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Threat Detection</h4>
-        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
-          <strong>Built‑in Analytics:</strong> Uses machine learning and behavioral analytics to detect threats.<br>
-          <strong>Custom Analytics Rules:</strong> Allows creation of custom rules to detect specific threats.
-        </p>
-      </div>
-      
-      <div class="section" style="margin-bottom: 10px;">
-        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Investigation</h4>
-        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
-          <strong>Investigation Graph:</strong> Visualizes relationships between entities in an alert to help investigate incidents.<br>
-          <strong>Hunting Queries:</strong> Provides tools for proactive threat hunting using KQL (Kusto Query Language).
-        </p>
-      </div>
-      
-      <div class="section" style="margin-bottom: 10px;">
-        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Response</h4>
-        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
-          <strong>Automated Response:</strong> Uses playbooks to automate responses to threats.<br>
-          <strong>Manual Response Actions:</strong> Allows security teams to take manual actions based on investigation findings.
-        </p>
-      </div>
-      
-      <div class="section" style="margin-bottom: 10px;">
-        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Security Orchestration, Automation, and Response (SOAR)</h4>
-        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
-          <strong>Playbooks:</strong> Automates workflows and responses to incidents.<br>
-          <strong>Integration with Logic Apps:</strong> Leverages Azure Logic Apps for complex automation scenarios.
-        </p>
-      </div>
-      
-      <div class="section" style="margin-bottom: 10px;">
-        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Threat Intelligence</h4>
-        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
-          <strong>Built‑in Threat Intelligence:</strong> Integrates with Microsoft Threat Intelligence.<br>
-          <strong>Bring Your Own Threat Intelligence:</strong> Allows integration of third‑party threat intelligence feeds.
-        </p>
-      </div>
-      
-      <div class="section" style="margin-bottom: 10px;">
-        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Compliance and Reporting</h4>
-        <p style="margin: 3px 0; font-size: 0.95em; line-height: 1.3;">
-          <strong>Regulatory Compliance:</strong> Provides compliance assessments and reporting for various regulatory standards.<br>
-          <strong>Custom Dashboards and Reports:</strong> Allows creation of custom dashboards and reports to monitor security posture.
-        </p>
-      </div>
-      
-      <div class="section" style="margin-bottom: 0;">
-        <h4 style="margin: 5px 0; color: #007bb5; font-size: 1em;">Included Rules</h4>
-        <ul style="margin: 3px 0 0 20px; font-size: 0.95em; line-height: 1.3;">
-          <li>2 Automation Rules</li>
-          <li>5 Scheduled Analytic Rules</li>
-          <li>5 Near Real‑Time Analytic Rules</li>
-          <li>2 Automation Rules including Playbooks</li>
-        </ul>
-      </div>
+
+    <button class="add-to-bill" onclick="addToBill('Microsoft Sentinel', calculateSentinelCost(), {instances: document.getElementById('sentinel-instances').value, extraRules: document.getElementById('sentinel-extra-rules').value})">Add to Bill</button>
+
+    <div class="features-section" style="margin-top: 24px;">
+      <table id="sentinelTable" style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+        <thead>
+          <tr>
+            <th style="width: 25%; background-color: #30475e; color: white; padding: 12px; text-align: left; border: 1px solid #dee2e6;">Feature Name</th>
+            <th style="width: 75%; background-color: #30475e; color: white; padding: 12px; text-align: left; border: 1px solid #dee2e6;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">Data Collection</td>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">
+              <strong>Out-of-Box Data Connectors:</strong> Integrates with various Microsoft and non-Microsoft sources, including Microsoft Entra ID, Azure Activity, and more.<br><br>
+              <strong>Custom Data Collection:</strong> Supports data collection using common event format (CEF), Syslog, or REST-API.
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">Threat Detection</td>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">
+              <strong>Built-in Analytics:</strong> Uses machine learning and behavioral analytics to detect threats.<br><br>
+              <strong>Custom Analytics Rules:</strong> Allows creation of custom rules to detect specific threats.
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">Investigation</td>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">
+              <strong>Investigation Graph:</strong> Visualizes relationships between entities in an alert to help investigate incidents.<br><br>
+              <strong>Hunting Queries:</strong> Provides tools for proactive threat hunting using KQL (Kusto Query Language).
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">Response</td>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">
+              <strong>Automated Response:</strong> Uses playbooks to automate responses to threats.<br><br>
+              <strong>Manual Response Actions:</strong> Allows security teams to take manual actions based on investigation findings.
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">SOAR</td>
+            <td style="padding: 12px; border: 1px solid #dee2e6;">
+              <strong>Playbooks:</strong> Automates workflows and responses to incidents.<br><br>
+              <strong>Integration with Logic Apps:</strong> Leverages Azure Logic Apps for complex automation scenarios.
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   `;
 }
